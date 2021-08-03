@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+       <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+        <ProjectGuid>{FA9B3009-5E9E-47CB-A413-C5E182B943F2}</ProjectGuid>
+    </PropertyGroup>
+</Project>
