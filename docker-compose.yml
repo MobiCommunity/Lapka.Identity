@@ -34,7 +34,7 @@ services:
       - 5341:80
 
 networks:
-  amzn:
+  template:
     name: template
 
 volumes:
