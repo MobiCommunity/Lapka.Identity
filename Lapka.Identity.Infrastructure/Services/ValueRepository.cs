@@ -20,13 +20,11 @@ namespace Lapka.Identity.Infrastructure.Services
 
 #pragma warning disable 1998
         public async Task AddValue(Value value)
-#pragma warning restore 1998
         {
             _values.Add(value);
         }
-#pragma warning disable 1998
+
         public async Task<ValueDto> GetById(Guid id)
-#pragma warning restore 1998
         {
             var entity = _values.FirstOrDefault(x => x.Id.Value == id);
             if (entity is null) throw new ValueNotFoundException();
