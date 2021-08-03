@@ -28,7 +28,7 @@ namespace Lapka.Identity.Api.Controllers
         public async Task<ActionResult> NewShelter(CreateShelterRequest createShelterRequest)
         {
             Guid id = Guid.NewGuid();
-            await _commandDispatcher.SendAsync(new CreateShelter(createShelterRequest.Id, createShelterRequest.Name,
+            await _commandDispatcher.SendAsync(new CreateShelter(id, createShelterRequest.Name,
                 createShelterRequest.PhoneNumber, createShelterRequest.Email, createShelterRequest.Address.AsValueObject(),
                 createShelterRequest.GeoLocation.AsValueObject()));
 
