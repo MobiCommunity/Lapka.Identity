@@ -5,11 +5,11 @@ namespace Lapka.Identity.Api.Models.Request
 {
     public class CreateShelterRequest
     {
-        public Guid Id { get; }
-        public string Name { get; }
-        public AddressModel Address { get; }
-        public LocationModel GeoLocation { get; }
-        public string Email { get; }
-        public string PhoneNumber { get; }
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public AddressModel Address { get; set; }
+        public LocationModel GeoLocation { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }
