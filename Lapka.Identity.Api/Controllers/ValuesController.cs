@@ -37,7 +37,8 @@ namespace Lapka.Identity.Api.Controllers
             Guid id = Guid.NewGuid();
             await _commandDispatcher.SendAsync(new CreateValue(valueRequest.Name,valueRequest.Description,id));
 
-            return Created($"api/lapka.identity/values/{id}", null);
+            return Created($"api/identity/values/{id}", null);
         }
+        
     }
 }
