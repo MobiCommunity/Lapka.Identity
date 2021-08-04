@@ -44,9 +44,9 @@ namespace Lapka.Identity.Api.Controllers
         }
         
         [HttpDelete("{id:guid}")]
-        public async Task<ActionResult> Delete(DeleteShelterRequest deleteShelterRequest)
+        public async Task<ActionResult> Delete(Guid id)
         {
-            await _commandDispatcher.SendAsync(new DeleteShelter(deleteShelterRequest.Id));
+            await _commandDispatcher.SendAsync(new DeleteShelter(id));
 
             return NoContent();
         }
