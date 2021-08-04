@@ -29,6 +29,11 @@ namespace Lapka.Identity.Core.Entities
             AddEvent(new ShelterDeleted(this));
         }
         
+        public void Update()
+        {
+            AddEvent(new ShelterUpdated(this));
+        }
+        
         public static Shelter Create(Guid id, string name, Address address, Location location, string phoneNumber, string email)
         {
             if (IsNameValid(name))
