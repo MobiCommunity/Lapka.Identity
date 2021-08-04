@@ -12,7 +12,7 @@ using Lapka.Identity.Core.ValueObjects;
 namespace Lapka.Identity.Api.Controllers
 {
     [ApiController]
-    [Route("api/shelter/create")]
+    [Route("api/shelter")]
     public class ShelterController : ControllerBase
     {
         private readonly ICommandDispatcher _commandDispatcher;
@@ -24,8 +24,8 @@ namespace Lapka.Identity.Api.Controllers
             _queryDispatcher = queryDispatcher;
         }
 
-        [HttpPost]
-        public async Task<ActionResult> NewShelter(CreateShelterRequest createShelterRequest)
+        [HttpPost("create")]
+        public async Task<ActionResult> Add(CreateShelterRequest createShelterRequest)
         {
             Guid id = Guid.NewGuid();
             await _commandDispatcher.SendAsync(new CreateShelter(id, createShelterRequest.Name,
