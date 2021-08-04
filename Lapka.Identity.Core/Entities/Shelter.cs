@@ -1,4 +1,5 @@
 using System;
+using Lapka.Identity.Core.Events.Abstract;
 using Lapka.Identity.Core.Events.Concrete;
 using Lapka.Identity.Core.Exceptions;
 using Lapka.Identity.Core.ValueObjects;
@@ -21,6 +22,11 @@ namespace Lapka.Identity.Core.Entities
             GeoLocation = location;
             PhoneNumber = phoneNumber;
             Email = email;
+        }
+
+        public void Delete()
+        {
+            AddEvent(new ShelterDeleted(this));
         }
         
         public static Shelter Create(Guid id, string name, Address address, Location location, string phoneNumber, string email)
@@ -46,5 +52,4 @@ namespace Lapka.Identity.Core.Entities
 
         private static bool IsNameValid(string name) => string.IsNullOrWhiteSpace(name);
     }
-    
 }

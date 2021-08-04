@@ -39,6 +39,6 @@ namespace Lapka.Identity.Api.Controllers
 
             return Created($"api/identity/values/{id}", null);
         }
-        
+
     }
 }

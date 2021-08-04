@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 using System.ComponentModel.DataAnnotations;
+=======
+﻿using System.ComponentModel.DataAnnotations;
+>>>>>>> origin/develop
 
 namespace Lapka.Identity.Application.Dto
 {
@@ -9,4 +13,6 @@ namespace Lapka.Identity.Application.Dto
         [Required] 
         public string Longitude { get; set; }
     }
+        
+
 }

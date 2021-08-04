@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Lapka.Identity.Application.Dto;
+using Lapka.Identity.Application.Exceptions;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Core.Entities;
 
@@ -28,4 +31,20 @@ namespace Lapka.Identity.Infrastructure.Services
         }
     }
     
+
+        public Task DeleteAsync(Shelter shelter)
+        {
+            var shelterFromDb = _shelters.FirstOrDefault(x => x.Id.Value == shelter.Id.Value);
+            _shelters.Remove(shelterFromDb);
+
+            return Task.CompletedTask;        
+        }
+
+        public Task<Shelter> GetByIdAsync(Guid id)
+        {
+            var shelter = _shelters.FirstOrDefault(x => x.Id.Value == id);
+
+            return Task.FromResult(shelter);
+        } 
+    }
 }

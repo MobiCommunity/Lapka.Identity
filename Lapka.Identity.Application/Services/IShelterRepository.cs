@@ -9,5 +9,7 @@ namespace Lapka.Identity.Application.Services
         Task AddAsync(Shelter shelter);
 
         Task<IEnumerable<Shelter>> GetAllAsync();
+        Task DeleteAsync(Shelter shelter);
+        Task<Shelter> GetByIdAsync(Guid id);
     }
 }
