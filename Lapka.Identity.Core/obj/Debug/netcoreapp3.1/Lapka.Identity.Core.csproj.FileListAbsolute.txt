@@ -1,0 +1,11 @@
+D:\RiderProjects\Lapka.Identity.Core\bin\Debug\netcoreapp3.1\Lapka.Identity.Core.deps.json
+D:\RiderProjects\Lapka.Identity.Core\bin\Debug\netcoreapp3.1\Lapka.Identity.Core.dll
+D:\RiderProjects\Lapka.Identity.Core\bin\Debug\netcoreapp3.1\Lapka.Identity.Core.pdb
+D:\RiderProjects\Lapka.Identity.Core\bin\Debug\netcoreapp3.1\Lapka.Identity.Core.xml
+D:\RiderProjects\Lapka.Identity.Core\obj\Debug\netcoreapp3.1\Lapka.Identity.Core.csprojAssemblyReference.cache
+D:\RiderProjects\Lapka.Identity.Core\obj\Debug\netcoreapp3.1\Lapka.Identity.Core.AssemblyInfoInputs.cache
+D:\RiderProjects\Lapka.Identity.Core\obj\Debug\netcoreapp3.1\Lapka.Identity.Core.AssemblyInfo.cs
+D:\RiderProjects\Lapka.Identity.Core\obj\Debug\netcoreapp3.1\Lapka.Identity.Core.csproj.CoreCompileInputs.cache
+D:\RiderProjects\Lapka.Identity.Core\obj\Debug\netcoreapp3.1\Lapka.Identity.Core.dll
+D:\RiderProjects\Lapka.Identity.Core\obj\Debug\netcoreapp3.1\Lapka.Identity.Core.xml
+D:\RiderProjects\Lapka.Identity.Core\obj\Debug\netcoreapp3.1\Lapka.Identity.Core.pdb
