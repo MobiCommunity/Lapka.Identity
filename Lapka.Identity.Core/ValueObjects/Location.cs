@@ -50,12 +50,12 @@ namespace Lapka.Identity.Core.ValueObjects
                 throw new InvalidLatitudeValueException(Latitude);
             }
             
-            if (int.Parse(Latitude) <= MinLatitudeValue)
+            if (double.Parse(Latitude) <= MinLatitudeValue)
             {
                 throw new LatitudeTooLowException(Latitude);
             }
 
-            if (int.Parse(Latitude) >= MaxLatitudeValue)
+            if (double.Parse(Latitude) >= MaxLatitudeValue)
             {
                 throw new LatitudeTooBigException(Latitude);
             }
