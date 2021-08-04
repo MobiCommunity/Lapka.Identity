@@ -39,12 +39,12 @@ namespace Lapka.Identity.Core.Entities
             return shelter;
         }
 
-        private static bool IsEmailValid(string email) => !string.IsNullOrWhiteSpace(email);
+        private static bool IsEmailValid(string email) => string.IsNullOrWhiteSpace(email);
 
-        private static bool IsPhoneNumberValid(string phoneNumber) => !string.IsNullOrWhiteSpace(phoneNumber);
+        private static bool IsPhoneNumberValid(string phoneNumber) => string.IsNullOrWhiteSpace(phoneNumber);
 
 
-        private static bool IsNameValid(string name) => !string.IsNullOrWhiteSpace(name);
+        private static bool IsNameValid(string name) => string.IsNullOrWhiteSpace(name);
     }
     
 }

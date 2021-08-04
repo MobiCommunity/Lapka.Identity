@@ -5,17 +5,16 @@ namespace Lapka.Identity.Application.Dto
 {
     public static class Extensions
     {
-        public static Address AsDto(this AddressDto addressDto)
-            => new Address(addressDto.City, addressDto.Street, addressDto.ZipCode);
-
-        public static Location AsDto(this LocationDto locationDto)
-            => new Location(locationDto.Latitude, locationDto.Longitude);
-
-
         public static ShelterDto AsDto(this Shelter shelter)
         {
             return new ShelterDto
             {
+                Address = shelter.Address.AsDto(),
+                GeoLocation = shelter.GeoLocation.AsDto(),
+                Name = shelter.Name,
+                Email = shelter.Email,
+                PhoneNumber = shelter.PhoneNumber,
+                Id = shelter.Id.Value
             };
         }
 

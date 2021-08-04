@@ -14,7 +14,9 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Lapka.Identity.Api.Attributes;
 using Lapka.Identity.Application;
+using Lapka.Identity.Application.Services;
 using Lapka.Identity.Infrastructure;
+using Lapka.Identity.Infrastructure.Services;
 
 namespace Lapka.Identity.Api
 {
@@ -31,6 +33,7 @@ namespace Lapka.Identity.Api
                     services.AddControllers();
 
                     services.TryAddSingleton(new JsonSerializerFactory().GetSerializer());
+                    services.AddSingleton<IShelterRepository, ShelterRepository>();
 
                     services
                         .AddConvey()

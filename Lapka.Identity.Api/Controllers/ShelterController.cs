@@ -35,7 +35,7 @@ namespace Lapka.Identity.Api.Controllers
                 createShelterRequest.Address.AsValueObject(),
                 createShelterRequest.GeoLocation.AsValueObject()));
 
-            return Created($"api/shleter/{id}", null);
+            return Created($"api/shelter/{id}", null);
         }
 
         [HttpGet]
