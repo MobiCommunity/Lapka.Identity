@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 using System.ComponentModel.DataAnnotations;
-=======
-﻿using System.ComponentModel.DataAnnotations;
->>>>>>> origin/develop
 
 namespace Lapka.Identity.Application.Dto
 {

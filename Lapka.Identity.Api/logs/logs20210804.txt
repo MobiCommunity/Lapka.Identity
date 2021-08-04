@@ -372,3 +372,335 @@ Lapka.Identity.Core.Exceptions.InvalidShelterNameException: Invalid value of str
 2021-08-04 12:56:58.162 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.CreateShelterController.GetById (Lapka.Identity.Api) in 85.4913ms
 2021-08-04 12:56:58.164 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.CreateShelterController.GetById (Lapka.Identity.Api)'
 2021-08-04 12:56:58.166 +02:00 [INF] Request finished in 104.0599ms 200 application/json; charset=utf-8
+2021-08-04 14:47:03.627 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/index.html  
+2021-08-04 14:47:03.793 +02:00 [INF] Request finished in 169.5021ms 200 text/html;charset=utf-8
+2021-08-04 14:47:04.073 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/v1/swagger.json  
+2021-08-04 14:47:04.232 +02:00 [INF] Request finished in 158.7151ms 200 application/json;charset=utf-8
+2021-08-04 14:47:56.865 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/shelter application/json 159
+2021-08-04 14:47:56.882 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 14:47:56.947 +02:00 [INF] Route matched with {action = "Add", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Add(Lapka.Identity.Api.Models.Request.CreateShelterRequest) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 14:47:57.098 +02:00 [INF] Executing ObjectResult, writing value of type 'null'.
+2021-08-04 14:47:57.105 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api) in 151.1996ms
+2021-08-04 14:47:57.108 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 14:47:57.109 +02:00 [INF] Request finished in 244.2755ms 201 
+2021-08-04 14:48:06.645 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/shelter application/json 159
+2021-08-04 14:48:06.647 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 14:48:06.649 +02:00 [INF] Route matched with {action = "Add", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Add(Lapka.Identity.Api.Models.Request.CreateShelterRequest) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 14:48:06.657 +02:00 [INF] Executing ObjectResult, writing value of type 'null'.
+2021-08-04 14:48:06.657 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api) in 7.4459ms
+2021-08-04 14:48:06.658 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 14:48:06.659 +02:00 [INF] Request finished in 13.9571ms 201 
+2021-08-04 14:48:14.298 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/shelter application/json 163
+2021-08-04 14:48:14.300 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 14:48:14.301 +02:00 [INF] Route matched with {action = "Add", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Add(Lapka.Identity.Api.Models.Request.CreateShelterRequest) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 14:48:14.310 +02:00 [INF] Executing ObjectResult, writing value of type 'null'.
+2021-08-04 14:48:14.311 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api) in 8.8393ms
+2021-08-04 14:48:14.312 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 14:48:14.313 +02:00 [INF] Request finished in 15.0344ms 201 
+2021-08-04 14:48:42.953 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/shelter  
+2021-08-04 14:48:42.954 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetShelters (Lapka.Identity.Api)'
+2021-08-04 14:48:42.968 +02:00 [INF] Route matched with {action = "GetShelters", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Lapka.Identity.Application.Dto.ShelterDto]]] GetShelters() on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 14:48:43.006 +02:00 [INF] Executing ObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[Lapka.Identity.Core.Entities.Shelter, Lapka.Identity.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Lapka.Identity.Application.Dto.ShelterDto, Lapka.Identity.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2021-08-04 14:48:43.025 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.GetShelters (Lapka.Identity.Api) in 56.3755ms
+2021-08-04 14:48:43.025 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetShelters (Lapka.Identity.Api)'
+2021-08-04 14:48:43.026 +02:00 [INF] Request finished in 73.1661ms 200 application/json; charset=utf-8
+2021-08-04 14:49:35.627 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/shelter/ac6dc231-9496-44fe-86bf-58a661d06593  
+2021-08-04 14:49:35.631 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api)'
+2021-08-04 14:49:35.652 +02:00 [INF] Route matched with {action = "GetById", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetById(System.Guid) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 14:49:35.683 +02:00 [INF] Executing ObjectResult, writing value of type 'Lapka.Identity.Application.Dto.ShelterDto'.
+2021-08-04 14:49:35.685 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api) in 31.942ms
+2021-08-04 14:49:35.685 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api)'
+2021-08-04 14:49:35.686 +02:00 [INF] Request finished in 59.3356ms 200 application/json; charset=utf-8
+2021-08-04 14:49:36.821 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/shelter/ac6dc231-9496-44fe-86bf-58a661d06593  
+2021-08-04 14:49:36.824 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api)'
+2021-08-04 14:49:36.825 +02:00 [INF] Route matched with {action = "GetById", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetById(System.Guid) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 14:49:36.827 +02:00 [INF] Executing ObjectResult, writing value of type 'Lapka.Identity.Application.Dto.ShelterDto'.
+2021-08-04 14:49:36.828 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api) in 2.6673ms
+2021-08-04 14:49:36.829 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api)'
+2021-08-04 14:49:36.830 +02:00 [INF] Request finished in 8.2888ms 200 application/json; charset=utf-8
+2021-08-04 14:50:21.638 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/shelter/20a6ad20-8bc9-44c8-b25f-a10adc9d78bc  
+2021-08-04 14:50:21.639 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api)'
+2021-08-04 14:50:21.640 +02:00 [INF] Route matched with {action = "GetById", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetById(System.Guid) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 14:50:21.642 +02:00 [INF] Executing ObjectResult, writing value of type 'Lapka.Identity.Application.Dto.ShelterDto'.
+2021-08-04 14:50:21.643 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api) in 2.2552ms
+2021-08-04 14:50:21.644 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api)'
+2021-08-04 14:50:21.644 +02:00 [INF] Request finished in 6.4366ms 200 application/json; charset=utf-8
+2021-08-04 14:50:24.155 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/shelter/20a6ad20-8bc9-44c8-b25f-a10adc9d78bc  
+2021-08-04 14:50:24.156 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api)'
+2021-08-04 14:50:24.156 +02:00 [INF] Route matched with {action = "GetById", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetById(System.Guid) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 14:50:24.157 +02:00 [INF] Executing ObjectResult, writing value of type 'Lapka.Identity.Application.Dto.ShelterDto'.
+2021-08-04 14:50:24.158 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api) in 1.788ms
+2021-08-04 14:50:24.159 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api)'
+2021-08-04 14:50:24.160 +02:00 [INF] Request finished in 4.7557ms 200 application/json; charset=utf-8
+2021-08-04 14:50:39.861 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5000/api/shelter/20a6ad20-8bc9-44c8-b25f-a10adc9d78bc application/json 45
+2021-08-04 14:50:39.861 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Delete (Lapka.Identity.Api)'
+2021-08-04 14:50:39.879 +02:00 [INF] Route matched with {action = "Delete", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] Delete(Lapka.Identity.Api.Models.Request.DeleteShelterRequest) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 14:50:39.908 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.Delete (Lapka.Identity.Api) in 28.8108ms
+2021-08-04 14:50:39.911 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Delete (Lapka.Identity.Api)'
+2021-08-04 14:50:39.911 +02:00 [ERR] shelter not exists in database
+Lapka.Identity.Application.Exceptions.ShelterNotFoundException: shelter not exists in database
+   at Lapka.Identity.Application.Commands.Handlers.DeleteShelterHandler.HandleAsync(DeleteShelter command) in /Users/dominikbednarz/Documents/Mobitouch/Lapka.Identity/Lapka.Identity.Application/Commands/Handlers/DeleteShelterHandler.cs:line 25
+   at Convey.CQRS.Commands.Dispatchers.CommandDispatcher.SendAsync[T](T command)
+   at Lapka.Identity.Api.Controllers.ShelterController.Delete(DeleteShelterRequest deleteShelterRequest) in /Users/dominikbednarz/Documents/Mobitouch/Lapka.Identity/Lapka.Identity.Api/Controllers/ShelterController.cs:line 52
+   at lambda_method(Closure , Object )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutorAwaitable.Awaiter.GetResult()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Convey.WebApi.Exceptions.ErrorHandlerMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
+2021-08-04 14:50:40.064 +02:00 [INF] Request finished in 203.3418ms 400 application/json
+2021-08-04 14:51:43.838 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/index.html  
+2021-08-04 14:51:44.073 +02:00 [INF] Request finished in 242.0409ms 200 text/html;charset=utf-8
+2021-08-04 14:51:44.338 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/v1/swagger.json  
+2021-08-04 14:51:44.588 +02:00 [INF] Request finished in 249.7932ms 200 application/json;charset=utf-8
+2021-08-04 14:52:24.874 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/shelter application/json 158
+2021-08-04 14:52:24.887 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 14:52:24.930 +02:00 [INF] Route matched with {action = "Add", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Add(Lapka.Identity.Api.Models.Request.CreateShelterRequest) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 14:52:25.048 +02:00 [INF] Executing ObjectResult, writing value of type 'null'.
+2021-08-04 14:52:25.053 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api) in 117.487ms
+2021-08-04 14:52:25.056 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 14:52:25.056 +02:00 [INF] Request finished in 182.4479ms 201 
+2021-08-04 14:52:35.676 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/shelter application/json 159
+2021-08-04 14:52:35.677 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 14:52:35.679 +02:00 [INF] Route matched with {action = "Add", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Add(Lapka.Identity.Api.Models.Request.CreateShelterRequest) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 14:52:35.682 +02:00 [INF] Executing ObjectResult, writing value of type 'null'.
+2021-08-04 14:52:35.682 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api) in 3.0112ms
+2021-08-04 14:52:35.682 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 14:52:35.683 +02:00 [INF] Request finished in 7.7644ms 201 
+2021-08-04 14:52:44.384 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/shelter application/json 159
+2021-08-04 14:52:44.385 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 14:52:44.386 +02:00 [INF] Route matched with {action = "Add", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Add(Lapka.Identity.Api.Models.Request.CreateShelterRequest) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 14:52:44.389 +02:00 [INF] Executing ObjectResult, writing value of type 'null'.
+2021-08-04 14:52:44.389 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api) in 2.9138ms
+2021-08-04 14:52:44.389 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 14:52:44.390 +02:00 [INF] Request finished in 6.4001ms 201 
+2021-08-04 14:52:45.708 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/shelter application/json 159
+2021-08-04 14:52:45.709 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 14:52:45.709 +02:00 [INF] Route matched with {action = "Add", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Add(Lapka.Identity.Api.Models.Request.CreateShelterRequest) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 14:52:45.711 +02:00 [INF] Executing ObjectResult, writing value of type 'null'.
+2021-08-04 14:52:45.711 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api) in 1.6514ms
+2021-08-04 14:52:45.711 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 14:52:45.712 +02:00 [INF] Request finished in 3.7236ms 201 
+2021-08-04 14:52:46.604 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/shelter application/json 159
+2021-08-04 14:52:46.604 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 14:52:46.605 +02:00 [INF] Route matched with {action = "Add", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Add(Lapka.Identity.Api.Models.Request.CreateShelterRequest) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 14:52:46.607 +02:00 [INF] Executing ObjectResult, writing value of type 'null'.
+2021-08-04 14:52:46.607 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api) in 1.5328ms
+2021-08-04 14:52:46.607 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 14:52:46.608 +02:00 [INF] Request finished in 4.0677ms 201 
+2021-08-04 14:52:58.484 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/shelter application/json 162
+2021-08-04 14:52:58.485 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 14:52:58.486 +02:00 [INF] Route matched with {action = "Add", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Add(Lapka.Identity.Api.Models.Request.CreateShelterRequest) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 14:52:58.489 +02:00 [INF] Executing ObjectResult, writing value of type 'null'.
+2021-08-04 14:52:58.490 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api) in 2.9522ms
+2021-08-04 14:52:58.491 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 14:52:58.495 +02:00 [INF] Request finished in 9.7314ms 201 
+2021-08-04 14:53:08.578 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/shelter  
+2021-08-04 14:53:08.579 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetShelters (Lapka.Identity.Api)'
+2021-08-04 14:53:08.584 +02:00 [INF] Route matched with {action = "GetShelters", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Lapka.Identity.Application.Dto.ShelterDto]]] GetShelters() on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 14:53:08.612 +02:00 [INF] Executing ObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[Lapka.Identity.Core.Entities.Shelter, Lapka.Identity.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Lapka.Identity.Application.Dto.ShelterDto, Lapka.Identity.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2021-08-04 14:53:08.625 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.GetShelters (Lapka.Identity.Api) in 40.9697ms
+2021-08-04 14:53:08.626 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetShelters (Lapka.Identity.Api)'
+2021-08-04 14:53:08.626 +02:00 [INF] Request finished in 47.5848ms 200 application/json; charset=utf-8
+2021-08-04 15:20:33.280 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/index.html  
+2021-08-04 15:20:33.452 +02:00 [INF] Request finished in 177.9431ms 200 text/html;charset=utf-8
+2021-08-04 15:20:33.669 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/v1/swagger.json  
+2021-08-04 15:20:33.832 +02:00 [INF] Request finished in 163.0737ms 200 application/json;charset=utf-8
+2021-08-04 15:30:25.162 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/shelter application/json 167
+2021-08-04 15:30:25.178 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 15:30:25.221 +02:00 [INF] Route matched with {action = "Add", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Add(Lapka.Identity.Api.Models.Request.CreateShelterRequest) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 15:30:25.343 +02:00 [INF] Executing ObjectResult, writing value of type 'null'.
+2021-08-04 15:30:25.349 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api) in 121.7105ms
+2021-08-04 15:30:25.352 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 15:30:25.352 +02:00 [INF] Request finished in 191.3154ms 201 
+2021-08-04 15:30:28.429 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/shelter application/json 167
+2021-08-04 15:30:28.431 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 15:30:28.437 +02:00 [INF] Route matched with {action = "Add", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Add(Lapka.Identity.Api.Models.Request.CreateShelterRequest) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 15:30:28.444 +02:00 [INF] Executing ObjectResult, writing value of type 'null'.
+2021-08-04 15:30:28.446 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api) in 7.8459ms
+2021-08-04 15:30:28.448 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 15:30:28.449 +02:00 [INF] Request finished in 20.1188ms 201 
+2021-08-04 15:30:35.768 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/shelter application/json 168
+2021-08-04 15:30:35.769 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 15:30:35.770 +02:00 [INF] Route matched with {action = "Add", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Add(Lapka.Identity.Api.Models.Request.CreateShelterRequest) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 15:30:35.779 +02:00 [INF] Executing ObjectResult, writing value of type 'null'.
+2021-08-04 15:30:35.780 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api) in 8.551ms
+2021-08-04 15:30:35.781 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 15:30:35.783 +02:00 [INF] Request finished in 14.1593ms 201 
+2021-08-04 15:30:40.112 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/shelter application/json 168
+2021-08-04 15:30:40.112 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 15:30:40.113 +02:00 [INF] Route matched with {action = "Add", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Add(Lapka.Identity.Api.Models.Request.CreateShelterRequest) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 15:30:40.115 +02:00 [INF] Executing ObjectResult, writing value of type 'null'.
+2021-08-04 15:30:40.115 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api) in 1.511ms
+2021-08-04 15:30:40.115 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 15:30:40.115 +02:00 [INF] Request finished in 3.8546ms 201 
+2021-08-04 15:30:48.107 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/shelter application/json 168
+2021-08-04 15:30:48.108 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 15:30:48.109 +02:00 [INF] Route matched with {action = "Add", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Add(Lapka.Identity.Api.Models.Request.CreateShelterRequest) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 15:30:48.113 +02:00 [INF] Executing ObjectResult, writing value of type 'null'.
+2021-08-04 15:30:48.113 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api) in 3.7615ms
+2021-08-04 15:30:48.114 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 15:30:48.116 +02:00 [INF] Request finished in 9.0258ms 201 
+2021-08-04 15:31:30.754 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/shelter  
+2021-08-04 15:31:30.756 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetShelters (Lapka.Identity.Api)'
+2021-08-04 15:31:30.780 +02:00 [INF] Route matched with {action = "GetShelters", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Lapka.Identity.Application.Dto.ShelterDto]]] GetShelters() on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 15:31:30.812 +02:00 [INF] Executing ObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[Lapka.Identity.Core.Entities.Shelter, Lapka.Identity.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Lapka.Identity.Application.Dto.ShelterDto, Lapka.Identity.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2021-08-04 15:31:30.827 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.GetShelters (Lapka.Identity.Api) in 46.1696ms
+2021-08-04 15:31:30.828 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetShelters (Lapka.Identity.Api)'
+2021-08-04 15:31:30.828 +02:00 [INF] Request finished in 74.3037ms 200 application/json; charset=utf-8
+2021-08-04 15:31:57.700 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/shelter/b02c4252-598f-4da3-9ecc-7d78fce99afb  
+2021-08-04 15:31:57.701 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api)'
+2021-08-04 15:31:57.705 +02:00 [INF] Route matched with {action = "GetById", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetById(System.Guid) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 15:31:57.717 +02:00 [INF] Executing ObjectResult, writing value of type 'Lapka.Identity.Application.Dto.ShelterDto'.
+2021-08-04 15:31:57.719 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api) in 12.9043ms
+2021-08-04 15:31:57.719 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api)'
+2021-08-04 15:31:57.720 +02:00 [INF] Request finished in 19.8415ms 200 application/json; charset=utf-8
+2021-08-04 15:32:08.550 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5000/api/shelter/{id}  0
+2021-08-04 15:32:08.551 +02:00 [INF] Request finished in 1.0577ms 404 
+2021-08-04 15:32:10.528 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5000/api/shelter/{id}  0
+2021-08-04 15:32:10.530 +02:00 [INF] Request finished in 1.8526ms 404 
+2021-08-04 15:42:21.542 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/shelter/b02c4252-598f-4da3-9ecc-7d78fce99afb  
+2021-08-04 15:42:21.562 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api)'
+2021-08-04 15:42:21.570 +02:00 [INF] Route matched with {action = "GetById", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetById(System.Guid) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 15:42:21.585 +02:00 [INF] Executing ObjectResult, writing value of type 'Lapka.Identity.Application.Dto.ShelterDto'.
+2021-08-04 15:42:21.590 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api) in 19.0335ms
+2021-08-04 15:42:21.591 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api)'
+2021-08-04 15:42:21.592 +02:00 [INF] Request finished in 53.0798ms 200 application/json; charset=utf-8
+2021-08-04 15:42:56.461 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/shelter/b02c4252-598f-4da3-9ecc-7d78fce99afb  
+2021-08-04 15:42:56.462 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api)'
+2021-08-04 15:42:56.463 +02:00 [INF] Route matched with {action = "GetById", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetById(System.Guid) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 15:42:56.466 +02:00 [INF] Executing ObjectResult, writing value of type 'Lapka.Identity.Application.Dto.ShelterDto'.
+2021-08-04 15:42:56.470 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api) in 6.625ms
+2021-08-04 15:42:56.471 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api)'
+2021-08-04 15:42:56.472 +02:00 [INF] Request finished in 11.007ms 200 application/json; charset=utf-8
+2021-08-04 15:45:26.774 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/index.html  
+2021-08-04 15:45:26.943 +02:00 [INF] Request finished in 173.5915ms 200 text/html;charset=utf-8
+2021-08-04 15:45:27.263 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/v1/swagger.json  
+2021-08-04 15:45:27.422 +02:00 [INF] Request finished in 158.9355ms 200 application/json;charset=utf-8
+2021-08-04 15:45:41.795 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/shelter application/json 170
+2021-08-04 15:45:41.820 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 15:45:41.876 +02:00 [INF] Route matched with {action = "Add", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Add(Lapka.Identity.Api.Models.Request.CreateShelterRequest) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 15:45:42.014 +02:00 [INF] Executing ObjectResult, writing value of type 'null'.
+2021-08-04 15:45:42.019 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api) in 138.3175ms
+2021-08-04 15:45:42.022 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 15:45:42.023 +02:00 [INF] Request finished in 228.4529ms 201 
+2021-08-04 15:46:17.712 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/shelter/3fa85f64-5717-4562-b3fc-2c963f66afa6  
+2021-08-04 15:46:17.715 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api)'
+2021-08-04 15:46:17.731 +02:00 [INF] Route matched with {action = "GetById", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetById(System.Guid) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 15:46:17.773 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api) in 41.1985ms
+2021-08-04 15:46:17.774 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api)'
+2021-08-04 15:46:17.777 +02:00 [ERR] shelter not exists in database
+Lapka.Identity.Application.Exceptions.ShelterNotFoundException: shelter not exists in database
+   at Lapka.Identity.Infrastructure.Queries.Handlers.GetShelterHandler.HandleAsync(GetShelter query) in /Users/dominikbednarz/Documents/Mobitouch/Lapka.Identity/Lapka.Identity.Infrastructure/Queries/Handlers/GetShelterHandler.cs:line 25
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Convey.CQRS.Queries.Dispatchers.QueryDispatcher.QueryAsync[TResult](IQuery`1 query)
+   at Lapka.Identity.Api.Controllers.ShelterController.GetById(Guid id) in /Users/dominikbednarz/Documents/Mobitouch/Lapka.Identity/Lapka.Identity.Api/Controllers/ShelterController.cs:line 31
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Convey.WebApi.Exceptions.ErrorHandlerMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
+2021-08-04 15:46:17.928 +02:00 [INF] Request finished in 216.6928ms 400 application/json
+2021-08-04 15:46:51.047 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/shelter application/json 168
+2021-08-04 15:46:51.049 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 15:46:51.051 +02:00 [INF] Route matched with {action = "Add", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Add(Lapka.Identity.Api.Models.Request.CreateShelterRequest) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 15:46:51.055 +02:00 [INF] Executing ObjectResult, writing value of type 'null'.
+2021-08-04 15:46:51.056 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api) in 4.5168ms
+2021-08-04 15:46:51.056 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 15:46:51.057 +02:00 [INF] Request finished in 9.6275ms 201 
+2021-08-04 15:46:55.168 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/shelter  
+2021-08-04 15:46:55.169 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetShelters (Lapka.Identity.Api)'
+2021-08-04 15:46:55.176 +02:00 [INF] Route matched with {action = "GetShelters", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Lapka.Identity.Application.Dto.ShelterDto]]] GetShelters() on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 15:46:55.198 +02:00 [INF] Executing ObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[Lapka.Identity.Core.Entities.Shelter, Lapka.Identity.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Lapka.Identity.Application.Dto.ShelterDto, Lapka.Identity.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2021-08-04 15:46:55.220 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.GetShelters (Lapka.Identity.Api) in 43.3155ms
+2021-08-04 15:46:55.220 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetShelters (Lapka.Identity.Api)'
+2021-08-04 15:46:55.221 +02:00 [INF] Request finished in 53.0075ms 200 application/json; charset=utf-8
+2021-08-04 15:47:20.776 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/shelter/266ff98e-a2d5-4b6f-abd3-de1dd39343c4  
+2021-08-04 15:47:20.778 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api)'
+2021-08-04 15:47:20.780 +02:00 [INF] Route matched with {action = "GetById", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetById(System.Guid) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 15:47:20.807 +02:00 [INF] Executing ObjectResult, writing value of type 'Lapka.Identity.Application.Dto.ShelterDto'.
+2021-08-04 15:47:20.811 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api) in 29.4663ms
+2021-08-04 15:47:20.816 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api)'
+2021-08-04 15:47:20.819 +02:00 [INF] Request finished in 42.892ms 200 application/json; charset=utf-8
+2021-08-04 15:47:28.477 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5000/api/shelter/266ff98e-a2d5-4b6f-abd3-de1dd39343c4  0
+2021-08-04 15:47:28.478 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Delete (Lapka.Identity.Api)'
+2021-08-04 15:47:28.487 +02:00 [INF] Route matched with {action = "Delete", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Delete(System.Guid) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 15:47:28.511 +02:00 [INF] Executing HttpStatusCodeResult, setting HTTP status code 204
+2021-08-04 15:47:28.513 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.Delete (Lapka.Identity.Api) in 24.8422ms
+2021-08-04 15:47:28.513 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Delete (Lapka.Identity.Api)'
+2021-08-04 15:47:28.514 +02:00 [INF] Request finished in 37.3582ms 204 
+2021-08-04 15:50:18.808 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/index.html  
+2021-08-04 15:50:18.982 +02:00 [INF] Request finished in 179.1524ms 200 text/html;charset=utf-8
+2021-08-04 15:50:19.194 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/v1/swagger.json  
+2021-08-04 15:50:19.341 +02:00 [INF] Request finished in 146.5486ms 200 application/json;charset=utf-8
+2021-08-04 15:50:28.717 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/shelter application/json 171
+2021-08-04 15:50:28.724 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 15:50:28.770 +02:00 [INF] Route matched with {action = "Add", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Add(Lapka.Identity.Api.Models.Request.CreateShelterRequest) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 15:50:28.888 +02:00 [INF] Executing ObjectResult, writing value of type 'null'.
+2021-08-04 15:50:28.893 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api) in 117.2761ms
+2021-08-04 15:50:28.895 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 15:50:28.896 +02:00 [INF] Request finished in 178.9585ms 201 
+2021-08-04 15:50:30.383 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/shelter application/json 171
+2021-08-04 15:50:30.384 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 15:50:30.385 +02:00 [INF] Route matched with {action = "Add", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Add(Lapka.Identity.Api.Models.Request.CreateShelterRequest) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 15:50:30.388 +02:00 [INF] Executing ObjectResult, writing value of type 'null'.
+2021-08-04 15:50:30.388 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api) in 2.5168ms
+2021-08-04 15:50:30.388 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 15:50:30.389 +02:00 [INF] Request finished in 6.2112ms 201 
+2021-08-04 15:50:41.559 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/shelter  
+2021-08-04 15:50:41.560 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetShelters (Lapka.Identity.Api)'
+2021-08-04 15:50:41.568 +02:00 [INF] Route matched with {action = "GetShelters", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Lapka.Identity.Application.Dto.ShelterDto]]] GetShelters() on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 15:50:41.601 +02:00 [INF] Executing ObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[Lapka.Identity.Core.Entities.Shelter, Lapka.Identity.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Lapka.Identity.Application.Dto.ShelterDto, Lapka.Identity.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2021-08-04 15:50:41.618 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.GetShelters (Lapka.Identity.Api) in 48.777ms
+2021-08-04 15:50:41.618 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetShelters (Lapka.Identity.Api)'
+2021-08-04 15:50:41.618 +02:00 [INF] Request finished in 59.3403ms 200 application/json; charset=utf-8
+2021-08-04 15:51:25.867 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/index.html  
+2021-08-04 15:51:26.030 +02:00 [INF] Request finished in 166.7358ms 200 text/html;charset=utf-8
+2021-08-04 15:51:26.182 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/v1/swagger.json  
+2021-08-04 15:51:26.300 +02:00 [INF] Request finished in 117.8532ms 200 application/json;charset=utf-8
+2021-08-04 15:51:37.563 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/shelter application/json 171
+2021-08-04 15:51:37.576 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 15:51:37.648 +02:00 [INF] Route matched with {action = "Add", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Add(Lapka.Identity.Api.Models.Request.CreateShelterRequest) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 15:51:37.787 +02:00 [INF] Executing ObjectResult, writing value of type 'null'.
+2021-08-04 15:51:37.793 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api) in 139.2937ms
+2021-08-04 15:51:37.797 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Add (Lapka.Identity.Api)'
+2021-08-04 15:51:37.797 +02:00 [INF] Request finished in 233.9821ms 201 
+2021-08-04 15:51:45.400 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/shelter  
+2021-08-04 15:51:45.401 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetShelters (Lapka.Identity.Api)'
+2021-08-04 15:51:45.409 +02:00 [INF] Route matched with {action = "GetShelters", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Lapka.Identity.Application.Dto.ShelterDto]]] GetShelters() on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 15:51:45.440 +02:00 [INF] Executing ObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[Lapka.Identity.Core.Entities.Shelter, Lapka.Identity.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Lapka.Identity.Application.Dto.ShelterDto, Lapka.Identity.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2021-08-04 15:51:45.461 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.GetShelters (Lapka.Identity.Api) in 51.6668ms
+2021-08-04 15:51:45.462 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetShelters (Lapka.Identity.Api)'
+2021-08-04 15:51:45.462 +02:00 [INF] Request finished in 62.3094ms 200 application/json; charset=utf-8
+2021-08-04 15:52:06.994 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/shelter/1e013767-121b-4f83-b22b-19b7c0bdec31  
+2021-08-04 15:52:06.996 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api)'
+2021-08-04 15:52:07.007 +02:00 [INF] Route matched with {action = "GetById", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetById(System.Guid) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 15:52:07.030 +02:00 [INF] Executing ObjectResult, writing value of type 'Lapka.Identity.Application.Dto.ShelterDto'.
+2021-08-04 15:52:07.031 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api) in 23.7012ms
+2021-08-04 15:52:07.033 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.GetById (Lapka.Identity.Api)'
+2021-08-04 15:52:07.035 +02:00 [INF] Request finished in 41.2167ms 200 application/json; charset=utf-8
+2021-08-04 15:52:14.338 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5000/api/shelter/1e013767-121b-4f83-b22b-19b7c0bdec31  0
+2021-08-04 15:52:14.341 +02:00 [INF] Executing endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Delete (Lapka.Identity.Api)'
+2021-08-04 15:52:14.367 +02:00 [INF] Route matched with {action = "Delete", controller = "Shelter"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Delete(System.Guid) on controller Lapka.Identity.Api.Controllers.ShelterController (Lapka.Identity.Api).
+2021-08-04 15:52:14.401 +02:00 [INF] Executing HttpStatusCodeResult, setting HTTP status code 204
+2021-08-04 15:52:14.402 +02:00 [INF] Executed action Lapka.Identity.Api.Controllers.ShelterController.Delete (Lapka.Identity.Api) in 34.015ms
+2021-08-04 15:52:14.402 +02:00 [INF] Executed endpoint 'Lapka.Identity.Api.Controllers.ShelterController.Delete (Lapka.Identity.Api)'
+2021-08-04 15:52:14.403 +02:00 [INF] Request finished in 64.8523ms 204 

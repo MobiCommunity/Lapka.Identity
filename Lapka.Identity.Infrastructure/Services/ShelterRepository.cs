@@ -29,9 +29,7 @@ namespace Lapka.Identity.Infrastructure.Services
         {
             return _shelters;
         }
-    }
-    
-
+        
         public Task DeleteAsync(Shelter shelter)
         {
             var shelterFromDb = _shelters.FirstOrDefault(x => x.Id.Value == shelter.Id.Value);
