@@ -24,11 +24,12 @@ namespace Lapka.Identity.Infrastructure.Services
             _values.Add(value);
         }
 
-        public async Task<ValueDto> GetById(Guid id)
+        public async Task<Value> GetById(Guid id)
         {
             var entity = _values.FirstOrDefault(x => x.Id.Value == id);
             if (entity is null) throw new ValueNotFoundException();
-            return new ValueDto { Id = entity.Id.Value, Description = entity.Description, Name = entity.Name };
+            
+            return entity;
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Lapka.Identity.Api.Models;
 using Lapka.Identity.Api.Models.Request;
 using Lapka.Identity.Application.Commands;
+using Lapka.Identity.Application.Queries;
 
 namespace Lapka.Identity.Api.Controllers
 {
@@ -21,6 +22,15 @@ namespace Lapka.Identity.Api.Controllers
             _commandDispatcher = commandDispatcher;
             _queryDispatcher = queryDispatcher;
         }
+        
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            return Ok(await _queryDispatcher.QueryAsync(new GetShelter
+            {
+                Id = id
+            }));
+        }
 
         [HttpPost]
         public async Task<ActionResult> Add(CreateShelterRequest createShelterRequest)
@@ -30,10 +40,10 @@ namespace Lapka.Identity.Api.Controllers
                 createShelterRequest.PhoneNumber, createShelterRequest.Email, createShelterRequest.Address.AsValueObject(),
                 createShelterRequest.GeoLocation.AsValueObject()));
 
-            return Created($"api/shleter/{id}", null);
+            return Created($"api/shelter/{id}", null);
         }
         
-        [HttpDelete]
+        [HttpDelete("{id:guid}")]
         public async Task<ActionResult> Delete(DeleteShelterRequest deleteShelterRequest)
         {
             await _commandDispatcher.SendAsync(new DeleteShelter(deleteShelterRequest.Id));
