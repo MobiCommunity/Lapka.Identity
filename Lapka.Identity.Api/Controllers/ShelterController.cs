@@ -6,19 +6,17 @@ using System.Threading.Tasks;
 using Lapka.Identity.Api.Models;
 using Lapka.Identity.Api.Models.Request;
 using Lapka.Identity.Application.Commands;
-using Lapka.Identity.Application.Queries;
-using Lapka.Identity.Core.ValueObjects;
 
 namespace Lapka.Identity.Api.Controllers
 {
     [ApiController]
     [Route("api/shelter")]
-    public class CreateShelterController : ControllerBase
+    public class ShelterController : ControllerBase
     {
         private readonly ICommandDispatcher _commandDispatcher;
         private readonly IQueryDispatcher _queryDispatcher;
 
-        public CreateShelterController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher)
+        public ShelterController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher)
         {
             _commandDispatcher = commandDispatcher;
             _queryDispatcher = queryDispatcher;
