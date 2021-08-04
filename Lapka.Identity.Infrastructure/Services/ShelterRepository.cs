@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Core.Entities;
 
@@ -19,6 +20,11 @@ namespace Lapka.Identity.Infrastructure.Services
             _shelters.Add(shelter);
 
             return Task.CompletedTask;
+        }
+
+        public async Task<IEnumerable<Shelter>> GetAllAsync()
+        {
+            return _shelters;
         }
     }
     

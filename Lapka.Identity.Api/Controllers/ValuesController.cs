@@ -32,7 +32,7 @@ namespace Lapka.Identity.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Add(CreateValueRequest valueRequest)
+        public async Task<IActionResult> Add(CreateValueRequest valueRequest)
         {
             Guid id = Guid.NewGuid();
             await _commandDispatcher.SendAsync(new CreateValue(valueRequest.Name,valueRequest.Description,id));
