@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Queries;
 using Lapka.Identity.Application.Services;
+using Lapka.Identity.Core.Entities;
 
 namespace Lapka.Identity.Infrastructure.Queries.Handlers
 {
@@ -17,7 +18,9 @@ namespace Lapka.Identity.Infrastructure.Queries.Handlers
 
         public async Task<ValueDto> HandleAsync(GetValue query)
         {
-            return await _service.GetById(query.Id);
+            Value value = await _service.GetById(query.Id);
+
+            return value.AsDto();
         }
     }
 }

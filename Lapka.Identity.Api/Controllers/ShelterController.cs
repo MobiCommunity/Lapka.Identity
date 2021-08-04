@@ -23,6 +23,15 @@ namespace Lapka.Identity.Api.Controllers
             _commandDispatcher = commandDispatcher;
             _queryDispatcher = queryDispatcher;
         }
+        
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult> GetById(Guid id)
+        {
+            return Ok(await _queryDispatcher.QueryAsync(new GetShelter
+            {
+                Id = id
+            }));
+        }
 
         [HttpPost]
         public async Task<ActionResult> Add(CreateShelterRequest createShelterRequest)
@@ -35,7 +44,7 @@ namespace Lapka.Identity.Api.Controllers
             return Created($"api/shleter/{id}", null);
         }
         
-        [HttpDelete]
+        [HttpDelete("{id:guid}")]
         public async Task<ActionResult> Delete(DeleteShelterRequest deleteShelterRequest)
         {
             await _commandDispatcher.SendAsync(new DeleteShelter(deleteShelterRequest.Id));

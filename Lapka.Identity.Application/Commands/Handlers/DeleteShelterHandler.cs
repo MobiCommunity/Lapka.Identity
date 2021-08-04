@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Convey.CQRS.Commands;
+using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Services;
+using Lapka.Identity.Core.Entities;
 
 namespace Lapka.Identity.Application.Commands.Handlers
 {
@@ -16,7 +18,7 @@ namespace Lapka.Identity.Application.Commands.Handlers
         }
         public async Task HandleAsync(DeleteShelter command)
         {
-            var shelter = await _shelterRepository.GetByIdAsync(command.Id);
+            Shelter shelter = await _shelterRepository.GetByIdAsync(command.Id); 
             shelter.Delete();
             
             await _shelterRepository.DeleteAsync(shelter);

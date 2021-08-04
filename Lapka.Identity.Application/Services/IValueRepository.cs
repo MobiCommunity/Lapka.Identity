@@ -8,6 +8,6 @@ namespace Lapka.Identity.Application.Services
     public interface IValueRepository
     {
         Task AddValue(Value value);
-        Task<ValueDto> GetById(Guid id);
+        Task<Value> GetById(Guid id);
     }
 }
