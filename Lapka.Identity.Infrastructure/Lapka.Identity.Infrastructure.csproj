@@ -26,4 +26,8 @@
       <ProjectReference Include="..\Lapka.Identity.Application\Lapka.Identity.Application.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Queries\Handlers" />
+    </ItemGroup>
+
 </Project>

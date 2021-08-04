@@ -46,7 +46,7 @@ namespace Lapka.Identity.Api
                         c.SwaggerDoc("v1", new OpenApiInfo
                         {
                             Version = "v1",
-                            Title = "lapka.identity Microservice",
+                            Title = "identity Microservice",
                             Description = ""
                         });
                         string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -65,11 +65,11 @@ namespace Lapka.Identity.Api
                         .UseConvey()
                         .UseInfrastructure()
                         .UseRouting()
-                        .UseSwagger(c => { c.RouteTemplate = "api/lapka.identity/swagger/{documentname}/swagger.json"; })
+                        .UseSwagger(c => { c.RouteTemplate = "api/identity/swagger/{documentname}/swagger.json"; })
                         .UseSwaggerUI(c =>
                         {
-                            c.SwaggerEndpoint("/api/lapka.identity/swagger/v1/swagger.json", "My API V1");
-                            c.RoutePrefix = "api/lapka.identity/swagger";
+                            c.SwaggerEndpoint("/api/identity/swagger/v1/swagger.json", "My API V1");
+                            c.RoutePrefix = "api/identity/swagger";
                         })
                         .UseEndpoints(e =>
                         {

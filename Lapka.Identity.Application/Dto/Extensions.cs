@@ -17,16 +17,7 @@ namespace Lapka.Identity.Application.Dto
             };
         }
         
-        public static ValueDto AsDto(this Value value)
-        {
-            return new ValueDto
-            {
-                Name = value.Name,
-                Description = value.Description,
-                Id = value.Id.Value
-            };
-        }
-        
+
         public static AddressDto AsDto(this Address address)
         {
             return new AddressDto
