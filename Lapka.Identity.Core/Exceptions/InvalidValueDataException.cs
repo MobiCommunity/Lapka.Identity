@@ -6,11 +6,11 @@ namespace Lapka.Identity.Core.Exceptions
     {
         public string Field { get; }
 
-        public InvalidValueDataException(string field) : base($"invalid Value {field}")
+        public InvalidValueDataException(string field) : base($"Invalid value of {field}")
         {
             Field = field;
         }
 
-        public override string Code => $"invalid_Value_{Field}";
+        public override string Code => $"invalid_value_data";
     }
 }

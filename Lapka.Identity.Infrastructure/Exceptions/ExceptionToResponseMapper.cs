@@ -2,6 +2,7 @@ using Convey.WebApi.Exceptions;
 using System;
 using System.Net;
 using Lapka.Identity.Application.Exceptions;
+using Lapka.Identity.Core.Exceptions;
 using Lapka.Identity.Core.Exceptions.Abstract;
 
 namespace Lapka.Identity.Infrastructure.Exceptions
@@ -11,17 +12,25 @@ namespace Lapka.Identity.Infrastructure.Exceptions
         public ExceptionResponse Map(Exception exception)
             => exception switch
             {
-                DomainException ex => new ExceptionResponse(new {code = ex.Code, reason = ex.Message},
-                    HttpStatusCode.BadRequest),
+                DomainException ex => ex switch
+                {
+                    InvalidValueDataException invalidValueDataException => new ExceptionResponse(new
+                    {
+                        code = invalidValueDataException.Code,
+                        reason = invalidValueDataException.Message
+                    }, HttpStatusCode.NotFound),
+                    _ => new ExceptionResponse(new {code = ex.Code, reason = ex.Message},
+                        HttpStatusCode.BadRequest),
+                },
 
                 AppException ex => ex switch
                 {
-                    ValueNotFoundException valueNotFoundException => 
-                        new ExceptionResponse (new
+                    ValueNotFoundException valueNotFoundException =>
+                        new ExceptionResponse(new
                         {
                             code = valueNotFoundException.Code,
                             reason = valueNotFoundException.Message
-                        },HttpStatusCode.NotFound),
+                        }, HttpStatusCode.NotFound),
                     _ => new ExceptionResponse(
                         new
                         {
