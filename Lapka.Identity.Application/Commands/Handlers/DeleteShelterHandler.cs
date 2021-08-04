@@ -20,7 +20,7 @@ namespace Lapka.Identity.Application.Commands.Handlers
         public async Task HandleAsync(DeleteShelter command)
         {
             Shelter shelter = await _shelterRepository.GetByIdAsync(command.Id);
-            if (shelter is null) throw new ValueNotFoundException();
+            if (shelter is null) throw new ShelterNotFoundException();
             
             shelter.Delete();
             

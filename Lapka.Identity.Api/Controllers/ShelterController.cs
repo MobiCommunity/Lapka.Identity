@@ -40,7 +40,7 @@ namespace Lapka.Identity.Api.Controllers
                 createShelterRequest.PhoneNumber, createShelterRequest.Email, createShelterRequest.Address.AsValueObject(),
                 createShelterRequest.GeoLocation.AsValueObject()));
 
-            return Created($"api/shleter/{id}", null);
+            return Created($"api/shelter/{id}", null);
         }
         
         [HttpDelete("{id:guid}")]

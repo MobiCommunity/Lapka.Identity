@@ -20,7 +20,7 @@ namespace Lapka.Identity.Infrastructure.Queries.Handlers
         public async Task<ShelterDto> HandleAsync(GetShelter query)
         {
             Shelter shelter = await _shelterRepository.GetByIdAsync(query.Id);
-            if (shelter is null) throw new ValueNotFoundException();
+            if (shelter is null) throw new ShelterNotFoundException();
             
             return shelter.AsDto();
         }
