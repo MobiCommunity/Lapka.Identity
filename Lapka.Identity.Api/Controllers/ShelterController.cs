@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Lapka.Identity.Api.Models;
 using Lapka.Identity.Api.Models.Request;
 using Lapka.Identity.Application.Commands;
+using Lapka.Identity.Application.Queries;
 
 namespace Lapka.Identity.Api.Controllers
 {
