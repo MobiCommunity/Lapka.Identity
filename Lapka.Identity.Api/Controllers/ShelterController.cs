@@ -12,7 +12,7 @@ using Lapka.Identity.Core.ValueObjects;
 namespace Lapka.Identity.Api.Controllers
 {
     [ApiController]
-    [Route("api/shelter/create")]
+    [Route("api/shelter")]
     public class CreateShelterController : ControllerBase
     {
         private readonly ICommandDispatcher _commandDispatcher;
@@ -25,7 +25,7 @@ namespace Lapka.Identity.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> NewShelter(CreateShelterRequest createShelterRequest)
+        public async Task<ActionResult> Add(CreateShelterRequest createShelterRequest)
         {
             Guid id = Guid.NewGuid();
             await _commandDispatcher.SendAsync(new CreateShelter(id, createShelterRequest.Name,
@@ -33,6 +33,14 @@ namespace Lapka.Identity.Api.Controllers
                 createShelterRequest.GeoLocation.AsValueObject()));
 
             return Created($"api/shleter/{id}", null);
+        }
+        
+        [HttpDelete]
+        public async Task<ActionResult> Delete(DeleteShelterRequest deleteShelterRequest)
+        {
+            await _commandDispatcher.SendAsync(new DeleteShelter(deleteShelterRequest.Id));
+
+            return NoContent();
         }
     }
 }
