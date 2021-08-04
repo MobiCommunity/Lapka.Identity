@@ -4,6 +4,10 @@ namespace Lapka.Identity.Core.ValueObjects
 {
     public class Location
     {
+        private const int MaxLongitudeValue = 180;
+        private const int MinLongitudeValue = -180;
+        private const int MaxLatitudeValue = 90;
+        private const int MinLatitudeValue = -90;
         public string Latitude  { get; }
         public string Longitude   { get; }
 
@@ -27,13 +31,13 @@ namespace Lapka.Identity.Core.ValueObjects
             {
                 throw new InvalidLongitudeValueException(Longitude);
             }
-            
-            if (int.Parse(Longitude) < -180)
+                
+            if (double.Parse(Longitude) <= MinLongitudeValue)
             {
                 throw new LongitudeTooLowException(Longitude);
             }
 
-            if (int.Parse(Longitude) > 180)
+            if (double.Parse(Longitude) >= MaxLongitudeValue)
             {
                 throw new LongitudeTooBigException(Longitude);
             }
@@ -46,12 +50,12 @@ namespace Lapka.Identity.Core.ValueObjects
                 throw new InvalidLatitudeValueException(Latitude);
             }
             
-            if (int.Parse(Latitude) < -90)
+            if (double.Parse(Latitude) <= MinLatitudeValue)
             {
                 throw new LatitudeTooLowException(Latitude);
             }
 
-            if (int.Parse(Latitude) > 90)
+            if (double.Parse(Latitude) >= MaxLatitudeValue)
             {
                 throw new LatitudeTooBigException(Latitude);
             }
