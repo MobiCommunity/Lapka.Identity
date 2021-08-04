@@ -1,0 +1,11 @@
+/Users/dominikbednarz/Documents/Mobitouch/Lapka.Identity/Lapka.Identity.Core/bin/Debug/netcoreapp3.1/Lapka.Identity.Core.deps.json
+/Users/dominikbednarz/Documents/Mobitouch/Lapka.Identity/Lapka.Identity.Core/bin/Debug/netcoreapp3.1/Lapka.Identity.Core.dll
+/Users/dominikbednarz/Documents/Mobitouch/Lapka.Identity/Lapka.Identity.Core/bin/Debug/netcoreapp3.1/Lapka.Identity.Core.pdb
+/Users/dominikbednarz/Documents/Mobitouch/Lapka.Identity/Lapka.Identity.Core/bin/Debug/netcoreapp3.1/Lapka.Identity.Core.xml
+/Users/dominikbednarz/Documents/Mobitouch/Lapka.Identity/Lapka.Identity.Core/obj/Debug/netcoreapp3.1/Lapka.Identity.Core.csprojAssemblyReference.cache
+/Users/dominikbednarz/Documents/Mobitouch/Lapka.Identity/Lapka.Identity.Core/obj/Debug/netcoreapp3.1/Lapka.Identity.Core.AssemblyInfoInputs.cache
+/Users/dominikbednarz/Documents/Mobitouch/Lapka.Identity/Lapka.Identity.Core/obj/Debug/netcoreapp3.1/Lapka.Identity.Core.AssemblyInfo.cs
+/Users/dominikbednarz/Documents/Mobitouch/Lapka.Identity/Lapka.Identity.Core/obj/Debug/netcoreapp3.1/Lapka.Identity.Core.csproj.CoreCompileInputs.cache
+/Users/dominikbednarz/Documents/Mobitouch/Lapka.Identity/Lapka.Identity.Core/obj/Debug/netcoreapp3.1/Lapka.Identity.Core.dll
+/Users/dominikbednarz/Documents/Mobitouch/Lapka.Identity/Lapka.Identity.Core/obj/Debug/netcoreapp3.1/Lapka.Identity.Core.xml
+/Users/dominikbednarz/Documents/Mobitouch/Lapka.Identity/Lapka.Identity.Core/obj/Debug/netcoreapp3.1/Lapka.Identity.Core.pdb

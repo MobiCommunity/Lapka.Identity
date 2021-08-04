@@ -1,0 +1,45 @@
+2021-08-03 14:58:36.074 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger  
+2021-08-03 14:58:36.417 +02:00 [INF] Request finished in 340.7713ms 301 
+2021-08-03 14:58:36.453 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/index.html  
+2021-08-03 14:58:36.531 +02:00 [INF] Request finished in 78.4972ms 200 text/html;charset=utf-8
+2021-08-03 14:58:36.556 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/swagger-ui.css  
+2021-08-03 14:58:36.574 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/swagger-ui-bundle.js  
+2021-08-03 14:58:36.579 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/swagger-ui-standalone-preset.js  
+2021-08-03 14:58:36.714 +02:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2021-08-03 14:58:36.714 +02:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2021-08-03 14:58:36.717 +02:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2021-08-03 14:58:36.720 +02:00 [INF] Request finished in 140.9863ms 200 application/javascript
+2021-08-03 14:58:36.720 +02:00 [INF] Request finished in 164.2537ms 200 text/css
+2021-08-03 14:58:36.720 +02:00 [INF] Request finished in 146.4543ms 200 application/javascript
+2021-08-03 14:58:36.960 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/v1/swagger.json  
+2021-08-03 14:58:37.023 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/favicon-32x32.png  
+2021-08-03 14:58:37.048 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/favicon-16x16.png  
+2021-08-03 14:58:37.048 +02:00 [INF] Sending file. Request path: '/favicon-16x16.png'. Physical path: 'N/A'
+2021-08-03 14:58:37.048 +02:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2021-08-03 14:58:37.049 +02:00 [INF] Request finished in 1.1026ms 200 image/png
+2021-08-03 14:58:37.049 +02:00 [INF] Request finished in 26.2999ms 200 image/png
+2021-08-03 14:58:37.125 +02:00 [INF] Request finished in 165.029ms 200 application/json;charset=utf-8
+2021-08-03 15:04:40.206 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/index.html  
+2021-08-03 15:04:40.473 +02:00 [INF] Request finished in 269.3159ms 200 text/html;charset=utf-8
+2021-08-03 15:04:40.694 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/v1/swagger.json  
+2021-08-03 15:04:40.814 +02:00 [INF] Request finished in 119.7082ms 200 application/json;charset=utf-8
+2021-08-03 15:12:54.904 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/index.html  
+2021-08-03 15:12:55.123 +02:00 [INF] Request finished in 221.7498ms 200 text/html;charset=utf-8
+2021-08-03 15:12:55.349 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/v1/swagger.json  
+2021-08-03 15:12:55.429 +02:00 [INF] Request finished in 79.7742ms 200 application/json;charset=utf-8
+2021-08-03 15:16:02.194 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/index.html  
+2021-08-03 15:16:02.423 +02:00 [INF] Request finished in 234.6801ms 200 text/html;charset=utf-8
+2021-08-03 15:16:02.556 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/v1/swagger.json  
+2021-08-03 15:16:02.686 +02:00 [INF] Request finished in 129.9818ms 200 application/json;charset=utf-8
+2021-08-03 15:16:22.422 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/index.html  
+2021-08-03 15:16:22.429 +02:00 [INF] Request finished in 6.754ms 200 text/html;charset=utf-8
+2021-08-03 15:16:22.525 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/v1/swagger.json  
+2021-08-03 15:16:22.530 +02:00 [INF] Request finished in 5.6104ms 200 application/json;charset=utf-8
+2021-08-03 15:16:53.527 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/index.html  
+2021-08-03 15:16:53.708 +02:00 [INF] Request finished in 186.1062ms 200 text/html;charset=utf-8
+2021-08-03 15:16:53.909 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/v1/swagger.json  
+2021-08-03 15:16:54.056 +02:00 [INF] Request finished in 146.476ms 200 application/json;charset=utf-8
+2021-08-03 16:05:19.454 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/index.html  
+2021-08-03 16:05:19.642 +02:00 [INF] Request finished in 192.3071ms 200 text/html;charset=utf-8
+2021-08-03 16:05:19.853 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/lapka.identity/swagger/v1/swagger.json  
+2021-08-03 16:05:19.986 +02:00 [INF] Request finished in 133.5766ms 200 application/json;charset=utf-8
