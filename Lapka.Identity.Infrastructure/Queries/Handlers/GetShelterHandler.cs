@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Convey.CQRS.Queries;
 using Lapka.Identity.Application.Dto;
+using Lapka.Identity.Application.Exceptions;
 using Lapka.Identity.Application.Queries;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Core.Entities;
@@ -19,6 +20,8 @@ namespace Lapka.Identity.Infrastructure.Queries.Handlers
         public async Task<ShelterDto> HandleAsync(GetShelter query)
         {
             Shelter shelter = await _shelterRepository.GetByIdAsync(query.Id);
+            if (shelter is null) throw new ValueNotFoundException();
+            
             return shelter.AsDto();
         }
     }

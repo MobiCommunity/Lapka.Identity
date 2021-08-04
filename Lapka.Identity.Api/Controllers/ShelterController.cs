@@ -25,7 +25,7 @@ namespace Lapka.Identity.Api.Controllers
         }
         
         [HttpGet("{id:guid}")]
-        public async Task<ActionResult> GetById(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             return Ok(await _queryDispatcher.QueryAsync(new GetShelter
             {
