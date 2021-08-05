@@ -1,4 +1,4 @@
-﻿using Lapka.Identity.Core.Entities;
+using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.ValueObjects;
 
 namespace Lapka.Identity.Application.Dto
@@ -9,14 +9,14 @@ namespace Lapka.Identity.Application.Dto
         {
             return new ShelterDto
             {
-                Name = shelter.Name,
                 Address = shelter.Address.AsDto(),
                 Email = shelter.Email,
                 GeoLocation = shelter.GeoLocation.AsDto(),
-                PhoneNumber = shelter.PhoneNumber
+                Name = shelter.Name,
+                PhoneNumber = shelter.PhoneNumber,
+                Id = shelter.Id.Value
             };
         }
-        
 
         public static AddressDto AsDto(this Address address)
         {

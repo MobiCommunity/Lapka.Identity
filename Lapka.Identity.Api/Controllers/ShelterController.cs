@@ -2,10 +2,12 @@ using Convey.CQRS.Commands;
 using Convey.CQRS.Queries;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Lapka.Identity.Api.Models;
 using Lapka.Identity.Api.Models.Request;
 using Lapka.Identity.Application.Commands;
+using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Queries;
 
 namespace Lapka.Identity.Api.Controllers
@@ -47,7 +49,8 @@ namespace Lapka.Identity.Api.Controllers
         {
             Guid id = Guid.NewGuid();
             await _commandDispatcher.SendAsync(new CreateShelter(id, createShelterRequest.Name,
-                createShelterRequest.PhoneNumber, createShelterRequest.Email, createShelterRequest.Address.AsValueObject(),
+                createShelterRequest.PhoneNumber, createShelterRequest.Email,
+                createShelterRequest.Address.AsValueObject(),
                 createShelterRequest.GeoLocation.AsValueObject()));
 
             return Created($"api/shelter/{id}", null);
@@ -60,5 +63,10 @@ namespace Lapka.Identity.Api.Controllers
 
             return NoContent();
         }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ShelterDto>>> GetShelters() 
+            => Ok(await _queryDispatcher.QueryAsync(new GetShelters()));
+        
     }
 }
