@@ -36,11 +36,9 @@ namespace Lapka.Identity.Infrastructure.Services
         public Task UpdateAsync(Shelter shelter)
         {
             Shelter shelterFromDb = _shelters.FirstOrDefault(x => x.Id.Value == shelter.Id.Value);
-            Shelter changedShelter = new Shelter(shelter.Id.Value, shelter.Name, shelter.Address, shelter.GeoLocation,
-                shelter.PhoneNumber, shelter.Email);
-            
+
             _shelters.Remove(shelterFromDb);
-            _shelters.Add(changedShelter);
+            _shelters.Add(shelter);
             
             return Task.CompletedTask;     
         }

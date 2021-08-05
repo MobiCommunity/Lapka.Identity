@@ -24,9 +24,9 @@ namespace Lapka.Identity.Application.Commands.Handlers
             Shelter shelter = await _shelterRepository.GetByIdAsync(command.Id);
             if (shelter is null) throw new ShelterNotFoundException();
             
-            shelter.Update();
+            shelter.Update(command.Name, command.Address, command.GeoLocation, command.PhoneNumber, command.Email);
             
-            await _shelterRepository.UpdateAsync(new Shelter(command.Id, command.Email, command.Address, command.GeoLocation, command.PhoneNumber, command.Email));
+            await _shelterRepository.UpdateAsync(shelter);
             
             await _eventProcessor.ProcessAsync(shelter.Events);
         }
