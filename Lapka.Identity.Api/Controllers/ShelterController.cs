@@ -31,9 +31,19 @@ namespace Lapka.Identity.Api.Controllers
                 Id = id
             }));
         }
+        
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> Update(Guid id, UpdateShelterRequest shelter)
+        {
+                await _commandDispatcher.SendAsync(new UpdateShelter(id, shelter.Name,
+                shelter.PhoneNumber, shelter.Email, shelter.Address.AsValueObject(),
+                shelter.GeoLocation.AsValueObject()));
+
+            return NoContent();    
+        }
 
         [HttpPost]
-        public async Task<ActionResult> Add(CreateShelterRequest createShelterRequest)
+        public async Task<IActionResult> Add(CreateShelterRequest createShelterRequest)
         {
             Guid id = Guid.NewGuid();
             await _commandDispatcher.SendAsync(new CreateShelter(id, createShelterRequest.Name,
@@ -44,7 +54,7 @@ namespace Lapka.Identity.Api.Controllers
         }
         
         [HttpDelete("{id:guid}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             await _commandDispatcher.SendAsync(new DeleteShelter(id));
 
