@@ -5,9 +5,9 @@ namespace Lapka.Identity.Application.Dto
     public class LocationDto
     {
         [Required]
-        public string Latitude  { get; set; }
+        public string Latitude { get; set; }
         [Required]
-        public string Longitude   { get; set; }
+        public string Longitude { get; set; }
     }        
 
 }

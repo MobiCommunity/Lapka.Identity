@@ -12,11 +12,16 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using Convey.Persistence.MongoDB;
 using Lapka.Identity.Api.Attributes;
+using Lapka.Identity.Api.Models;
 using Lapka.Identity.Application;
+using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Services;
+using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Infrastructure;
 using Lapka.Identity.Infrastructure.Services;
+using Microsoft.Extensions.Options;
 
 namespace Lapka.Identity.Api
 {
@@ -31,18 +36,18 @@ namespace Lapka.Identity.Api
             WebHost.CreateDefaultBuilder(args).ConfigureServices(services =>
                 {
                     services.AddControllers();
-
+                    
                     services.TryAddSingleton(new JsonSerializerFactory().GetSerializer());
-                    services.AddSingleton<IShelterRepository, ShelterRepository>();
 
                     services
                         .AddConvey()
                         .AddInfrastructure()
                         .AddApplication();
+                    
+                    services.AddSingleton<IShelterRepository, ShelterRepository>();
 
                     services.AddSwaggerGen(c =>
-                    {
-
+                    {   
                         c.SwaggerDoc("v1", new OpenApiInfo
                         {
                             Version = "v1",
