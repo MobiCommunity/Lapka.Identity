@@ -25,7 +25,12 @@ namespace Lapka.Identity.Infrastructure.Services
             await _repository.AddAsync(shelter.AsDocument());
         }
 
-        public async Task DeleteAsync(Shelter shelter)
+        public async Task<IEnumerable<Shelter>> GetAllAsync()
+        {
+            return _shelters;
+        }
+        
+        public Task DeleteAsync(Shelter shelter)
         {
             await _repository.DeleteAsync(shelter.AsDocument().Id);
         }
