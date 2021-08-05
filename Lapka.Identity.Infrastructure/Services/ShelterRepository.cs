@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Convey.Persistence.MongoDB;
-using Lapka.Identity.Application.Dto;
-using Lapka.Identity.Application.Exceptions;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Infrastructure.Documents;
-using MongoDB.Driver;
 
 namespace Lapka.Identity.Infrastructure.Services
 {
@@ -34,7 +31,7 @@ namespace Lapka.Identity.Infrastructure.Services
         
         public async Task DeleteAsync(Shelter shelter)
         {
-            await _repository.DeleteAsync(shelter.AsDocument().Id);
+            await _repository.DeleteAsync(shelter.Id.Value);
         }
 
         public async Task UpdateAsync(Shelter shelter)
@@ -45,6 +42,7 @@ namespace Lapka.Identity.Infrastructure.Services
         public async Task<Shelter> GetByIdAsync(Guid id)
         {
             ShelterDocument shelterFromDb = await _repository.GetAsync(id);
+            if (shelterFromDb == null) return null;
 
             return shelterFromDb.AsBusiness();
         } 
