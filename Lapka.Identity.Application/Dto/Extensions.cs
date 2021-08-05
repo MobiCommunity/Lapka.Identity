@@ -10,9 +10,9 @@ namespace Lapka.Identity.Application.Dto
             return new ShelterDto
             {
                 Address = shelter.Address.AsDto(),
+                Email = shelter.Email,
                 GeoLocation = shelter.GeoLocation.AsDto(),
                 Name = shelter.Name,
-                Email = shelter.Email,
                 PhoneNumber = shelter.PhoneNumber,
                 Id = shelter.Id.Value
             };
@@ -27,7 +27,7 @@ namespace Lapka.Identity.Application.Dto
                 ZipCode = address.ZipCode
             };
         }
-
+        
         public static LocationDto AsDto(this Location location)
         {
             return new LocationDto

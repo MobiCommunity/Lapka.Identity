@@ -5,12 +5,11 @@ using Lapka.Identity.Core.Events.Concrete;
 
 namespace Lapka.Identity.Application.Events.Concrete
 {
-    public class ValueCreatedHandler : IDomainEventHandler<ValueCreated>
+    public class ShelterUpdatedHandler  : IDomainEventHandler<ShelterCreated>
     {
-
-        public Task HandleAsync(ValueCreated @event)
+        public Task HandleAsync(ShelterCreated @event)
         {
-            Console.WriteLine($"i caught {@event.Value.Name}");
+            Console.WriteLine($"i caught {@event.Shelter.Name}");
             return Task.CompletedTask;
         }
     }

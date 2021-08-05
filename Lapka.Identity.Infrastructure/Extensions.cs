@@ -46,7 +46,6 @@ namespace Lapka.Identity.Infrastructure
 
             services.AddSingleton<IDomainToIntegrationEventMapper, DomainToIntegrationEventMapper>();
 
-            services.AddSingleton<IValueRepository, ValueRepository>();
             services.AddTransient<IEventProcessor, EventProcessor>();
             services.AddTransient<IMessageBroker, DummyMessageBroker>();
 

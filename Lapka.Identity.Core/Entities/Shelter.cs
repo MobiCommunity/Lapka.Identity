@@ -8,11 +8,11 @@ namespace Lapka.Identity.Core.Entities
 {
     public class Shelter : AggregateRoot
     {
-        public string Name { get; }
-        public Address Address { get; }
-        public Location GeoLocation { get; }
-        public string PhoneNumber { get; }
-        public string Email { get; }
+        public string Name { get; private set; }
+        public Address Address { get; private set; }
+        public Location GeoLocation { get; private set; }
+        public string PhoneNumber { get; private set; }
+        public string Email { get; private set; }
 
         public Shelter(Guid id, string name, Address address, Location location, string phoneNumber, string email)
         {
@@ -21,12 +21,23 @@ namespace Lapka.Identity.Core.Entities
             Address = address;
             GeoLocation = location;
             PhoneNumber = phoneNumber;
-            Email = email;
+            Email = email; 
         }
 
         public void Delete()
         {
             AddEvent(new ShelterDeleted(this));
+        }
+        
+        public void Update(string name, Address address, Location location, string phoneNumber, string email)
+        {
+            Name = name;
+            Address = address;
+            GeoLocation = location;
+            PhoneNumber = phoneNumber;
+            Email = email;
+            
+            AddEvent(new ShelterUpdated(this));
         }
         
         public static Shelter Create(Guid id, string name, Address address, Location location, string phoneNumber, string email)

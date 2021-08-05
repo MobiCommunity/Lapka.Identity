@@ -33,6 +33,16 @@ namespace Lapka.Identity.Api.Controllers
                 Id = id
             }));
         }
+        
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> Update(Guid id, UpdateShelterRequest shelter)
+        {
+                await _commandDispatcher.SendAsync(new UpdateShelter(id, shelter.Name,
+                shelter.PhoneNumber, shelter.Email, shelter.Address.AsValueObject(),
+                shelter.GeoLocation.AsValueObject()));
+
+            return NoContent();    
+        }
 
         [HttpPost]
         public async Task<IActionResult> Add(CreateShelterRequest createShelterRequest)
