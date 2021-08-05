@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using Lapka.Identity.Core.ValueObjects;
 
@@ -5,6 +6,8 @@ namespace Lapka.Identity.Application.Dto
 {
     public class ShelterDto
     {
+        [Required]
+        public Guid Id { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
