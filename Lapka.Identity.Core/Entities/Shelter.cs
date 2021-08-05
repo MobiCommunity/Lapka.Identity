@@ -21,7 +21,7 @@ namespace Lapka.Identity.Core.Entities
             Address = address;
             GeoLocation = location;
             PhoneNumber = phoneNumber;
-            Email = email;
+            Email = email; 
         }
 
         public void Delete()
