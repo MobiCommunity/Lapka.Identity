@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Convey.Persistence.MongoDB;
+using Convey.Types;
 using Lapka.Identity.Application.Events.Abstract;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Infrastructure.Exceptions;
@@ -27,7 +29,8 @@ namespace Lapka.Identity.Infrastructure
                 .AddErrorHandler<ExceptionToResponseMapper>()
                 .AddExceptionToMessageMapper<ExceptionToMessageMapper>()
                 // .AddRabbitMq()
-                // .AddMongo()
+                .AddMongo()
+                .AddMongoRepository<ShelterDocument, Guid>("Shelters")
                 // .AddConsul()
                 // .AddFabio()
                 // .AddMessageOutbox()
