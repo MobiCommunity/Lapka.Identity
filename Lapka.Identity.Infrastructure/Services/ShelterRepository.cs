@@ -2,57 +2,49 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Lapka.Identity.Application.Dto;
-using Lapka.Identity.Application.Exceptions;
+using Convey.Persistence.MongoDB;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Core.Entities;
+using Lapka.Identity.Infrastructure.Documents;
 
 namespace Lapka.Identity.Infrastructure.Services
 {
     public class ShelterRepository : IShelterRepository
     {
-        private readonly IList<Shelter> _shelters;
-            
-        public ShelterRepository()
+        private readonly IMongoRepository<ShelterDocument, Guid> _repository;
+        public ShelterRepository(IMongoRepository<ShelterDocument, Guid> repository)
         {
-            _shelters = new List<Shelter>();
+            _repository = repository;
         }
 
-        public Task AddAsync(Shelter shelter)
+        public async Task AddAsync(Shelter shelter)
         {
-            _shelters.Add(shelter);
-
-            return Task.CompletedTask;
+            await _repository.AddAsync(shelter.AsDocument());
         }
 
         public async Task<IEnumerable<Shelter>> GetAllAsync()
         {
-            return _shelters;
+            var sheltersFromDb = await _repository.FindAsync(_ => true);
+
+            return sheltersFromDb.Select(x => x.AsBusiness());
         }
         
-        public Task DeleteAsync(Shelter shelter)
+        public async Task DeleteAsync(Shelter shelter)
         {
-            Shelter shelterFromDb = _shelters.FirstOrDefault(x => x.Id.Value == shelter.Id.Value);
-            _shelters.Remove(shelterFromDb);
-
-            return Task.CompletedTask;        
+            await _repository.DeleteAsync(shelter.Id.Value);
         }
 
-        public Task UpdateAsync(Shelter shelter)
+        public async Task UpdateAsync(Shelter shelter)
         {
-            Shelter shelterFromDb = _shelters.FirstOrDefault(x => x.Id.Value == shelter.Id.Value);
-
-            _shelters.Remove(shelterFromDb);
-            _shelters.Add(shelter);
-            
-            return Task.CompletedTask;     
+            await _repository.UpdateAsync(shelter.AsDocument());
         }
 
-        public Task<Shelter> GetByIdAsync(Guid id)
+        public async Task<Shelter> GetByIdAsync(Guid id)
         {
-            Shelter shelter = _shelters.FirstOrDefault(x => x.Id.Value == id);
+            ShelterDocument shelterFromDb = await _repository.GetAsync(id);
+            if (shelterFromDb == null) return null;
 
-            return Task.FromResult(shelter);
+            return shelterFromDb.AsBusiness();
         } 
     }
 }

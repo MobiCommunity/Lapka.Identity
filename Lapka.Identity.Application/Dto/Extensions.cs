@@ -9,12 +9,12 @@ namespace Lapka.Identity.Application.Dto
         {
             return new ShelterDto
             {
+                Id = shelter.Id.Value,
                 Address = shelter.Address.AsDto(),
                 Email = shelter.Email,
                 GeoLocation = shelter.GeoLocation.AsDto(),
                 Name = shelter.Name,
-                PhoneNumber = shelter.PhoneNumber,
-                Id = shelter.Id.Value
+                PhoneNumber = shelter.PhoneNumber
             };
         }
 

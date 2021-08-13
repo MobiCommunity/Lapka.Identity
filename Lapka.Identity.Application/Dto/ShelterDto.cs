@@ -11,9 +11,9 @@ namespace Lapka.Identity.Application.Dto
         [Required]
         public string Name { get; set; }
         [Required]
-        public LocationDto GeoLocation { get; set; }
-        [Required]
         public AddressDto Address { get; set; }
+        [Required]
+        public LocationDto GeoLocation { get; set; }
         [Required]
         public string PhoneNumber { get; set; }
         [Required]
