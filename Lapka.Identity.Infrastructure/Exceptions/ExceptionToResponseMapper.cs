@@ -25,12 +25,6 @@ namespace Lapka.Identity.Infrastructure.Exceptions
 
                 AppException ex => ex switch
                 {
-                    ValueNotFoundException valueNotFoundException =>
-                        new ExceptionResponse(new
-                        {
-                            code = valueNotFoundException.Code,
-                            reason = valueNotFoundException.Message
-                        }, HttpStatusCode.NotFound),
                     _ => new ExceptionResponse(
                         new
                         {

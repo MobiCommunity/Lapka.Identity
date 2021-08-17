@@ -24,7 +24,7 @@ namespace Lapka.Identity.Infrastructure.Services
 
         public async Task<IEnumerable<Shelter>> GetAllAsync()
         {
-            var sheltersFromDb = await _repository.FindAsync(_ => true);
+            IReadOnlyList<ShelterDocument> sheltersFromDb = await _repository.FindAsync(_ => true);
 
             return sheltersFromDb.Select(x => x.AsBusiness());
         }
@@ -42,7 +42,10 @@ namespace Lapka.Identity.Infrastructure.Services
         public async Task<Shelter> GetByIdAsync(Guid id)
         {
             ShelterDocument shelterFromDb = await _repository.GetAsync(id);
-            if (shelterFromDb == null) return null;
+            if (shelterFromDb is null)
+            {
+                return null;
+            }
 
             return shelterFromDb.AsBusiness();
         } 

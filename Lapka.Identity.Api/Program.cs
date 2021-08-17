@@ -45,6 +45,14 @@ namespace Lapka.Identity.Api
                         .AddApplication();
                     
                     services.AddSingleton<IShelterRepository, ShelterRepository>();
+                    services.AddScoped<IGrpcPhotoService, GrpcPhotoService>();
+                    
+                    AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+                    
+                    services.AddGrpcClient<Photo.PhotoClient>(o =>
+                    {
+                        o.Address = new Uri("http://localhost:5013");
+                    });
 
                     services.AddSwaggerGen(c =>
                     {   

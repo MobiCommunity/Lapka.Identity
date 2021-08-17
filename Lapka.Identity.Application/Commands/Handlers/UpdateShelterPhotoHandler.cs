@@ -2,20 +2,21 @@ using System;
 using System.Threading.Tasks;
 using Convey.CQRS.Commands;
 using Lapka.Identity.Application.Dto;
+using Lapka.Identity.Application.Exceptions;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Core.Entities;
 using Microsoft.Extensions.Logging;
 
 namespace Lapka.Identity.Application.Commands.Handlers
 {
-    public class CreateShelterHandler : ICommandHandler<CreateShelter>
+    public class UpdateShelterPhotoHandler : ICommandHandler<UpdateShelterPhoto>
     {
-        private readonly ILogger<CreateShelterHandler> _logger;
+        private readonly ILogger<UpdateShelterPhotoHandler> _logger;
         private readonly IShelterRepository _shelterRepository;
         private readonly IGrpcPhotoService _grpcPhotoService;
         private readonly IEventProcessor _eventProcessor;
 
-        public CreateShelterHandler(ILogger<CreateShelterHandler> logger, IShelterRepository shelterRepository,
+        public UpdateShelterPhotoHandler(ILogger<UpdateShelterPhotoHandler> logger, IShelterRepository shelterRepository,
             IGrpcPhotoService grpcPhotoService, IEventProcessor eventProcessor)
         {
             _logger = logger;
@@ -24,26 +25,26 @@ namespace Lapka.Identity.Application.Commands.Handlers
             _eventProcessor = eventProcessor;
         }
 
-        public async Task HandleAsync(CreateShelter command)
+        public async Task HandleAsync(UpdateShelterPhoto command)
         {
-            string photoPath =  $"{command.PhotoId:N}.{command.Photo.GetFileExtension()}"; 
-
-            Shelter created = Shelter.Create(command.Id, command.Name, command.Address, 
-                command.GeoLocation, photoPath, command.PhoneNumber, command.Email);
-
-            await _shelterRepository.AddAsync(created);
+            string photoPath =  $"{command.PhotoId:N}.{command.Photo.GetFileExtension()}";
+            Shelter shelter = await _shelterRepository.GetByIdAsync(command.Id);
+            string oldPhotoPath = shelter.PhotoPath;
             
+            shelter.UpdatePhoto(photoPath);
+
             try
             {
+                await _grpcPhotoService.DeleteAsync(oldPhotoPath);
                 await _grpcPhotoService.AddAsync(photoPath, command.Photo.Content);
             }
             catch(Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                throw new CannotRequestFilesMicroserviceException(ex);
             }
             
-            await _eventProcessor.ProcessAsync(created.Events);
-            
+            await _shelterRepository.UpdateAsync(shelter);
+            await _eventProcessor.ProcessAsync(shelter.Events);
         }
     }
 }

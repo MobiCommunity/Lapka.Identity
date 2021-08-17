@@ -34,7 +34,7 @@ namespace Lapka.Identity.Api.Controllers
             }));
         }
         
-        [HttpPut("{id:guid}")]
+        [HttpPatch("{id:guid}")]
         public async Task<IActionResult> Update(Guid id, UpdateShelterRequest shelter)
         {
                 await _commandDispatcher.SendAsync(new UpdateShelter(id, shelter.Name,
@@ -43,15 +43,26 @@ namespace Lapka.Identity.Api.Controllers
 
             return NoContent();    
         }
+        
+        [HttpPatch("photo/{id:guid}")]
+        public async Task<IActionResult> UpdatePhoto(Guid id, [FromForm]UpdateShelterPhotoRequest shelter)
+        {
+            Guid photoId = Guid.NewGuid();
+
+            await _commandDispatcher.SendAsync(new UpdateShelterPhoto(id, shelter.Photo.AsValueObject(), photoId));
+
+            return NoContent();    
+        }
 
         [HttpPost]
-        public async Task<IActionResult> Add(CreateShelterRequest createShelterRequest)
+        public async Task<IActionResult> Add([FromForm]CreateShelterRequest createShelterRequest)
         {
             Guid id = Guid.NewGuid();
+            Guid photoId = Guid.NewGuid();
+            
             await _commandDispatcher.SendAsync(new CreateShelter(id, createShelterRequest.Name,
-                createShelterRequest.PhoneNumber, createShelterRequest.Email,
-                createShelterRequest.Address.AsValueObject(),
-                createShelterRequest.GeoLocation.AsValueObject()));
+                createShelterRequest.PhoneNumber, createShelterRequest.Email, createShelterRequest.Address.AsValueObject(),
+                createShelterRequest.GeoLocation.AsValueObject(), createShelterRequest.Photo.AsValueObject(), photoId));
 
             return Created($"api/shelter/{id}", null);
         }
