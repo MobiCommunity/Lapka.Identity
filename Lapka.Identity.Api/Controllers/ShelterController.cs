@@ -67,6 +67,6 @@ namespace Lapka.Identity.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ShelterDto>>> GetShelters() 
             => Ok(await _queryDispatcher.QueryAsync(new GetShelters()));
-        
+
     }
 }
