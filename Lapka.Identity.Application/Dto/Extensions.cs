@@ -13,6 +13,7 @@ namespace Lapka.Identity.Application.Dto
                 Address = shelter.Address.AsDto(),
                 Email = shelter.Email,
                 GeoLocation = shelter.GeoLocation.AsDto(),
+                PhotoPath = shelter.PhotoPath,
                 Name = shelter.Name,
                 PhoneNumber = shelter.PhoneNumber
             };
@@ -36,5 +37,8 @@ namespace Lapka.Identity.Application.Dto
                 Longitude = location.Longitude
             };
         }
+        
+        public static string GetFileExtension(this File file) =>
+            file.Name.Contains('.') ? file.Name.Split('.')[1] : string.Empty;
     }
 }

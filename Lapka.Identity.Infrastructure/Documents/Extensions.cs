@@ -14,6 +14,7 @@ namespace Lapka.Identity.Infrastructure.Exceptions
                 Name = shelter.Name,
                 Address = shelter.Address.AsDocument(),
                 GeoLocation = shelter.GeoLocation.AsDocument(),
+                PhotoPath = shelter.PhotoPath,
                 Email = shelter.Email,
                 PhoneNumber = shelter.PhoneNumber
             };
@@ -41,7 +42,7 @@ namespace Lapka.Identity.Infrastructure.Exceptions
         public static Shelter AsBusiness(this ShelterDocument shelter)
         {
             return new Shelter(shelter.Id, shelter.Name, shelter.Address.AsBusiness(),
-                shelter.GeoLocation.AsBusiness(), shelter.PhoneNumber, shelter.Email);
+                shelter.GeoLocation.AsBusiness(), shelter.PhotoPath, shelter.PhoneNumber, shelter.Email);
         }
         
         public static Location AsBusiness(this LocationDocument shelter)
