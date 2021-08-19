@@ -1,7 +1,8 @@
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.ValueObjects;
 
-namespace Lapka.Identity.Infrastructure.Documents
+
+namespace Lapka.Identity.Infrastructure.Exceptions
 {
     public static class Extensions
     {
@@ -17,7 +18,7 @@ namespace Lapka.Identity.Infrastructure.Documents
                 PhoneNumber = shelter.PhoneNumber
             };
         }
-        
+
         public static LocationDocument AsDocument(this Location shelter)
         {
             return new LocationDocument

@@ -1,4 +1,4 @@
-namespace Lapka.Identity.Infrastructure.Documents
+namespace Lapka.Identity.Infrastructure.Exceptions
 {
     public class AddressDocument
     {

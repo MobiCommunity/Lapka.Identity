@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Convey.Persistence.MongoDB;
+using Convey.Types;
 using Lapka.Identity.Application.Events.Abstract;
 using Lapka.Identity.Application.Services;
-using Lapka.Identity.Infrastructure.Documents;
 using Lapka.Identity.Infrastructure.Exceptions;
 using Lapka.Identity.Infrastructure.Services;
 
