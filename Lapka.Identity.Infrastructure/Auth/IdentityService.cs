@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Lapka.Identity.Application.Commands;
 using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Services;
+using Lapka.Identity.Application.Services.Auth;
+using Lapka.Identity.Application.Services.User;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.Exceptions;
 using Lapka.Identity.Core.Exceptions.Identity;
@@ -24,14 +26,19 @@ namespace Lapka.Identity.Infrastructure.Auth
         private readonly IPasswordService _passwordService;
         private readonly IJwtProvider _jwtProvider;
         private readonly IRefreshTokenService _refreshTokenService;
+        private readonly IGrpcPhotoService _grpcPhotoService;
+        private readonly ILogger<IdentityService> _logger;
 
         public IdentityService(IUserRepository userRepository, IPasswordService passwordService,
-            IJwtProvider jwtProvider, IRefreshTokenService refreshTokenService)
+            IJwtProvider jwtProvider, IRefreshTokenService refreshTokenService, IGrpcPhotoService grpcPhotoService,
+            ILogger<IdentityService> logger)
         {
             _userRepository = userRepository;
             _passwordService = passwordService;
             _jwtProvider = jwtProvider;
             _refreshTokenService = refreshTokenService;
+            _grpcPhotoService = grpcPhotoService;
+            _logger = logger;
         }
 
         public async Task<UserDto> GetAsync(Guid id)
@@ -64,7 +71,6 @@ namespace Lapka.Identity.Infrastructure.Auth
                 [ClaimTypes.NameIdentifier] = new []{user.Id.Value.ToString()} 
             };
             
-            
             AuthDto auth = _jwtProvider.Create(user.Id.Value, user.Role, claims: claims);
             auth.RefreshToken = await _refreshTokenService.CreateAsync(user.Id.Value);
             
@@ -83,11 +89,11 @@ namespace Lapka.Identity.Infrastructure.Auth
             {
                 throw new EmailInUseException(command.Email);
             }
-
-            string role = string.IsNullOrWhiteSpace(command.Role) ? "user" : command.Role.ToLowerInvariant();
+            
+            string role = "user";
             string password = _passwordService.Hash(command.Password);
             user = new User(command.Id, command.Username, command.FirstName, command.LastName, command.Email, 
-                password, command.PhotoPath, command.PhotoPath, command.CreatedAt, role);
+                password, null, null, command.CreatedAt, role);
 
             await _userRepository.AddAsync(user);
         }

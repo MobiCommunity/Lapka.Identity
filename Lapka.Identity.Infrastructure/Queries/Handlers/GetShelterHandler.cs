@@ -4,6 +4,7 @@ using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Exceptions;
 using Lapka.Identity.Application.Queries;
 using Lapka.Identity.Application.Services;
+using Lapka.Identity.Application.Services.Shelter;
 using Lapka.Identity.Core.Entities;
 
 namespace Lapka.Identity.Infrastructure.Queries.Handlers

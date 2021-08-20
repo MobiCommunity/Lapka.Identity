@@ -1,6 +1,9 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using Convey.CQRS.Commands;
+using Lapka.Identity.Core.ValueObjects;
+using Microsoft.AspNetCore.Http;
 
 namespace Lapka.Identity.Application.Commands
 {
@@ -12,13 +15,9 @@ namespace Lapka.Identity.Application.Commands
         public string LastName{ get; }
         public string Email { get; }
         public string Password { get; }
-        public string PhoneNumber { get; }
-        public string PhotoPath { get; }
         public DateTime CreatedAt { get; }
-        public string Role { get; }
 
-        public SignUp(Guid id, string username, string firstName, string lastName, string email, string password,
-            string phoneNumber, string photoPath, DateTime createdAt, string role)
+        public SignUp(Guid id, string username, string firstName, string lastName, string email, string password, DateTime createdAt)
         {
             Id = id;
             Username = username;
@@ -26,10 +25,7 @@ namespace Lapka.Identity.Application.Commands
             LastName = lastName;
             Email = email;
             Password = password;
-            PhoneNumber = phoneNumber;
-            PhotoPath = photoPath;
             CreatedAt = createdAt;
-            Role = role;
         }
     }
 }

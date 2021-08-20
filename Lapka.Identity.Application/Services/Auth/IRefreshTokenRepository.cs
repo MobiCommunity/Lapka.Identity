@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Lapka.Identity.Core.Entities;
 
-namespace Lapka.Identity.Application.Services
+namespace Lapka.Identity.Application.Services.Auth
 {
     public interface IRefreshTokenRepository
     {

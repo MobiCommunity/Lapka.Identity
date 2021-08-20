@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Convey.Auth;
 using Convey.Persistence.MongoDB;
 using Lapka.Identity.Application.Services;
+using Lapka.Identity.Application.Services.User;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Infrastructure.Documents;
 

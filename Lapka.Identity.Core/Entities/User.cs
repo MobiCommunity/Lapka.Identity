@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using Lapka.Identity.Core.Events.Concrete;
@@ -12,8 +13,8 @@ namespace Lapka.Identity.Core.Entities
         public string LastName{ get; }
         public string Email { get; }
         public string Password { get; }
-        public string PhoneNumber { get; }
-        public string PhotoPath { get; }
+        public string? PhoneNumber { get; }
+        public string? PhotoPath { get; }
         public DateTime CreatedAt { get; }
         public string Role { get; }
 
@@ -33,7 +34,7 @@ namespace Lapka.Identity.Core.Entities
         }
 
         public static User Create(Guid id, string username, string firstName, string lastName, string email, 
-            string password, string phoneNumber, string photoPath, DateTime createdAt, string role)
+            string password, string? phoneNumber, string? photoPath, DateTime createdAt, string role)
         {
             User user = new User(id, username, firstName, lastName, email, password, phoneNumber, photoPath, createdAt, role);
             user.AddEvent(new UserCreated(user));

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Lapka.Identity.Application.Dto;
 
-namespace Lapka.Identity.Application.Services
+namespace Lapka.Identity.Application.Services.Auth
 {
     public interface IJwtProvider
     {

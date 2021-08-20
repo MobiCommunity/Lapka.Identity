@@ -1,4 +1,4 @@
-namespace Lapka.Identity.Application.Services
+namespace Lapka.Identity.Application.Services.User
 {
     public interface IRng
     {

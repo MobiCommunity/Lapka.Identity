@@ -36,5 +36,8 @@ namespace Lapka.Identity.Application.Dto
                 Longitude = location.Longitude
             };
         }
+        
+        public static string GetFileExtension(this File file) =>
+            file.Name.Contains('.') ? file.Name.Split('.')[1] : string.Empty;
     }
 }

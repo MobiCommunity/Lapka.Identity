@@ -1,10 +1,13 @@
 using System;
 using System.Threading.Tasks;
 using Convey.CQRS.Commands;
+using Lapka.Identity.Api.Models;
 using Lapka.Identity.Api.Models.Request;
 using Lapka.Identity.Application.Commands;
 using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Services;
+using Lapka.Identity.Application.Services.Auth;
+using Lapka.Identity.Core.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lapka.Identity.Api.Controllers
@@ -13,23 +16,21 @@ namespace Lapka.Identity.Api.Controllers
     [Route("api/user")]
     public class UserController : ControllerBase
     {
-        private readonly ICommandDispatcher _commandDispatcher;
         private readonly IIdentityService _identityService;
 
-        public UserController(ICommandDispatcher commandDispatcher, IIdentityService identityService)
+        public UserController(IIdentityService identityService)
         {
-            _commandDispatcher = commandDispatcher;
             _identityService = identityService;
         }
         
         [HttpPost("SignUp")]
-        public async Task<IActionResult> SingUp(SignUpRequest user)
+        public async Task<IActionResult> SingUp([FromForm]SignUpRequest user)
         {
             Guid id = Guid.NewGuid();
-            DateTime createdAt = DateTime.Now;;
+            DateTime createdAt = DateTime.Now;
             
-            await _commandDispatcher.SendAsync(new SignUp(id, user.Username, user.FirstName, user.LastName, user.Email, 
-                user.Password, user.PhotoPath, user.PhotoPath, createdAt, user.Role));
+            await _identityService.SignUpAsync(new SignUp(id, user.Username, user.FirstName, user.LastName, user.Email, 
+                user.Password, createdAt));
 
             return Created($"api/user/{id}", null);
         }
