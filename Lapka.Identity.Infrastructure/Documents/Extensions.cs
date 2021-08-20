@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.ValueObjects;
 
@@ -49,10 +51,53 @@ namespace Lapka.Identity.Infrastructure.Exceptions
         {
             return new Location(shelter.Latitude, shelter.Longitude);
         }
-        
+
         public static Address AsBusiness(this AddressDocument shelter)
         {
             return new Address(shelter.Street, shelter.ZipCode, shelter.City);
+        }
+        public static UserDocument AsDocument(this User user)
+        {
+            return new UserDocument
+            {
+                Id = user.Id.Value,
+                Username = user.Username,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Password = user.Password,
+                PhoneNumber = user.PhoneNumber,
+                PhotoPath = user.PhotoPath,
+                Role = user.Role
+            };
+        }
+        
+        public static User AsBusiness(this UserDocument user)
+        {
+            return new User(user.Id, user.Username, user.FirstName, user.LastName, user.Email, user.Password, 
+                user.PhoneNumber, user.PhotoPath, user.CreatedAt, user.Role);
+        }
+
+        public static JsonWebToken AsBusiness(this Convey.Auth.JsonWebToken jsonWebToken)
+        {
+            return new JsonWebToken(jsonWebToken.AccessToken, jsonWebToken.RefreshToken, jsonWebToken.Expires);
+        }
+
+        public static RefreshToken AsBusiness(this JsonWebTokenDocument token)
+        {
+            return new RefreshToken(token.Id, token.UserId, token.RefreshToken, token.CreatedAt, token.ExpiresAt);
+        }
+        
+        public static JsonWebTokenDocument AsDocument(this RefreshToken token)
+        {
+            return new JsonWebTokenDocument
+            {
+                Id = token.Id.Value,
+                UserId = token.UserId,
+                RefreshToken = token.Token,
+                CreatedAt = token.CreatedAt,
+                ExpiresAt = token.RevokedAt
+            };
         }
     }
 }
