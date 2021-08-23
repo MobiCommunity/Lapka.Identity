@@ -37,6 +37,22 @@ namespace Lapka.Identity.Application.Dto
             };
         }
         
+        public static UserDto AsDto(this User user)
+        {
+            return new UserDto
+            {
+                Id = user.Id.Value,
+                CreatedAt = user.CreatedAt,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber,
+                PhotoPath = user.PhotoPath,
+                Role = user.Role,
+                Username = user.Username
+            };
+        }
+        
         public static string GetFileExtension(this File file) =>
             file.Name.Contains('.') ? file.Name.Split('.')[1] : string.Empty;
     }

@@ -7,8 +7,9 @@ namespace Lapka.Identity.Application.Services.Auth
 {
     public interface IIdentityService
     {
-        Task<UserDto> GetAsync(Guid id);
         Task<AuthDto> SignInAsync(SignIn command);
         Task SignUpAsync(SignUp command);
+        Task ChangeUserPasswordAsync(UpdateUserPassword command);
+
     }
 }
