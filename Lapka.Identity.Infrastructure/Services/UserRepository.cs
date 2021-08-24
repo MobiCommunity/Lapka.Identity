@@ -1,14 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Authentication;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using Convey.Auth;
 using Convey.Persistence.MongoDB;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Infrastructure.Documents;
+using Lapka.Identity.Infrastructure.Exceptions;
 
 namespace Lapka.Identity.Infrastructure.Services
 {

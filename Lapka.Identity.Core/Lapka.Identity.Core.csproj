@@ -6,4 +6,9 @@
         <NoWarn>$(NoWarn);1591</NoWarn>
         <ProjectGuid>{FA9B3009-5E9E-47CB-A413-C5E182B943F2}</ProjectGuid>
     </PropertyGroup>
+
+       <ItemGroup>
+         <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.1.18" />
+         <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+       </ItemGroup>
 </Project>

@@ -9,6 +9,7 @@ using Lapka.Identity.Api.Models.Request;
 using Lapka.Identity.Application.Commands;
 using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Queries;
+using Microsoft.AspNetCore.Http;
 
 namespace Lapka.Identity.Api.Controllers
 {

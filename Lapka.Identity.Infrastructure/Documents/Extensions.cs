@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.ValueObjects;
+using Lapka.Identity.Infrastructure.Documents;
 
 
 namespace Lapka.Identity.Infrastructure.Exceptions

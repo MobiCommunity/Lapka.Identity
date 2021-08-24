@@ -10,5 +10,6 @@ namespace Lapka.Identity.Application.Services
         Task<UserDto> GetAsync(Guid id);
         Task<AuthDto> SignInAsync(SignIn command);
         Task SignUpAsync(SignUp command);
+        Task<FacebookAuthDto> FacebookLoginAsync(string accessToken);
     }
 }
