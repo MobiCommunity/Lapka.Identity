@@ -1,13 +1,10 @@
-using System;
 using System.Threading.Tasks;
 using Convey.CQRS.Queries;
-using Convey.Persistence.MongoDB;
 using Lapka.Identity.Application.Dto;
+using Lapka.Identity.Application.Exceptions;
 using Lapka.Identity.Application.Queries;
 using Lapka.Identity.Application.Services.User;
 using Lapka.Identity.Core.Entities;
-using Lapka.Identity.Core.Exceptions.User;
-using Lapka.Identity.Infrastructure.Documents;
 
 namespace Lapka.Identity.Infrastructure.Queries.Handlers
 {
@@ -25,7 +22,7 @@ namespace Lapka.Identity.Infrastructure.Queries.Handlers
 
             if (user is null)
             {
-                throw new UserNotFoundException(user.Id.ToString());
+                throw new UserNotFoundException(query?.Id.ToString());
             }
 
             return user.AsDto();

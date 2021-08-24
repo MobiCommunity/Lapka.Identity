@@ -47,7 +47,7 @@ namespace Lapka.Identity.Api.Controllers
         }));
 
         [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> DeletUser(Guid id)
+        public async Task<IActionResult> DeleteUser(Guid id)
         {
             await _commandDispatcher.SendAsync(new DeleteUser(id));
 

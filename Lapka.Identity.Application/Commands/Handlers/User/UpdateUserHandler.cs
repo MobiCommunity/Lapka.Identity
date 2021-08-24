@@ -1,10 +1,9 @@
 using System.Threading.Tasks;
 using Convey.CQRS.Commands;
+using Lapka.Identity.Application.Exceptions;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.User;
 using Lapka.Identity.Core.Entities;
-using Lapka.Identity.Core.Exceptions.Identity;
-using Lapka.Identity.Core.Exceptions.User;
 
 namespace Lapka.Identity.Application.Commands.Handlers
 {

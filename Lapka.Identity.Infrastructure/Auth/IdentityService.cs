@@ -4,12 +4,11 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Lapka.Identity.Application.Commands;
 using Lapka.Identity.Application.Dto;
+using Lapka.Identity.Application.Exceptions;
 using Lapka.Identity.Application.Services.Auth;
 using Lapka.Identity.Application.Services.User;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.Exceptions.Identity;
-using Lapka.Identity.Core.Exceptions.User;
-using Lapka.Identity.Infrastructure.Documents;
 
 namespace Lapka.Identity.Infrastructure.Auth
 {
