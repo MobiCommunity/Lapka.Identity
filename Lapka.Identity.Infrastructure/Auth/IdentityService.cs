@@ -9,7 +9,6 @@ using Lapka.Identity.Application.Services;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.Exceptions;
 using Lapka.Identity.Core.Exceptions.Identity;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
 namespace Lapka.Identity.Infrastructure.Auth
@@ -25,19 +24,14 @@ namespace Lapka.Identity.Infrastructure.Auth
         private readonly IPasswordService _passwordService;
         private readonly IJwtProvider _jwtProvider;
         private readonly IRefreshTokenService _refreshTokenService;
-        private readonly IFacebookAuthService _facebookAuthService;
-        private readonly UserManager<IdentityUser> _userManager;
 
         public IdentityService(IUserRepository userRepository, IPasswordService passwordService,
-            IJwtProvider jwtProvider, IRefreshTokenService refreshTokenService,
-            IFacebookAuthService facebookAuthService, UserManager<IdentityUser> userManager)
+            IJwtProvider jwtProvider, IRefreshTokenService refreshTokenService)
         {
             _userRepository = userRepository;
             _passwordService = passwordService;
             _jwtProvider = jwtProvider;
             _refreshTokenService = refreshTokenService;
-            _facebookAuthService = facebookAuthService;
-            _userManager = userManager;
         }
 
         public async Task<UserDto> GetAsync(Guid id)
@@ -67,13 +61,13 @@ namespace Lapka.Identity.Infrastructure.Auth
 
             Dictionary<string, IEnumerable<string>> claims = new Dictionary<string, IEnumerable<string>>
             {
-                [ClaimTypes.NameIdentifier] = new[] {user.Id.Value.ToString()}
+                [ClaimTypes.NameIdentifier] = new []{user.Id.Value.ToString()} 
             };
-
-
+            
+            
             AuthDto auth = _jwtProvider.Create(user.Id.Value, user.Role, claims: claims);
             auth.RefreshToken = await _refreshTokenService.CreateAsync(user.Id.Value);
-
+            
             return auth;
         }
 
@@ -85,15 +79,15 @@ namespace Lapka.Identity.Infrastructure.Auth
             }
 
             User user = await _userRepository.GetAsync(command.Email);
-            if (user is { })
+            if (user is {})
             {
                 throw new EmailInUseException(command.Email);
             }
 
             string role = string.IsNullOrWhiteSpace(command.Role) ? "user" : command.Role.ToLowerInvariant();
             string password = _passwordService.Hash(command.Password);
-            user = new User(command.Id, command.Username, command.FirstName, command.LastName, command.Email,
-                password, command.PhotoPath, command.PhotoPath, command.CreatedAt, role);
+            user = User.Create(command.Id, command.Username, command.FirstName, command.LastName, command.Email, 
+                password,  command.CreatedAt, role);
 
             await _userRepository.AddAsync(user);
         }
@@ -120,6 +114,21 @@ namespace Lapka.Identity.Infrastructure.Auth
             }
 
             return null;
+        }
+        
+        public async Task ChangeUserPasswordAsync(UpdateUserPassword command)
+        {
+            User user = await _userRepository.GetAsync(command.Id);
+            if (user is null)
+            {
+                throw new UserNotFoundException(command.Id.ToString());
+            }
+            
+            string password = _passwordService.Hash(command.Password);
+            
+            user.UpdatePassword(password);
+
+            await _userRepository.UpdateAsync(user);
         }
     }
 }

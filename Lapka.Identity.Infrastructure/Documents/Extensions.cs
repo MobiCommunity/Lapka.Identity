@@ -1,6 +1,5 @@
-using System.Collections.Generic;
-using System.Linq;
 using Lapka.Identity.Core.Entities;
+using Lapka.Identity.Core.Exceptions;
 using Lapka.Identity.Core.ValueObjects;
 using Lapka.Identity.Infrastructure.Documents;
 
@@ -69,7 +68,8 @@ namespace Lapka.Identity.Infrastructure.Exceptions
                 Password = user.Password,
                 PhoneNumber = user.PhoneNumber,
                 PhotoPath = user.PhotoPath,
-                Role = user.Role
+                Role = user.Role,
+                CreatedAt = user.CreatedAt
             };
         }
         
@@ -98,6 +98,28 @@ namespace Lapka.Identity.Infrastructure.Exceptions
                 RefreshToken = token.Token,
                 CreatedAt = token.CreatedAt,
                 ExpiresAt = token.RevokedAt
+            };
+        }
+
+        public static UploadPhotoRequest.Types.Bucket AsGrpcUpload(this BucketName bucket)
+        {
+            return bucket switch
+            {
+                BucketName.PetPhotos => UploadPhotoRequest.Types.Bucket.PetPhotos,
+                BucketName.ShelterPhotos => UploadPhotoRequest.Types.Bucket.ShelterPhotos,
+                BucketName.UserPhotos => UploadPhotoRequest.Types.Bucket.UserPhotos,
+                _ => throw new InvalidBucketNameException(bucket.ToString())
+            };
+        }
+        
+        public static DeletePhotoRequest.Types.Bucket AsGrpcDelete(this BucketName bucket)
+        {
+            return bucket switch
+            {
+                BucketName.PetPhotos => DeletePhotoRequest.Types.Bucket.PetPhotos,
+                BucketName.ShelterPhotos => DeletePhotoRequest.Types.Bucket.ShelterPhotos,
+                BucketName.UserPhotos => DeletePhotoRequest.Types.Bucket.UserPhotos,
+                _ => throw new InvalidBucketNameException(bucket.ToString())
             };
         }
     }

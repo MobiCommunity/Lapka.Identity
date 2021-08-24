@@ -1,4 +1,5 @@
 using Lapka.Identity.Application.Services;
+using Lapka.Identity.Application.Services.User;
 using Microsoft.AspNetCore.Identity;
 
 namespace Lapka.Identity.Infrastructure.Auth

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Convey.Auth;
 using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Services;
+using Lapka.Identity.Application.Services.Auth;
 
 namespace Lapka.Identity.Infrastructure.Services
 {

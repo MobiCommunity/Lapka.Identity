@@ -4,7 +4,6 @@ namespace Lapka.Identity.Application.Exceptions
 {
     public class CannotRequestFilesMicroserviceException : AppException
     {
-        
         public Exception Exception { get; }
         
         public CannotRequestFilesMicroserviceException(Exception exception) 

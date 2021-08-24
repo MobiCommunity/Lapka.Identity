@@ -1,7 +1,9 @@
-﻿using System.IO;
+using System.IO;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using Lapka.Identity.Application.Services;
+using Lapka.Identity.Core.ValueObjects;
+using Lapka.Identity.Infrastructure.Documents;
 
 namespace Lapka.Identity.Infrastructure.Services
 {
@@ -13,21 +15,23 @@ namespace Lapka.Identity.Infrastructure.Services
         {
             _client = client;
         }
-
-        public async Task AddAsync(string photoPath, Stream photo)
+        
+        public async Task AddAsync(string photoPath, Stream photo, BucketName bucket)
         {
             await _client.UploadPhotoAsync(new UploadPhotoRequest
             {
                 PhotoPath = photoPath,
-                Photo = await ByteString.FromStreamAsync(photo)
+                Photo = await ByteString.FromStreamAsync(photo),
+                BucketName = bucket.AsGrpcUpload()
             });
         }
 
-        public async Task DeleteAsync(string photoPath)
+        public async Task DeleteAsync(string photoPath, BucketName bucket)
         {
             await _client.DeletePhotoAsync(new DeletePhotoRequest
             {
-                PhotoPath = photoPath
+                PhotoPath = photoPath,
+                BucketName = bucket.AsGrpcDelete()
             });
         }
     }

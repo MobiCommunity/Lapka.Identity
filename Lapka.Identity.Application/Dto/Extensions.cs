@@ -13,7 +13,6 @@ namespace Lapka.Identity.Application.Dto
                 Address = shelter.Address.AsDto(),
                 Email = shelter.Email,
                 GeoLocation = shelter.GeoLocation.AsDto(),
-                PhotoPath = shelter.PhotoPath,
                 Name = shelter.Name,
                 PhoneNumber = shelter.PhoneNumber
             };
@@ -35,6 +34,22 @@ namespace Lapka.Identity.Application.Dto
             {
                 Latitude = location.Latitude,
                 Longitude = location.Longitude
+            };
+        }
+        
+        public static UserDto AsDto(this User user)
+        {
+            return new UserDto
+            {
+                Id = user.Id.Value,
+                CreatedAt = user.CreatedAt,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber,
+                PhotoPath = user.PhotoPath,
+                Role = user.Role,
+                Username = user.Username
             };
         }
         

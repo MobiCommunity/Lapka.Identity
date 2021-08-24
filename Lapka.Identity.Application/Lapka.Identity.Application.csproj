@@ -21,7 +21,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Services\Identity" />
       <Folder Include="Services\Responses\" />
     </ItemGroup>
 

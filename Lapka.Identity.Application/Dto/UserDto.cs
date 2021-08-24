@@ -5,27 +5,14 @@ namespace Lapka.Identity.Application.Dto
 {
     public class UserDto
     {
-        public Guid Id { get; }
-        public string Username { get; }
-        public string FirstName { get; }
-        public string LastName{ get; }
-        public string Email { get; }
-        public string PhoneNumber { get; }
-        public string PhotoPath { get; }
-        public DateTime CreatedAt { get; }
-        public string Role { get; }
-
-        public UserDto(User user)
-        {
-            Id = user.Id.Value;
-            Username = user.Username;
-            FirstName = user.FirstName;
-            LastName = user.LastName;
-            Email = user.Email;
-            PhoneNumber = user.PhoneNumber;
-            PhotoPath = user.PhotoPath;
-            CreatedAt = user.CreatedAt;
-            Role = user.Role;
-        }
+        public Guid Id { get; set; }
+        public string Username { get; set; }
+        public string FirstName { get; set; }
+        public string LastName{ get; set; }
+        public string Email { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string? PhotoPath { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public string Role { get; set; }
     }
 }

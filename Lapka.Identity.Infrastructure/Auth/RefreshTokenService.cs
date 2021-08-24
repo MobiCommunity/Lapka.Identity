@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Lapka.Identity.Application.Dto;
-using Lapka.Identity.Application.Services;
+using Lapka.Identity.Application.Exceptions;
+using Lapka.Identity.Application.Services.Auth;
+using Lapka.Identity.Application.Services.User;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.Exceptions.Token;
-using Lapka.Identity.Core.Exceptions.User;
 
 namespace Lapka.Identity.Infrastructure.Auth
 {

@@ -8,8 +8,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Configuration;
-using System.Net;
 using Convey.Auth;
 using Convey.Persistence.MongoDB;
 using Lapka.Identity.Application.Events.Abstract;
@@ -19,7 +17,6 @@ using Lapka.Identity.Infrastructure.Documents;
 using Lapka.Identity.Infrastructure.Exceptions;
 using Lapka.Identity.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 
 
 namespace Lapka.Identity.Infrastructure
@@ -89,8 +86,11 @@ namespace Lapka.Identity.Infrastructure
             services.AddSingleton(facebookOptions);
             services.AddHttpClient();
             services.AddSingleton<IFacebookAuthService, FacebookAuthService>();
-            
 
+            services.AddGrpcClient<Photo.PhotoClient>(o =>
+            {
+                o.Address = new Uri("http://localhost:5013");
+            });
             builder.Services.Scan(s => s.FromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
                 .AddClasses(c => c.AssignableTo(typeof(IDomainEventHandler<>)))
                 .AsImplementedInterfaces().WithTransientLifetime());

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Convey.Persistence.MongoDB;
 using Lapka.Identity.Application.Services;
+using Lapka.Identity.Application.Services.Shelter;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Infrastructure.Exceptions;
 

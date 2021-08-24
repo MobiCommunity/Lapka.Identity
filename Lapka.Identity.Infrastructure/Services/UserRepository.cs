@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Convey.Persistence.MongoDB;
 using Lapka.Identity.Application.Services;
+using Lapka.Identity.Application.Services.User;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Infrastructure.Documents;
 using Lapka.Identity.Infrastructure.Exceptions;
@@ -31,6 +32,16 @@ namespace Lapka.Identity.Infrastructure.Services
             return user?.AsBusiness();
         }
 
-        public Task AddAsync(User user) => _repository.AddAsync(user.AsDocument());
+        public async Task AddAsync(User user) => await _repository.AddAsync(user.AsDocument());
+        public async Task UpdateAsync(User user)
+        {
+            await _repository.UpdateAsync(user.AsDocument());
+            
+        }
+        public async Task DeleteAsync(User user)
+        {
+            await _repository.DeleteAsync(user.Id.Value);
+            
+        }
     }
 }
