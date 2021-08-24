@@ -17,27 +17,12 @@ namespace Lapka.Identity.Api.Controllers
     public class UserController : ControllerBase
     {
         private readonly ICommandDispatcher _commandDispatcher;
-        private readonly IIdentityService _identityService;
         private readonly IQueryDispatcher _queryDispatcher;
 
-        public UserController(ICommandDispatcher commandDispatcher, IIdentityService identityService,
-            IQueryDispatcher queryDispatcher)
+        public UserController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher)
         {
             _commandDispatcher = commandDispatcher;
-            _identityService = identityService;
             _queryDispatcher = queryDispatcher;
-        }
-
-        [HttpPost("SignUp")]
-        public async Task<IActionResult> SingUp([FromBody] SignUpRequest user)
-        {
-            Guid id = Guid.NewGuid();
-            DateTime createdAt = DateTime.Now;
-
-            await _identityService.SignUpAsync(new SignUp(id, user.Username, user.FirstName, user.LastName, user.Email,
-                user.Password, createdAt));
-
-            return Created($"api/user/{id}", null);
         }
 
         [HttpGet("{id:guid}")]
@@ -87,14 +72,6 @@ namespace Lapka.Identity.Api.Controllers
                 user.PhoneNumber));
 
             return NoContent();
-        }
-
-        [HttpPost("SignIn")]
-        public async Task<IActionResult> SingIn(SignInRequest user)
-        {
-            AuthDto token = await _identityService.SignInAsync(new SignIn(user.Email, user.Password));
-
-            return Ok(token);
         }
     }
 }

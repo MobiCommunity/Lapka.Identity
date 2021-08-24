@@ -12,8 +12,8 @@ namespace Lapka.Identity.Core.Entities
     public class User : AggregateRoot
     {
         public string Username { get; private set; }
-        public string FirstName { get; private set; }
-        public string LastName { get; private set; }
+        public string? FirstName { get; private set; }
+        public string? LastName { get; private set; }
         public string Email { get; private set; }
         public string Password { get; private set; }
         public string? PhoneNumber { get; private set; }
@@ -21,7 +21,7 @@ namespace Lapka.Identity.Core.Entities
         public DateTime CreatedAt { get; private set; }
         public string Role { get; private set; }
 
-        public User(Guid id, string username, string firstName, string lastName, string email, string password,
+        public User(Guid id, string username, string? firstName, string? lastName, string email, string password,
             string? phoneNumber, string? photoPath, DateTime createdAt, string role)
         {
             Id = new AggregateId(id);
@@ -38,7 +38,7 @@ namespace Lapka.Identity.Core.Entities
             Validate();
         }
 
-        public static User Create(Guid id, string username, string firstName, string lastName, string email,
+        public static User Create(Guid id, string username, string? firstName, string? lastName, string email,
             string password, DateTime createdAt, string role)
         {
             User user = new User(id, username, firstName, lastName, email, password, phoneNumber: null, photoPath: null,
@@ -48,7 +48,7 @@ namespace Lapka.Identity.Core.Entities
             return user;
         }
 
-        public void Update(string username, string firstName, string lastName, string email, string? phoneNumber,
+        public void Update(string username, string? firstName, string? lastName, string email, string? phoneNumber,
             string role, string? photoPath)
         {
             Username = username;
@@ -100,20 +100,20 @@ namespace Lapka.Identity.Core.Entities
                 throw new InvalidEmailValueException(Email);
             }
         }
-
-        private void ValidateLastName()
-        {
-            if (string.IsNullOrWhiteSpace(LastName))
-            {
-                throw new InvalidUserLastNameException(LastName);
-            }
-        }
-
+        
         private void ValidateFirstName()
         {
-            if (string.IsNullOrWhiteSpace(FirstName))
+            if (!string.IsNullOrWhiteSpace(FirstName))
             {
-                throw new InvalidUserFirstNameException(FirstName);
+                //TODO: If phone number is not null, validate first name 
+            }
+        }
+        
+        private void ValidateLastName()
+        {
+            if (!string.IsNullOrWhiteSpace(LastName))
+            {
+                //TODO: If phone number is not null, validate last name
             }
         }
 

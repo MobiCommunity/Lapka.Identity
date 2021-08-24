@@ -18,8 +18,10 @@ using Lapka.Identity.Application.Services.User;
 using Lapka.Identity.Infrastructure.Auth;
 using Lapka.Identity.Infrastructure.Documents;
 using Lapka.Identity.Infrastructure.Exceptions;
+using Lapka.Identity.Infrastructure.Options;
 using Lapka.Identity.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 
 
 namespace Lapka.Identity.Infrastructure
@@ -52,6 +54,13 @@ namespace Lapka.Identity.Infrastructure
             builder.Services.Configure<IISServerOptions>(o => o.AllowSynchronousIO = true);
 
             IServiceCollection services = builder.Services;
+            
+            ServiceProvider provider = services.BuildServiceProvider();
+            IConfiguration configuration = provider.GetService<IConfiguration>();
+            
+            GoogleAuthSettings googleAuthSettings = new GoogleAuthSettings();
+            configuration.GetSection("google").Bind(googleAuthSettings);
+            services.AddSingleton(googleAuthSettings);
 
             AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
             services.AddSingleton<IExceptionToResponseMapper, ExceptionToResponseMapper>();
@@ -70,6 +79,7 @@ namespace Lapka.Identity.Infrastructure
             services.AddSingleton<IRng, Rng>();
             services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IGoogleAuthHelper, GoogleAuthHelper>();
             services.AddScoped<IGrpcPhotoService, GrpcPhotoService>();
 
             AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);

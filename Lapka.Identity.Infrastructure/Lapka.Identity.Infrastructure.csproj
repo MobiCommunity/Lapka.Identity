@@ -19,6 +19,7 @@
         <PackageReference Include="Convey.Metrics.AppMetrics" Version="0.4.360" />
         <PackageReference Include="Convey.Persistence.MongoDB" Version="0.4.360" />
         <PackageReference Include="Convey.WebApi.CQRS" Version="0.4.360" />
+        <PackageReference Include="Google.Apis.Auth.AspNetCore3" Version="1.54.0" />
         <PackageReference Include="Grpc.AspNetCore" Version="2.39.0" />
 
     </ItemGroup>
