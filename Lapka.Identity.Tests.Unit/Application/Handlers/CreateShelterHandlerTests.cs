@@ -4,8 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Lapka.Identity.Application.Commands;
-using Lapka.Identity.Application.Commands.Handlers;
+using Lapka.Identity.Application.Commands.Handlers.Shelter;
 using Lapka.Identity.Application.Services;
+using Lapka.Identity.Application.Services.Shelter;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.Events.Abstract;
 using Lapka.Identity.Core.Events.Concrete;
@@ -66,7 +67,7 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
                                                p.GeoLocation.Longitude == shelter.GeoLocation.Longitude &&
                                                p.PhotoPath == fileNameExpectedValue));
 
-            await _grpcPhotoService.Received().AddAsync(Arg.Is(fileNameExpectedValue), Arg.Is(file.Content));
+            await _grpcPhotoService.Received().AddAsync(Arg.Is(fileNameExpectedValue), Arg.Is(file.Content), Arg.Is(BucketName.ShelterPhotos));
             await _eventProcessor.Received().ProcessAsync(Arg.Is<IEnumerable<IDomainEvent>>(e
                 => e.FirstOrDefault().GetType() == typeof(ShelterCreated)));
         }

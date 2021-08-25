@@ -4,11 +4,10 @@ using Convey.CQRS.Commands;
 using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Shelter;
-using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.ValueObjects;
 using Microsoft.Extensions.Logging;
 
-namespace Lapka.Identity.Application.Commands.Handlers
+namespace Lapka.Identity.Application.Commands.Handlers.Shelter
 {
     public class CreateShelterHandler : ICommandHandler<CreateShelter>
     {
@@ -30,7 +29,7 @@ namespace Lapka.Identity.Application.Commands.Handlers
         {
             string photoPath =  $"{command.PhotoId:N}.{command.Photo.GetFileExtension()}"; 
 
-            Shelter created = Shelter.Create(command.Id, command.Name, command.Address, 
+            Core.Entities.Shelter created = Core.Entities.Shelter.Create(command.Id, command.Name, command.Address, 
                 command.GeoLocation, photoPath, command.PhoneNumber, command.Email);
 
             await _shelterRepository.AddAsync(created);

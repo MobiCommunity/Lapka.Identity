@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Lapka.Identity.Application.Commands;
 using Lapka.Identity.Application.Dto;
@@ -10,14 +9,9 @@ using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Auth;
 using Lapka.Identity.Application.Services.User;
 using Lapka.Identity.Core.Entities;
-using Lapka.Identity.Core.Events.Concrete;
 using Lapka.Identity.Core.Exceptions;
 using Lapka.Identity.Core.Exceptions.Identity;
 using Lapka.Identity.Core.ValueObjects;
-using Lapka.Identity.Core.Exceptions.Token;
-using Lapka.Identity.Infrastructure.Services;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
 
 namespace Lapka.Identity.Infrastructure.Auth
 {
@@ -31,8 +25,8 @@ namespace Lapka.Identity.Infrastructure.Auth
         private readonly IGoogleAuthHelper _googleAuthHelper;
 
         public IdentityService(IUserRepository userRepository, IPasswordService passwordService,
-            IJwtProvider jwtProvider, IRefreshTokenService refreshTokenService, IFacebookAuthHelper facebookAuthHelper)
-            IJwtProvider jwtProvider, IRefreshTokenService refreshTokenService, IGoogleAuthHelper googleAuthHelper)
+            IJwtProvider jwtProvider, IRefreshTokenService refreshTokenService, IFacebookAuthHelper facebookAuthHelper,
+            IGoogleAuthHelper googleAuthHelper)
         {
             _userRepository = userRepository;
             _passwordService = passwordService;
@@ -64,7 +58,7 @@ namespace Lapka.Identity.Infrastructure.Auth
         {
             GoogleUser googleUser = await _googleAuthHelper.GetUserInfoAsync(command.AccessToken);
             User user = await _userRepository.GetAsync(googleUser.Email);
-            
+
             if (user is null)
             {
                 await SignUpAsync(new SignUp(Guid.NewGuid(), googleUser.Email, googleUser.GivenName,
@@ -76,6 +70,7 @@ namespace Lapka.Identity.Infrastructure.Auth
                     user.PhoneNumber, user.Role, googleUser.Picture);
                 await _userRepository.UpdateAsync(user);
             }
+
             user = await _userRepository.GetAsync(googleUser.Email);
 
             AuthDto auth = await GetTokensAsync(user);
@@ -86,7 +81,7 @@ namespace Lapka.Identity.Infrastructure.Auth
         public async Task SignUpAsync(SignUp command)
         {
             User user = await _userRepository.GetAsync(command.Email);
-            if (user is {})
+            if (user is { })
             {
                 throw new EmailInUseException(command.Email);
             }
@@ -101,7 +96,7 @@ namespace Lapka.Identity.Infrastructure.Auth
 
         public async Task<AuthDto> FacebookLoginAsync(SignInFacebook command)
         {
-            var validatedTokenResult = await _facebookAuthHelper.ValidateAccessTokenAsync(command.AccessToken);
+            FacebookTokenValidationResult validatedTokenResult = await _facebookAuthHelper.ValidateAccessTokenAsync(command.AccessToken);
 
             if (!validatedTokenResult.Data.IsValid)
             {
@@ -120,10 +115,10 @@ namespace Lapka.Identity.Infrastructure.Auth
             else
             {
                 user.Update(userInfo.Email, userInfo.FirstName,
-                    userInfo.LastName, userInfo.Email, user.PhoneNumber, user.Role, 
+                    userInfo.LastName, userInfo.Email, user.PhoneNumber, user.Role,
                     userInfo.FacebookPicture.Data.Url.AbsoluteUri);
 
-               await _userRepository.UpdateAsync(user);
+                await _userRepository.UpdateAsync(user);
             }
 
             user = await _userRepository.GetAsync(userInfo.Email);
@@ -152,7 +147,13 @@ namespace Lapka.Identity.Infrastructure.Auth
         {
             Dictionary<string, IEnumerable<string>> claims = new Dictionary<string, IEnumerable<string>>
             {
-                [ClaimTypes.NameIdentifier] = new[] {user.Id.Value.ToString()}
+                [ClaimTypes.NameIdentifier] = new[] {user.Id.Value.ToString()},
+                [ClaimTypes.Email] = new[] {user.Email},
+                [ClaimTypes.Role] = new[] {user.Role},
+                [ClaimTypes.GivenName] = new[] {user.FirstName},
+                [ClaimTypes.Surname] = new[] {user.LastName},
+                ["PhoneNumber"] = new[] {user.PhoneNumber},
+                ["Avatar"] = new[] {user.PhotoPath}
             };
 
             AuthDto auth = _jwtProvider.Create(user.Id.Value, user.Role, claims: claims);

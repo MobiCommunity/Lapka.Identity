@@ -4,6 +4,7 @@ using Convey.CQRS.Commands;
 using Lapka.Identity.Api.Models.Request;
 using Lapka.Identity.Application.Commands;
 using Lapka.Identity.Application.Dto;
+using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Auth;
 using Microsoft.AspNetCore.Mvc;
 

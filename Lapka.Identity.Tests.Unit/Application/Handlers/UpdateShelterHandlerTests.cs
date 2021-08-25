@@ -1,19 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Lapka.Identity.Application.Commands;
-using Lapka.Identity.Application.Commands.Handlers;
+using Lapka.Identity.Application.Commands.Handlers.Shelter;
 using Lapka.Identity.Application.Services;
+using Lapka.Identity.Application.Services.Shelter;
 using Lapka.Identity.Core.Entities;
-using Lapka.Identity.Core.Events.Abstract;
-using Lapka.Identity.Core.Events.Concrete;
 using Lapka.Identity.Core.ValueObjects;
-using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Xunit;
-using File = Lapka.Identity.Core.ValueObjects.File;
 
 namespace Lapka.Identity.Tests.Unit.Application.Handlers
 {

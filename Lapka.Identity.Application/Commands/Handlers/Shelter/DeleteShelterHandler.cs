@@ -1,12 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Convey.CQRS.Commands;
-using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Exceptions;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Shelter;
-using Lapka.Identity.Core.Entities;
 
-namespace Lapka.Identity.Application.Commands.Handlers
+namespace Lapka.Identity.Application.Commands.Handlers.Shelter
 {
     public class DeleteShelterHandler : ICommandHandler<DeleteShelter>
     {
@@ -20,7 +18,7 @@ namespace Lapka.Identity.Application.Commands.Handlers
         }
         public async Task HandleAsync(DeleteShelter command)
         {
-            Shelter shelter = await _shelterRepository.GetByIdAsync(command.Id);
+            Core.Entities.Shelter shelter = await _shelterRepository.GetByIdAsync(command.Id);
             if (shelter is null)
             {
                 throw new ShelterNotFoundException();

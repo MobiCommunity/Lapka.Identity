@@ -32,7 +32,7 @@ namespace Lapka.Identity.Core.ValueObjects
                 throw new InvalidLongitudeValueException(Longitude);
             }
             
-            bool isDouble = double.TryParse(Latitude, out double doubleLongitude);
+            bool isDouble = double.TryParse(Longitude, out double doubleLongitude);
 
             if (!isDouble)
             {
@@ -41,12 +41,12 @@ namespace Lapka.Identity.Core.ValueObjects
                 
             if (doubleLongitude <= MinLongitudeValue)
             {
-                throw new LongitudeTooLowException(Longitude);
+                throw new LongitudeTooLowException(Latitude);
             }
 
             if (doubleLongitude >= MaxLongitudeValue)
             {
-                throw new LongitudeTooBigException(Longitude);
+                throw new LongitudeTooBigException(Latitude);
             }
         }
 

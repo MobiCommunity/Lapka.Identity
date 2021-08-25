@@ -18,8 +18,10 @@ using Lapka.Identity.Application.Services.User;
 using Lapka.Identity.Infrastructure.Auth;
 using Lapka.Identity.Infrastructure.Documents;
 using Lapka.Identity.Infrastructure.Exceptions;
+using Lapka.Identity.Infrastructure.Options;
 using Lapka.Identity.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 
 
 namespace Lapka.Identity.Infrastructure
@@ -78,7 +80,6 @@ namespace Lapka.Identity.Infrastructure
             services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddSingleton<IGrpcPhotoService, GrpcPhotoService>();
-            // services.AddIdentity<UserDocument, List<string>>().AddDefaultTokenProviders();
             services.AddTransient<IGoogleAuthHelper, GoogleAuthHelper>();
             services.AddScoped<IGrpcPhotoService, GrpcPhotoService>();
 

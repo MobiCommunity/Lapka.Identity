@@ -5,7 +5,6 @@ using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Exceptions;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Shelter;
-using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.ValueObjects;
 using Microsoft.Extensions.Logging;
 
@@ -30,7 +29,7 @@ namespace Lapka.Identity.Application.Commands.Handlers
         public async Task HandleAsync(UpdateShelterPhoto command)
         {
             string photoPath =  $"{command.PhotoId:N}.{command.Photo.GetFileExtension()}";
-            Shelter shelter = await _shelterRepository.GetByIdAsync(command.Id);
+            Core.Entities.Shelter shelter = await _shelterRepository.GetByIdAsync(command.Id);
             string oldPhotoPath = shelter.PhotoPath;
             
             shelter.UpdatePhoto(photoPath);

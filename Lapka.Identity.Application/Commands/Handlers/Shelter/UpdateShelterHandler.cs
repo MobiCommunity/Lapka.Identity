@@ -3,9 +3,8 @@ using Convey.CQRS.Commands;
 using Lapka.Identity.Application.Exceptions;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Shelter;
-using Lapka.Identity.Core.Entities;
 
-namespace Lapka.Identity.Application.Commands.Handlers
+namespace Lapka.Identity.Application.Commands.Handlers.Shelter
 {
     public class UpdateShelterHandler : ICommandHandler<UpdateShelter>
     {
@@ -22,7 +21,7 @@ namespace Lapka.Identity.Application.Commands.Handlers
 
         public async Task HandleAsync(UpdateShelter command)
         {
-            Shelter shelter = await _shelterRepository.GetByIdAsync(command.Id);
+            Core.Entities.Shelter shelter = await _shelterRepository.GetByIdAsync(command.Id);
             if (shelter is null)
             {
                 throw new ShelterNotFoundException();
