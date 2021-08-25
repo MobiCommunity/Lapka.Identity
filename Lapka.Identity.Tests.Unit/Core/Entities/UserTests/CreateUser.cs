@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.Events.Abstract;
 using Lapka.Identity.Core.Events.Concrete;
+using Lapka.Identity.Core.ValueObjects;
 using Shouldly;
 using Xunit;
 
@@ -38,7 +40,7 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.UserTests
 
         private User ArrangeUser(AggregateId id = null, string username = null, string firstName = null,
             string lastName = null, string email = null, string password = null, DateTime createdAt = default,
-            string role = null)
+            string role = null, List<Guid> userPets = null)
         {
             AggregateId validId = id ?? new AggregateId();
             string validUsername = username ?? "Pomidorowy";
@@ -52,9 +54,10 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.UserTests
             {
                 validCreatedAt = createdAt;
             }
+            List<Guid> ValidUserPets = userPets ?? new List<Guid>();
 
             User user = new User(validId.Value, validUsername, validFirstName, validLastName, validEmail, validPassword,
-                null, null, validCreatedAt, validRole);
+                null, null, validCreatedAt, validRole, ValidUserPets);
 
             return user;
         }

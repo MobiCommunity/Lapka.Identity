@@ -76,7 +76,7 @@ namespace Lapka.Identity.Infrastructure.Exceptions
         public static User AsBusiness(this UserDocument user)
         {
             return new User(user.Id, user.Username, user.FirstName, user.LastName, user.Email, user.Password, 
-                user.PhoneNumber, user.PhotoPath, user.CreatedAt, user.Role);
+                user.PhoneNumber, user.PhotoPath, user.CreatedAt, user.Role, user.UserPets);
         }
 
         public static JsonWebToken AsBusiness(this Convey.Auth.JsonWebToken jsonWebToken)

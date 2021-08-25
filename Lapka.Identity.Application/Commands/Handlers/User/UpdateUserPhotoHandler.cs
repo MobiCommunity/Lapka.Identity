@@ -43,7 +43,7 @@ namespace Lapka.Identity.Application.Commands.Handlers
                 throw new CannotRequestFilesMicroserviceException(ex);
             }
             
-            user.Update(user.Username, user.FirstName, user.LastName, user.Email, user.PhoneNumber, user.Role, mainPhotoPath);
+            user.Update(user.Username, user.FirstName, user.LastName, user.PhoneNumber, user.Role, mainPhotoPath);
             await _userRepository.UpdateAsync(user);
         }
     }

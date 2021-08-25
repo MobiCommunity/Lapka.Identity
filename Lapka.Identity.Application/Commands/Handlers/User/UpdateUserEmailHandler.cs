@@ -27,8 +27,7 @@ namespace Lapka.Identity.Application.Commands.Handlers
             
             user = await _userRepository.GetAsync(command.Id);
 
-            user.Update(user.Username, user.FirstName, user.LastName, command.Email, user.PhoneNumber, user.Role,
-                user.PhotoPath);
+            user.UpdateEmail(user.Email);
 
             await _userRepository.UpdateAsync(user);
             await _eventProcessor.ProcessAsync(user.Events);

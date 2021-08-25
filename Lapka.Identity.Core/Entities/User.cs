@@ -1,6 +1,7 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Lapka.Identity.Core.Events.Concrete;
 using Lapka.Identity.Core.Exceptions;
@@ -20,9 +21,10 @@ namespace Lapka.Identity.Core.Entities
         public string? PhotoPath { get; private set; }
         public DateTime CreatedAt { get; private set; }
         public string Role { get; private set; }
+        public List<Guid> UserPets { get; private set; }
 
         public User(Guid id, string username, string? firstName, string? lastName, string email, string password,
-            string? phoneNumber, string? photoPath, DateTime createdAt, string role)
+            string? phoneNumber, string? photoPath, DateTime createdAt, string role, List<Guid> userPets)
         {
             Id = new AggregateId(id);
             Username = username;
@@ -34,6 +36,7 @@ namespace Lapka.Identity.Core.Entities
             PhotoPath = photoPath;
             CreatedAt = createdAt;
             Role = role;
+            UserPets = userPets;
 
             Validate();
         }
@@ -42,19 +45,18 @@ namespace Lapka.Identity.Core.Entities
             string password, DateTime createdAt, string role)
         {
             User user = new User(id, username, firstName, lastName, email, password, phoneNumber: null, photoPath: null,
-                createdAt, role);
+                createdAt, role, new List<Guid>());
 
             user.AddEvent(new UserCreated(user));
             return user;
         }
 
-        public void Update(string username, string? firstName, string? lastName, string email, string? phoneNumber,
-            string role, string? photoPath)
+        public void Update(string username, string? firstName, string? lastName, string? phoneNumber, string role,
+            string? photoPath)
         {
             Username = username;
             FirstName = firstName;
             LastName = lastName;
-            Email = email;
             PhoneNumber = phoneNumber;
             Role = role;
             PhotoPath = photoPath;
@@ -70,7 +72,29 @@ namespace Lapka.Identity.Core.Entities
 
             AddEvent(new UserUpdated(this));
         }
+
+        public void UpdateEmail(string email)
+        {
+            Email = email;
+
+            AddEvent(new UserUpdated(this));
+        }
+
+        public void AddPet(Guid petId)
+        {
+            UserPets.Add(petId);
+
+            AddEvent(new UserUpdated(this));
+        }
         
+        public void DeletePet(Guid petId)
+        {
+            Guid pet = UserPets.FirstOrDefault(x => x == petId);
+            UserPets.Remove(pet);
+
+            AddEvent(new UserUpdated(this));
+        }
+
         public void Delete()
         {
             AddEvent(new UserDeleted(this));
@@ -88,7 +112,7 @@ namespace Lapka.Identity.Core.Entities
         private void ValidatePhoneNumber()
         {
             if (string.IsNullOrWhiteSpace(PhoneNumber)) return;
-            
+
             if (!PhoneNumberRegex.IsMatch(PhoneNumber))
             {
                 throw new InvalidPhoneNumberException(PhoneNumber);
@@ -102,7 +126,7 @@ namespace Lapka.Identity.Core.Entities
                 throw new InvalidEmailValueException(Email);
             }
         }
-        
+
         private void ValidateFirstName()
         {
             if (!string.IsNullOrWhiteSpace(FirstName)) return;
@@ -111,12 +135,13 @@ namespace Lapka.Identity.Core.Entities
             {
                 throw new TooShortUserFirstNameException(FirstName);
             }
+
             if (FirstName.Length > 50)
             {
                 throw new TooLongUserFirstNameException(FirstName);
             }
         }
-        
+
         private void ValidateLastName()
         {
             if (!string.IsNullOrWhiteSpace(LastName)) return;
@@ -125,6 +150,7 @@ namespace Lapka.Identity.Core.Entities
             {
                 throw new TooShortUserLastNameException(LastName);
             }
+
             if (LastName.Length > 50)
             {
                 throw new TooLongUserLastNameException(LastName);

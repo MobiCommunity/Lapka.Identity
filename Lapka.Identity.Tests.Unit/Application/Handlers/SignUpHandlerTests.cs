@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Lapka.Identity.Application.Commands;
 using Lapka.Identity.Application.Commands.Handlers.Auth;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Core.Entities;
+using Lapka.Identity.Core.ValueObjects;
 using NSubstitute;
 using Xunit;
 
@@ -43,7 +45,7 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
 
         private User ArrangeUser(AggregateId id = null, string username = null, string firstName = null,
             string lastName = null, string email = null, string password = null, DateTime createdAt = default,
-            string role = null)
+            string role = null, List<Guid> userPets = null)
         {
             AggregateId validId = id ?? new AggregateId();
             string validUsername = username ?? "Pomidorowy";
@@ -57,9 +59,10 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
             {
                 validCreatedAt = createdAt;
             }
+            List<Guid> ValidUserPets = userPets ?? new List<Guid>();
 
             User user = new User(validId.Value, validUsername, validFirstName, validLastName, validEmail, validPassword,
-                null, null, validCreatedAt, validRole);
+                null, null, validCreatedAt, validRole, ValidUserPets);
 
             return user;
         }

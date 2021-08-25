@@ -66,8 +66,8 @@ namespace Lapka.Identity.Infrastructure.Auth
             }
             else
             {
-                user.Update(googleUser.Email, googleUser.GivenName, googleUser.FamilyName, googleUser.Email,
-                    user.PhoneNumber, user.Role, googleUser.Picture);
+                user.Update(user.Email, googleUser.GivenName, googleUser.FamilyName, user.PhoneNumber, user.Role,
+                    googleUser.Picture);
                 await _userRepository.UpdateAsync(user);
             }
 
@@ -115,8 +115,7 @@ namespace Lapka.Identity.Infrastructure.Auth
             }
             else
             {
-                user.Update(userInfo.Email, userInfo.FirstName,
-                    userInfo.LastName, userInfo.Email, user.PhoneNumber, user.Role,
+                user.Update(user.Email, userInfo.FirstName, userInfo.LastName, user.PhoneNumber, user.Role,
                     userInfo.FacebookPicture.Data.Url.AbsoluteUri);
 
                 await _userRepository.UpdateAsync(user);
@@ -150,11 +149,11 @@ namespace Lapka.Identity.Infrastructure.Auth
             {
                 [ClaimTypes.Email] = new[] {user.Email}
             };
-            
-            if (user.FirstName != null) claims.Add(ClaimTypes.GivenName, new []{user.FirstName});
-            if (user.LastName != null) claims.Add(ClaimTypes.Surname, new []{user.LastName});
-            if (user.PhoneNumber != null) claims.Add("PhoneNumber", new []{user.PhoneNumber});
-            if (user.PhotoPath != null) claims.Add("Avatar", new []{user.PhotoPath});
+
+            if (user.FirstName != null) claims.Add(ClaimTypes.GivenName, new[] {user.FirstName});
+            if (user.LastName != null) claims.Add(ClaimTypes.Surname, new[] {user.LastName});
+            if (user.PhoneNumber != null) claims.Add("PhoneNumber", new[] {user.PhoneNumber});
+            if (user.PhotoPath != null) claims.Add("Avatar", new[] {user.PhotoPath});
 
             AuthDto auth = _jwtProvider.Create(user.Id.Value, user.Role, claims: claims);
             auth.RefreshToken = await _refreshTokenService.CreateAsync(user.Id.Value);

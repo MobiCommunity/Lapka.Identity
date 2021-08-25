@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Convey.Types;
+using Lapka.Identity.Core.ValueObjects;
 
 namespace Lapka.Identity.Infrastructure.Documents
 {
@@ -16,5 +17,6 @@ namespace Lapka.Identity.Infrastructure.Documents
         public string PhotoPath { get; set; }
         public DateTime CreatedAt { get; set; }
         public string Role { get; set; }
+        public List<Guid> UserPets { get; set; }
     }
 }
