@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Lapka.Identity.Core.Entities
+namespace Lapka.Identity.Application.Dto
 {
     public partial class FacebookTokenValidationResult
     {

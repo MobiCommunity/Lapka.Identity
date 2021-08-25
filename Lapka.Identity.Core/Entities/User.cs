@@ -79,8 +79,6 @@ namespace Lapka.Identity.Core.Entities
         private void Validate()
         {
             ValidateUsername();
-            ValidateFirstName();
-            ValidateLastName();
             ValidateEmail();
             ValidatePhoneNumber();
         }

@@ -7,10 +7,9 @@ namespace Lapka.Identity.Application.Services
 {
     public interface IIdentityService
     {
-        Task<UserDto> GetAsync(Guid id);
         Task<AuthDto> SignInAsync(SignIn command);
         Task SignUpAsync(SignUp command);
-        Task<FacebookAuthDto> FacebookLoginAsync(string accessToken);
+        Task<AuthDto> FacebookLoginAsync(SignInFacebook command);
         Task ChangeUserPasswordAsync(UpdateUserPassword command);
 
     }

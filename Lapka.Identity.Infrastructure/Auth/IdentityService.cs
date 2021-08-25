@@ -5,10 +5,17 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Lapka.Identity.Application.Commands;
 using Lapka.Identity.Application.Dto;
+using Lapka.Identity.Application.Exceptions;
 using Lapka.Identity.Application.Services;
+using Lapka.Identity.Application.Services.Auth;
+using Lapka.Identity.Application.Services.User;
 using Lapka.Identity.Core.Entities;
+using Lapka.Identity.Core.Events.Concrete;
 using Lapka.Identity.Core.Exceptions;
 using Lapka.Identity.Core.Exceptions.Identity;
+using Lapka.Identity.Core.Exceptions.Token;
+using Lapka.Identity.Infrastructure.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
 namespace Lapka.Identity.Infrastructure.Auth
@@ -24,21 +31,16 @@ namespace Lapka.Identity.Infrastructure.Auth
         private readonly IPasswordService _passwordService;
         private readonly IJwtProvider _jwtProvider;
         private readonly IRefreshTokenService _refreshTokenService;
+        private readonly IFacebookAuthHelper _facebookAuthHelper;
 
         public IdentityService(IUserRepository userRepository, IPasswordService passwordService,
-            IJwtProvider jwtProvider, IRefreshTokenService refreshTokenService)
+            IJwtProvider jwtProvider, IRefreshTokenService refreshTokenService, IFacebookAuthHelper facebookAuthHelper)
         {
             _userRepository = userRepository;
             _passwordService = passwordService;
             _jwtProvider = jwtProvider;
             _refreshTokenService = refreshTokenService;
-        }
-
-        public async Task<UserDto> GetAsync(Guid id)
-        {
-            User user = await _userRepository.GetAsync(id);
-
-            return user is null ? null : new UserDto(user);
+            _facebookAuthHelper = facebookAuthHelper;
         }
 
         public async Task<AuthDto> SignInAsync(SignIn command)
@@ -59,15 +61,21 @@ namespace Lapka.Identity.Infrastructure.Auth
                 throw new InvalidCredentialsException(command.Email);
             }
 
+            AuthDto auth = await GetTokensAsync(user);
+
+            return auth;
+        }
+
+        private async Task<AuthDto> GetTokensAsync(User user)
+        {
             Dictionary<string, IEnumerable<string>> claims = new Dictionary<string, IEnumerable<string>>
             {
-                [ClaimTypes.NameIdentifier] = new []{user.Id.Value.ToString()} 
+                [ClaimTypes.NameIdentifier] = new[] {user.Id.Value.ToString()}
             };
-            
-            
+
+
             AuthDto auth = _jwtProvider.Create(user.Id.Value, user.Role, claims: claims);
             auth.RefreshToken = await _refreshTokenService.CreateAsync(user.Id.Value);
-            
             return auth;
         }
 
@@ -84,7 +92,7 @@ namespace Lapka.Identity.Infrastructure.Auth
                 throw new EmailInUseException(command.Email);
             }
 
-            string role = string.IsNullOrWhiteSpace(command.Role) ? "user" : command.Role.ToLowerInvariant();
+            string role = "user";
             string password = _passwordService.Hash(command.Password);
             user = User.Create(command.Id, command.Username, command.FirstName, command.LastName, command.Email, 
                 password,  command.CreatedAt, role);
@@ -92,30 +100,40 @@ namespace Lapka.Identity.Infrastructure.Auth
             await _userRepository.AddAsync(user);
         }
 
-        public async Task<FacebookAuthDto> FacebookLoginAsync(string accessToken)
+        public async Task<AuthDto> FacebookLoginAsync(SignInFacebook command)
         {
-            var validatedTokenResult = await _facebookAuthService.ValidateAccessTokenAsync(accessToken);
+            var validatedTokenResult = await _facebookAuthHelper.ValidateAccessTokenAsync(command.AccessToken);
 
             if (!validatedTokenResult.Data.IsValid)
             {
-                return new FacebookAuthDto
-                {
-                    ErrorMessage = new[] {"Invalid Facebook token"}
-                };
+                throw new InvalidAccessTokenException(command.AccessToken);
             }
 
-            var userInfo = _facebookAuthService.GetUserInfoAsync(accessToken);
+            FacebookUserInfoResult userInfo = await _facebookAuthHelper.GetUserInfoAsync(command.AccessToken);
 
-            var user = await _userManager.FindByEmailAsync(userInfo.ToString());
+            User user = await _userRepository.GetAsync(userInfo.Email);
 
             if (user is null)
             {
-                
+                await SignUpAsync(new SignUp(Guid.NewGuid(), userInfo.Email, userInfo.FirstName,
+                    userInfo.LastName, userInfo.Email, Guid.NewGuid().ToString(), DateTime.Now));
+            }
+            else
+            {
+                user.Update(userInfo.Email, userInfo.FirstName,
+                    userInfo.LastName, userInfo.Email, user.PhoneNumber, user.Role, 
+                    userInfo.FacebookPicture.Data.Url.AbsoluteUri);
+
+               await _userRepository.UpdateAsync(user);
             }
 
-            return null;
+            user = await _userRepository.GetAsync(userInfo.Email);
+
+            AuthDto auth = await GetTokensAsync(user);
+
+            return auth;
         }
-        
+
         public async Task ChangeUserPasswordAsync(UpdateUserPassword command)
         {
             User user = await _userRepository.GetAsync(command.Id);

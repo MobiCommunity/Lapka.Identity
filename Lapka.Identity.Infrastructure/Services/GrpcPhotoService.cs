@@ -4,6 +4,7 @@ using Google.Protobuf;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Core.ValueObjects;
 using Lapka.Identity.Infrastructure.Documents;
+using Lapka.Identity.Infrastructure.Exceptions;
 
 namespace Lapka.Identity.Infrastructure.Services
 {

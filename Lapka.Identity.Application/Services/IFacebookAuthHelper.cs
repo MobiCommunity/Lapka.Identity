@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
-using Lapka.Identity.Core.Entities;
+using Lapka.Identity.Application.Dto;
 
 namespace Lapka.Identity.Application.Services
 {
-    public interface IFacebookAuthService
+    public interface IFacebookAuthHelper
     {
         Task<FacebookTokenValidationResult> ValidateAccessTokenAsync(string accessToken);
 

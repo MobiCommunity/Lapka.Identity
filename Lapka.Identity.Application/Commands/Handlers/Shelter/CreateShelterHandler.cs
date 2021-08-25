@@ -5,6 +5,7 @@ using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Shelter;
 using Lapka.Identity.Core.Entities;
+using Lapka.Identity.Core.ValueObjects;
 using Microsoft.Extensions.Logging;
 
 namespace Lapka.Identity.Application.Commands.Handlers
@@ -36,7 +37,7 @@ namespace Lapka.Identity.Application.Commands.Handlers
             
             try
             {
-                await _grpcPhotoService.AddAsync(photoPath, command.Photo.Content);
+                await _grpcPhotoService.AddAsync(photoPath, command.Photo.Content, BucketName.ShelterPhotos);
             }
             catch(Exception ex)
             {

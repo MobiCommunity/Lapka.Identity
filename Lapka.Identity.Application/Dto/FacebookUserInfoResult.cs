@@ -1,7 +1,7 @@
 using System;
 using Newtonsoft.Json;
 
-namespace Lapka.Identity.Core.Entities
+namespace Lapka.Identity.Application.Dto
 {
     public class FacebookUserInfoResult
     {

@@ -1,13 +1,15 @@
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Services;
-using Lapka.Identity.Core.Entities;
+using Lapka.Identity.Core.Exceptions.Token;
 using Lapka.Identity.Infrastructure.Documents;
 using Newtonsoft.Json;
 
 namespace Lapka.Identity.Infrastructure.Services
 {
-    public class FacebookAuthService : IFacebookAuthService
+    public class FacebookAuthHelper : IFacebookAuthHelper
     {
         private const string TokenValidationUrl =
             "https://graph.facebook.com/debug_token?input_token={0}&access_token={1}|{2}";
@@ -16,7 +18,7 @@ namespace Lapka.Identity.Infrastructure.Services
         private readonly FacebookAuthSettings _facebookAuthSettings;
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public FacebookAuthService(FacebookAuthSettings facebookAuthSettings, IHttpClientFactory httpClientFactory)
+        public FacebookAuthHelper(FacebookAuthSettings facebookAuthSettings, IHttpClientFactory httpClientFactory)
         {
             _facebookAuthSettings = facebookAuthSettings;
             _httpClientFactory = httpClientFactory;
@@ -28,7 +30,14 @@ namespace Lapka.Identity.Infrastructure.Services
                 _facebookAuthSettings.AppSecret);
 
             var result = await _httpClientFactory.CreateClient().GetAsync(formattedUrl);
-            result.EnsureSuccessStatusCode();
+            try
+            {
+                result.EnsureSuccessStatusCode();
+            }
+            catch (Exception)
+            {
+                throw new InvalidAccessTokenException(accessToken);
+            }
 
             var responseAtString = await result.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<FacebookTokenValidationResult>(responseAtString);

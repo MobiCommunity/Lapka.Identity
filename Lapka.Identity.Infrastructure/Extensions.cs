@@ -12,11 +12,15 @@ using Convey.Auth;
 using Convey.Persistence.MongoDB;
 using Lapka.Identity.Application.Events.Abstract;
 using Lapka.Identity.Application.Services;
+using Lapka.Identity.Application.Services.Auth;
+using Lapka.Identity.Application.Services.Shelter;
+using Lapka.Identity.Application.Services.User;
 using Lapka.Identity.Infrastructure.Auth;
 using Lapka.Identity.Infrastructure.Documents;
 using Lapka.Identity.Infrastructure.Exceptions;
 using Lapka.Identity.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 
 
 namespace Lapka.Identity.Infrastructure
@@ -51,13 +55,7 @@ namespace Lapka.Identity.Infrastructure
             AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
             
             IServiceCollection services = builder.Services;
-
-            services.AddGrpcClient<Photo.PhotoClient>(
-                x =>
-                {
-                    x.Address = new Uri("http://localhost:5013");
-                });
-
+            
             services.AddSingleton<IExceptionToResponseMapper, ExceptionToResponseMapper>();
             services.AddSingleton<IDomainToIntegrationEventMapper, DomainToIntegrationEventMapper>();
 
@@ -81,16 +79,17 @@ namespace Lapka.Identity.Infrastructure
             IConfiguration configuration = provider.GetService<IConfiguration>();
 
             FacebookAuthSettings facebookOptions = new FacebookAuthSettings();
-            //configuration.GetSection("facebook").Bind(facebookOptions);
-            configuration.Bind(nameof(FacebookAuthSettings), facebookOptions);
+            configuration.GetSection("FacebookAuthSettings").Bind(facebookOptions);
             services.AddSingleton(facebookOptions);
             services.AddHttpClient();
-            services.AddSingleton<IFacebookAuthService, FacebookAuthService>();
+            services.AddSingleton<IFacebookAuthHelper, FacebookAuthHelper>();
+            
 
             services.AddGrpcClient<Photo.PhotoClient>(o =>
             {
                 o.Address = new Uri("http://localhost:5013");
             });
+            
             builder.Services.Scan(s => s.FromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
                 .AddClasses(c => c.AssignableTo(typeof(IDomainEventHandler<>)))
                 .AsImplementedInterfaces().WithTransientLifetime());
