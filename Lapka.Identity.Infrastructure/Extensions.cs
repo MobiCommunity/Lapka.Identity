@@ -18,10 +18,8 @@ using Lapka.Identity.Application.Services.User;
 using Lapka.Identity.Infrastructure.Auth;
 using Lapka.Identity.Infrastructure.Documents;
 using Lapka.Identity.Infrastructure.Exceptions;
-using Lapka.Identity.Infrastructure.Options;
 using Lapka.Identity.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 
 
 namespace Lapka.Identity.Infrastructure
@@ -79,15 +77,23 @@ namespace Lapka.Identity.Infrastructure
             services.AddSingleton<IRng, Rng>();
             services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddSingleton<IGrpcPhotoService, GrpcPhotoService>();
+            // services.AddIdentity<UserDocument, List<string>>().AddDefaultTokenProviders();
             services.AddTransient<IGoogleAuthHelper, GoogleAuthHelper>();
             services.AddScoped<IGrpcPhotoService, GrpcPhotoService>();
 
-            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+            FacebookAuthSettings facebookOptions = new FacebookAuthSettings();
+            configuration.GetSection("FacebookAuthSettings").Bind(facebookOptions);
+            services.AddSingleton(facebookOptions);
+            services.AddHttpClient();
+            services.AddSingleton<IFacebookAuthHelper, FacebookAuthHelper>();
+            
 
             services.AddGrpcClient<Photo.PhotoClient>(o =>
             {
                 o.Address = new Uri("http://localhost:5013");
             });
+            
             builder.Services.Scan(s => s.FromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
                 .AddClasses(c => c.AssignableTo(typeof(IDomainEventHandler<>)))
                 .AsImplementedInterfaces().WithTransientLifetime());

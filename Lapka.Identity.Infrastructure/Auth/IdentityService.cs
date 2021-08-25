@@ -1,15 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Lapka.Identity.Application.Commands;
 using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Exceptions;
+using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Auth;
 using Lapka.Identity.Application.Services.User;
 using Lapka.Identity.Core.Entities;
+using Lapka.Identity.Core.Events.Concrete;
+using Lapka.Identity.Core.Exceptions;
 using Lapka.Identity.Core.Exceptions.Identity;
 using Lapka.Identity.Core.ValueObjects;
+using Lapka.Identity.Core.Exceptions.Token;
+using Lapka.Identity.Infrastructure.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace Lapka.Identity.Infrastructure.Auth
 {
@@ -19,15 +27,18 @@ namespace Lapka.Identity.Infrastructure.Auth
         private readonly IPasswordService _passwordService;
         private readonly IJwtProvider _jwtProvider;
         private readonly IRefreshTokenService _refreshTokenService;
+        private readonly IFacebookAuthHelper _facebookAuthHelper;
         private readonly IGoogleAuthHelper _googleAuthHelper;
 
         public IdentityService(IUserRepository userRepository, IPasswordService passwordService,
+            IJwtProvider jwtProvider, IRefreshTokenService refreshTokenService, IFacebookAuthHelper facebookAuthHelper)
             IJwtProvider jwtProvider, IRefreshTokenService refreshTokenService, IGoogleAuthHelper googleAuthHelper)
         {
             _userRepository = userRepository;
             _passwordService = passwordService;
             _jwtProvider = jwtProvider;
             _refreshTokenService = refreshTokenService;
+            _facebookAuthHelper = facebookAuthHelper;
             _googleAuthHelper = googleAuthHelper;
         }
 
@@ -75,7 +86,7 @@ namespace Lapka.Identity.Infrastructure.Auth
         public async Task SignUpAsync(SignUp command)
         {
             User user = await _userRepository.GetAsync(command.Email);
-            if (user is { })
+            if (user is {})
             {
                 throw new EmailInUseException(command.Email);
             }
@@ -86,6 +97,40 @@ namespace Lapka.Identity.Infrastructure.Auth
                 password, command.CreatedAt, role);
 
             await _userRepository.AddAsync(user);
+        }
+
+        public async Task<AuthDto> FacebookLoginAsync(SignInFacebook command)
+        {
+            var validatedTokenResult = await _facebookAuthHelper.ValidateAccessTokenAsync(command.AccessToken);
+
+            if (!validatedTokenResult.Data.IsValid)
+            {
+                throw new InvalidAccessTokenException(command.AccessToken);
+            }
+
+            FacebookUserInfoResult userInfo = await _facebookAuthHelper.GetUserInfoAsync(command.AccessToken);
+
+            User user = await _userRepository.GetAsync(userInfo.Email);
+
+            if (user is null)
+            {
+                await SignUpAsync(new SignUp(Guid.NewGuid(), userInfo.Email, userInfo.FirstName,
+                    userInfo.LastName, userInfo.Email, Guid.NewGuid().ToString(), DateTime.Now));
+            }
+            else
+            {
+                user.Update(userInfo.Email, userInfo.FirstName,
+                    userInfo.LastName, userInfo.Email, user.PhoneNumber, user.Role, 
+                    userInfo.FacebookPicture.Data.Url.AbsoluteUri);
+
+               await _userRepository.UpdateAsync(user);
+            }
+
+            user = await _userRepository.GetAsync(userInfo.Email);
+
+            AuthDto auth = await GetTokensAsync(user);
+
+            return auth;
         }
 
         public async Task ChangeUserPasswordAsync(UpdateUserPassword command)

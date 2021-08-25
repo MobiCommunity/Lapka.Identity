@@ -5,6 +5,7 @@ using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Auth;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Infrastructure.Documents;
+using Lapka.Identity.Infrastructure.Exceptions;
 
 namespace Lapka.Identity.Infrastructure.Auth
 {

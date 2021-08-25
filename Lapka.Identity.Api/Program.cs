@@ -37,6 +37,7 @@ namespace Lapka.Identity.Api
                         .AddConvey()
                         .AddInfrastructure()
                         .AddApplication();
+                    
 
                     services.AddSwaggerGen(c =>
                     {
@@ -54,6 +55,7 @@ namespace Lapka.Identity.Api
                         c.IncludeXmlComments(xmlPath);
                         c.IncludeXmlComments(xmlPath2);
                     });
+                    
 
                     services.BuildServiceProvider();
                 }).Configure(app =>

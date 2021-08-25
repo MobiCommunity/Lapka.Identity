@@ -1,8 +1,10 @@
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.Exceptions;
 using Lapka.Identity.Core.ValueObjects;
+using Lapka.Identity.Infrastructure.Documents;
 
-namespace Lapka.Identity.Infrastructure.Documents
+
+namespace Lapka.Identity.Infrastructure.Exceptions
 {
     public static class Extensions
     {
@@ -14,11 +16,12 @@ namespace Lapka.Identity.Infrastructure.Documents
                 Name = shelter.Name,
                 Address = shelter.Address.AsDocument(),
                 GeoLocation = shelter.GeoLocation.AsDocument(),
+                PhotoPath = shelter.PhotoPath,
                 Email = shelter.Email,
                 PhoneNumber = shelter.PhoneNumber
             };
         }
-        
+
         public static LocationDocument AsDocument(this Location shelter)
         {
             return new LocationDocument
@@ -41,7 +44,7 @@ namespace Lapka.Identity.Infrastructure.Documents
         public static Shelter AsBusiness(this ShelterDocument shelter)
         {
             return new Shelter(shelter.Id, shelter.Name, shelter.Address.AsBusiness(),
-                shelter.GeoLocation.AsBusiness(), shelter.PhoneNumber, shelter.Email);
+                shelter.GeoLocation.AsBusiness(), shelter.PhotoPath, shelter.PhoneNumber, shelter.Email);
         }
         
         public static Location AsBusiness(this LocationDocument shelter)

@@ -20,8 +20,8 @@ namespace Lapka.Identity.Core.ValueObjects
         private void Validate()
         {
             ValidateStreet(Street);
-            ValidateZipCode(Street);
-            ValidateCity(Street);
+            ValidateZipCode(ZipCode);
+            ValidateCity(City);
         }
 
         private static void ValidateStreet(string street)

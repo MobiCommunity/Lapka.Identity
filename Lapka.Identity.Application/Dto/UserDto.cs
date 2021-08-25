@@ -1,5 +1,5 @@
+#nullable enable
 using System;
-using Lapka.Identity.Core.Entities;
 
 namespace Lapka.Identity.Application.Dto
 {

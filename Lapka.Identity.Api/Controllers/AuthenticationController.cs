@@ -41,6 +41,15 @@ namespace Lapka.Identity.Api.Controllers
             return Ok(token);
         }
 
+        [HttpPost("signin-facebook")]
+        public async Task<IActionResult> SignInFacebook(SignInFacebookRequest signInFacebookRequest)
+        {
+            AuthDto token =
+                await _identityService.FacebookLoginAsync(new SignInFacebook(signInFacebookRequest.AccessToken));
+
+            return Ok(token);
+        }
+
         [HttpPost("signin")]
         public async Task<IActionResult> SingIn(SignInRequest user)
         {

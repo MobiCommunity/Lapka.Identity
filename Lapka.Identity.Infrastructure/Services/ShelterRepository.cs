@@ -6,7 +6,7 @@ using Convey.Persistence.MongoDB;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Shelter;
 using Lapka.Identity.Core.Entities;
-using Lapka.Identity.Infrastructure.Documents;
+using Lapka.Identity.Infrastructure.Exceptions;
 
 namespace Lapka.Identity.Infrastructure.Services
 {
@@ -25,7 +25,7 @@ namespace Lapka.Identity.Infrastructure.Services
 
         public async Task<IEnumerable<Shelter>> GetAllAsync()
         {
-            var sheltersFromDb = await _repository.FindAsync(_ => true);
+            IReadOnlyList<ShelterDocument> sheltersFromDb = await _repository.FindAsync(_ => true);
 
             return sheltersFromDb.Select(x => x.AsBusiness());
         }
@@ -43,7 +43,10 @@ namespace Lapka.Identity.Infrastructure.Services
         public async Task<Shelter> GetByIdAsync(Guid id)
         {
             ShelterDocument shelterFromDb = await _repository.GetAsync(id);
-            if (shelterFromDb == null) return null;
+            if (shelterFromDb is null)
+            {
+                return null;
+            }
 
             return shelterFromDb.AsBusiness();
         } 
