@@ -41,7 +41,23 @@ namespace Lapka.Identity.Api.Controllers
 
             return Ok(token);
         }
+        
+        [HttpPost("signin")]
+        public async Task<IActionResult> SingIn(SignInRequest user)
+        {
+            AuthDto token = await _identityService.SignInAsync(new SignIn(user.Email, user.Password));
 
+            return Ok(token);
+        }
+        
+        [HttpPost("signin-google")]
+        public async Task<IActionResult> SingInByGoogle(SignInGoogleRequest token)
+        {
+            AuthDto authDto = await _identityService.SignInByGoogleAsync(new SignInGoogle(token.AccessToken));
+
+            return Ok(authDto);
+        }
+        
         [HttpPost("signin-facebook")]
         public async Task<IActionResult> SignInFacebook(SignInFacebookRequest signInFacebookRequest)
         {
@@ -50,15 +66,7 @@ namespace Lapka.Identity.Api.Controllers
 
             return Ok(token);
         }
-
-        [HttpPost("signin")]
-        public async Task<IActionResult> SingIn(SignInRequest user)
-        {
-            AuthDto token = await _identityService.SignInAsync(new SignIn(user.Email, user.Password));
-
-            return Ok(token);
-        }
-
+        
         [HttpPost("signup")]
         public async Task<IActionResult> SingUp([FromBody] SignUpRequest user)
         {
@@ -69,14 +77,6 @@ namespace Lapka.Identity.Api.Controllers
                 user.Password, createdAt));
 
             return Created($"api/user/{id}", null);
-        }
-        
-        [HttpPost("signin-google")]
-        public async Task<IActionResult> SingInByGoogle(SignInGoogleRequest token)
-        {
-            AuthDto authDto = await _identityService.SignInByGoogleAsync(new SignInGoogle(token.AccessToken));
-
-            return Ok(authDto);
         }
     }
 }

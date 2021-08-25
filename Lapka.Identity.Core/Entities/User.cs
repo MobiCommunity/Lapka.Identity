@@ -79,15 +79,19 @@ namespace Lapka.Identity.Core.Entities
         private void Validate()
         {
             ValidateUsername();
+            ValidateFirstName();
+            ValidateLastName();
             ValidateEmail();
             ValidatePhoneNumber();
         }
 
         private void ValidatePhoneNumber()
         {
-            if (!string.IsNullOrWhiteSpace(PhoneNumber))
+            if (string.IsNullOrWhiteSpace(PhoneNumber)) return;
+            
+            if (!PhoneNumberRegex.IsMatch(PhoneNumber))
             {
-                //TODO: If phone number is not null, validate phone number 
+                throw new InvalidPhoneNumberException(PhoneNumber);
             }
         }
 
@@ -101,17 +105,29 @@ namespace Lapka.Identity.Core.Entities
         
         private void ValidateFirstName()
         {
-            if (!string.IsNullOrWhiteSpace(FirstName))
+            if (!string.IsNullOrWhiteSpace(FirstName)) return;
+
+            if (FirstName.Length < 2)
             {
-                //TODO: If phone number is not null, validate first name 
+                throw new TooShortUserFirstNameException(FirstName);
+            }
+            if (FirstName.Length > 50)
+            {
+                throw new TooLongUserFirstNameException(FirstName);
             }
         }
         
         private void ValidateLastName()
         {
-            if (!string.IsNullOrWhiteSpace(LastName))
+            if (!string.IsNullOrWhiteSpace(LastName)) return;
+
+            if (LastName.Length < 2)
             {
-                //TODO: If phone number is not null, validate last name
+                throw new TooShortUserLastNameException(LastName);
+            }
+            if (LastName.Length > 50)
+            {
+                throw new TooLongUserLastNameException(LastName);
             }
         }
 
@@ -132,5 +148,9 @@ namespace Lapka.Identity.Core.Entities
             @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
             @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$",
             RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
+        private static readonly Regex PhoneNumberRegex =
+            new Regex(@"(?<!\w)(\(?(\+|00)?48\)?)?[ -]?\d{3}[ -]?\d{3}[ -]?\d{3}(?!\w)",
+                RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
     }
 }

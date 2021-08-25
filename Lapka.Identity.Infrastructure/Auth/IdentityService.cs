@@ -96,7 +96,8 @@ namespace Lapka.Identity.Infrastructure.Auth
 
         public async Task<AuthDto> FacebookLoginAsync(SignInFacebook command)
         {
-            FacebookTokenValidationResult validatedTokenResult = await _facebookAuthHelper.ValidateAccessTokenAsync(command.AccessToken);
+            FacebookTokenValidationResult validatedTokenResult =
+                await _facebookAuthHelper.ValidateAccessTokenAsync(command.AccessToken);
 
             if (!validatedTokenResult.Data.IsValid)
             {
@@ -147,14 +148,13 @@ namespace Lapka.Identity.Infrastructure.Auth
         {
             Dictionary<string, IEnumerable<string>> claims = new Dictionary<string, IEnumerable<string>>
             {
-                [ClaimTypes.NameIdentifier] = new[] {user.Id.Value.ToString()},
-                [ClaimTypes.Email] = new[] {user.Email},
-                [ClaimTypes.Role] = new[] {user.Role},
-                [ClaimTypes.GivenName] = new[] {user.FirstName},
-                [ClaimTypes.Surname] = new[] {user.LastName},
-                ["PhoneNumber"] = new[] {user.PhoneNumber},
-                ["Avatar"] = new[] {user.PhotoPath}
+                [ClaimTypes.Email] = new[] {user.Email}
             };
+            
+            if (user.FirstName != null) claims.Add(ClaimTypes.GivenName, new []{user.FirstName});
+            if (user.LastName != null) claims.Add(ClaimTypes.Surname, new []{user.LastName});
+            if (user.PhoneNumber != null) claims.Add("PhoneNumber", new []{user.PhoneNumber});
+            if (user.PhotoPath != null) claims.Add("Avatar", new []{user.PhotoPath});
 
             AuthDto auth = _jwtProvider.Create(user.Id.Value, user.Role, claims: claims);
             auth.RefreshToken = await _refreshTokenService.CreateAsync(user.Id.Value);
