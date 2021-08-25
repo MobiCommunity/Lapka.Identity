@@ -44,7 +44,7 @@ namespace Lapka.Identity.Infrastructure.Auth
                 throw new InvalidCredentialsException(command.Email);
             }
 
-            AuthDto auth = await GetTokens(user);
+            AuthDto auth = await GetTokensAsync(user);
 
             return auth;
         }
@@ -67,7 +67,7 @@ namespace Lapka.Identity.Infrastructure.Auth
             }
             user = await _userRepository.GetAsync(googleUser.Email);
 
-            AuthDto auth = await GetTokens(user);
+            AuthDto auth = await GetTokensAsync(user);
 
             return auth;
         }
@@ -103,7 +103,7 @@ namespace Lapka.Identity.Infrastructure.Auth
             await _userRepository.UpdateAsync(user);
         }
 
-        private async Task<AuthDto> GetTokens(User user)
+        private async Task<AuthDto> GetTokensAsync(User user)
         {
             Dictionary<string, IEnumerable<string>> claims = new Dictionary<string, IEnumerable<string>>
             {

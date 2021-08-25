@@ -4,7 +4,7 @@ namespace Lapka.Identity.Core.Exceptions
 {
     public class InvalidAccessTokenException : DomainException
     {
-        public string AccessToken { get; set; }
+        public string AccessToken { get; }
         public InvalidAccessTokenException(string token) : base($"Invalid access token: {token}")
         {
             AccessToken = token;
