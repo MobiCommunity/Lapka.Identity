@@ -50,7 +50,7 @@ namespace Lapka.Identity.Api.Controllers
         {
             Guid photoId = Guid.NewGuid();
 
-            await _commandDispatcher.SendAsync(new UpdateShelterPhoto(id, shelter.Photo.AsValueObject(), photoId));
+            await _commandDispatcher.SendAsync(new UpdateShelterPhoto(id, shelter.Photo.AsValueObject(photoId)));
 
             return NoContent();    
         }
@@ -63,7 +63,7 @@ namespace Lapka.Identity.Api.Controllers
             
             await _commandDispatcher.SendAsync(new CreateShelter(id, createShelterRequest.Name,
                 createShelterRequest.PhoneNumber, createShelterRequest.Email, createShelterRequest.Address.AsValueObject(),
-                createShelterRequest.GeoLocation.AsValueObject(), createShelterRequest.Photo.AsValueObject(), photoId));
+                createShelterRequest.GeoLocation.AsValueObject(), createShelterRequest.Photo.AsValueObject(photoId)));
 
             return Created($"api/shelter/{id}", null);
         }

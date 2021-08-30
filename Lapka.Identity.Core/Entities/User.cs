@@ -18,13 +18,13 @@ namespace Lapka.Identity.Core.Entities
         public string Email { get; private set; }
         public string Password { get; private set; }
         public string? PhoneNumber { get; private set; }
-        public string? PhotoPath { get; private set; }
+        public Guid PhotoId { get; private set; }
         public DateTime CreatedAt { get; private set; }
         public string Role { get; private set; }
         public List<Guid> UserPets { get; private set; }
 
         public User(Guid id, string username, string? firstName, string? lastName, string email, string password,
-            string? phoneNumber, string? photoPath, DateTime createdAt, string role, List<Guid> userPets)
+            string? phoneNumber, Guid photoId, DateTime createdAt, string role, List<Guid> userPets)
         {
             Id = new AggregateId(id);
             Username = username;
@@ -33,7 +33,7 @@ namespace Lapka.Identity.Core.Entities
             Email = email;
             Password = password;
             PhoneNumber = phoneNumber;
-            PhotoPath = photoPath;
+            PhotoId = photoId;
             CreatedAt = createdAt;
             Role = role;
             UserPets = userPets;
@@ -44,25 +44,30 @@ namespace Lapka.Identity.Core.Entities
         public static User Create(Guid id, string username, string? firstName, string? lastName, string email,
             string password, DateTime createdAt, string role)
         {
-            User user = new User(id, username, firstName, lastName, email, password, phoneNumber: null, photoPath: null,
+            User user = new User(id, username, firstName, lastName, email, password, phoneNumber: null, photoId: Guid.Empty, 
                 createdAt, role, new List<Guid>());
 
             user.AddEvent(new UserCreated(user));
             return user;
         }
 
-        public void Update(string username, string? firstName, string? lastName, string? phoneNumber, string role,
-            string? photoPath)
+        public void Update(string username, string? firstName, string? lastName, string? phoneNumber, string role)
         {
             Username = username;
             FirstName = firstName;
             LastName = lastName;
             PhoneNumber = phoneNumber;
             Role = role;
-            PhotoPath = photoPath;
 
             Validate();
 
+            AddEvent(new UserUpdated(this));
+        }
+        
+        public void UpdatePhoto(Guid photoId)
+        {
+            PhotoId = photoId;
+            
             AddEvent(new UserUpdated(this));
         }
 
@@ -129,7 +134,7 @@ namespace Lapka.Identity.Core.Entities
 
         private void ValidateFirstName()
         {
-            if (!string.IsNullOrWhiteSpace(FirstName)) return;
+            if (string.IsNullOrWhiteSpace(FirstName)) return;
 
             if (FirstName.Length < 2)
             {
@@ -144,7 +149,7 @@ namespace Lapka.Identity.Core.Entities
 
         private void ValidateLastName()
         {
-            if (!string.IsNullOrWhiteSpace(LastName)) return;
+            if (string.IsNullOrWhiteSpace(LastName)) return;
 
             if (LastName.Length < 2)
             {

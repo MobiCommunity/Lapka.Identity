@@ -23,8 +23,6 @@ namespace Lapka.Identity.Application.Commands.Handlers
         }
         public async Task HandleAsync(UpdateUserPhoto command)
         {
-            string mainPhotoPath = $"{command.PhotoId:N}.{command.Photo.GetFileExtension()}"; 
-
             User user = await _userRepository.GetAsync(command.UserId);
             if (user is null)
             {
@@ -33,17 +31,19 @@ namespace Lapka.Identity.Application.Commands.Handlers
             
             try
             {
-                if(!string.IsNullOrEmpty(user.PhotoPath))
-                    await _grpcPhotoService.DeleteAsync(user.PhotoPath, BucketName.UserPhotos);
+                if (Guid.Empty != user.PhotoId)
+                {
+                    await _grpcPhotoService.DeleteAsync(user.PhotoId, BucketName.UserPhotos);
+                }
                 
-                await _grpcPhotoService.AddAsync(mainPhotoPath, command.Photo.Content, BucketName.UserPhotos);
+                await _grpcPhotoService.AddAsync(command.Photo.Id, command.Photo.Name, command.Photo.Content, BucketName.UserPhotos);
             }
             catch(Exception ex)
             {
                 throw new CannotRequestFilesMicroserviceException(ex);
             }
             
-            user.Update(user.Username, user.FirstName, user.LastName, user.PhoneNumber, user.Role, mainPhotoPath);
+            user.UpdatePhoto(command.Photo.Id);
             await _userRepository.UpdateAsync(user);
         }
     }

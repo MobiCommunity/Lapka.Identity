@@ -47,7 +47,7 @@ namespace Lapka.Identity.Application.Dto
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 PhoneNumber = user.PhoneNumber,
-                PhotoPath = user.PhotoPath,
+                PhotoId = user.PhotoId,
                 Role = user.Role,
                 Username = user.Username,
                 

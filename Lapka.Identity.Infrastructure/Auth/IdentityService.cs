@@ -24,10 +24,11 @@ namespace Lapka.Identity.Infrastructure.Auth
         private readonly IRefreshTokenService _refreshTokenService;
         private readonly IFacebookAuthHelper _facebookAuthHelper;
         private readonly IGoogleAuthHelper _googleAuthHelper;
+        private readonly IGrpcPhotoService _photoService;
 
         public IdentityService(IUserRepository userRepository, IPasswordService passwordService,
             IJwtProvider jwtProvider, IRefreshTokenService refreshTokenService, IFacebookAuthHelper facebookAuthHelper,
-            IGoogleAuthHelper googleAuthHelper)
+            IGoogleAuthHelper googleAuthHelper, IGrpcPhotoService photoService)
         {
             _userRepository = userRepository;
             _passwordService = passwordService;
@@ -35,6 +36,7 @@ namespace Lapka.Identity.Infrastructure.Auth
             _refreshTokenService = refreshTokenService;
             _facebookAuthHelper = facebookAuthHelper;
             _googleAuthHelper = googleAuthHelper;
+            _photoService = photoService;
         }
 
         public async Task<AuthDto> SignInAsync(SignIn command)
@@ -64,13 +66,15 @@ namespace Lapka.Identity.Infrastructure.Auth
             {
                 await SignUpAsync(new SignUp(Guid.NewGuid(), googleUser.Email, googleUser.GivenName,
                     googleUser.FamilyName ?? "", googleUser.Email, Guid.NewGuid().ToString(), DateTime.Now));
+                user = await _userRepository.GetAsync(googleUser.Email);
             }
             else
             {
-                user.Update(user.Email, googleUser.GivenName, googleUser.FamilyName, user.PhoneNumber, user.Role,
-                    googleUser.Picture);
-                await _userRepository.UpdateAsync(user);
+                user.Update(user.Email, googleUser.GivenName, googleUser.FamilyName, user.PhoneNumber, user.Role);
             }
+            
+            await CheckIfPhotoUpdated(user, googleUser.Picture);
+            await _userRepository.UpdateAsync(user);
 
             user = await _userRepository.GetAsync(googleUser.Email);
 
@@ -113,14 +117,15 @@ namespace Lapka.Identity.Infrastructure.Auth
             {
                 await SignUpAsync(new SignUp(Guid.NewGuid(), userInfo.Email, userInfo.FirstName,
                     userInfo.LastName, userInfo.Email, Guid.NewGuid().ToString(), DateTime.Now));
+                user = await _userRepository.GetAsync(userInfo.Email);
             }
             else
             {
-                user.Update(user.Email, userInfo.FirstName, userInfo.LastName, user.PhoneNumber, user.Role,
-                    userInfo.FacebookPicture.Data.Url.AbsoluteUri);
-
-                await _userRepository.UpdateAsync(user);
+                user.Update(user.Email, userInfo.FirstName, userInfo.LastName, user.PhoneNumber, user.Role);
             }
+            
+            await CheckIfPhotoUpdated(user, userInfo.FacebookPicture.Data.Url.AbsoluteUri);
+            await _userRepository.UpdateAsync(user);
 
             user = await _userRepository.GetAsync(userInfo.Email);
 
@@ -146,7 +151,6 @@ namespace Lapka.Identity.Infrastructure.Auth
 
         private async Task<AuthDto> GetTokensAsync(User user)
         {
-            
             Dictionary<string, IEnumerable<string>> claims = new Dictionary<string, IEnumerable<string>>
             {
                 [ClaimTypes.Email] = new[] {user.Email}
@@ -156,11 +160,35 @@ namespace Lapka.Identity.Infrastructure.Auth
             if (user.FirstName != null) claims.Add(ClaimTypes.GivenName, new[] {user.FirstName});
             if (user.LastName != null) claims.Add(ClaimTypes.Surname, new[] {user.LastName});
             if (user.PhoneNumber != null) claims.Add("PhoneNumber", new[] {user.PhoneNumber});
-            if (user.PhotoPath != null) claims.Add("Avatar", new[] {user.PhotoPath});
+            if (user.PhotoId != Guid.Empty) claims.Add("Avatar", new[] {user.PhotoId.ToString()});
 
             AuthDto auth = _jwtProvider.Create(user.Id.Value, user.Role, claims: claims);
             auth.RefreshToken = await _refreshTokenService.CreateAsync(user.Id.Value);
             return auth;
+        }
+        
+        private async Task CheckIfPhotoUpdated(User user, string newPath)
+        {
+            if (user.PhotoId == Guid.Empty)
+            {
+                await SetNewPhotoAsync(user, "", newPath);
+                return;
+            }
+
+            string photoPath = await _photoService.GetPhotoPathAsync(user.PhotoId, BucketName.UserPhotos);
+
+            if (photoPath != newPath)
+            {
+                await SetNewPhotoAsync(user, photoPath, newPath);
+            }
+        }
+
+        private async Task SetNewPhotoAsync(User user, string oldPath, string newPath)
+        {
+            Guid photoId = Guid.NewGuid();
+            await _photoService.SetExternalPhotoAsync(photoId, oldPath, newPath,
+                BucketName.UserPhotos);
+            user.UpdatePhoto(photoId);
         }
     }
 }

@@ -11,18 +11,18 @@ namespace Lapka.Identity.Core.Entities
         public string Name { get; private set; }
         public Address Address { get; private set; }
         public Location GeoLocation { get; private set; }
-        public string PhotoPath { get; private set; }
+        public Guid PhotoId { get; private set; }
         public string PhoneNumber { get; private set; }
         public string Email { get; private set; }
 
-        public Shelter(Guid id, string name, Address address, Location location, string photoPath, string phoneNumber,
+        public Shelter(Guid id, string name, Address address, Location location, Guid photoId, string phoneNumber,
             string email)
         {
             Id = new AggregateId(id);
             Name = name;
             Address = address;
             GeoLocation = location;
-            PhotoPath = photoPath;
+            PhotoId = photoId;
             PhoneNumber = phoneNumber;
             Email = email; 
         }
@@ -43,14 +43,14 @@ namespace Lapka.Identity.Core.Entities
             AddEvent(new ShelterUpdated(this));
         }
         
-        public void UpdatePhoto(string photoPath)
+        public void UpdatePhoto(Guid photoId)
         {
-            PhotoPath = photoPath;
+            PhotoId = photoId;
             
             AddEvent(new ShelterPhotoUpdated(this));
         }
         
-        public static Shelter Create(Guid id, string name, Address address, Location location, string photoPath,
+        public static Shelter Create(Guid id, string name, Address address, Location location, Guid photoId,
             string phoneNumber, string email)
         {
             if (IsNameValid(name))
@@ -62,7 +62,7 @@ namespace Lapka.Identity.Core.Entities
             if (IsEmailValid(email))
                 throw new InvalidEmailValueException(email);
             
-            Shelter shelter = new Shelter(id, name, address, location, photoPath, phoneNumber, email);
+            Shelter shelter = new Shelter(id, name, address, location, photoId, phoneNumber, email);
             shelter.AddEvent(new ShelterCreated(shelter));
             return shelter;
         }

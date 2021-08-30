@@ -16,7 +16,7 @@ namespace Lapka.Identity.Infrastructure.Exceptions
                 Name = shelter.Name,
                 Address = shelter.Address.AsDocument(),
                 GeoLocation = shelter.GeoLocation.AsDocument(),
-                PhotoPath = shelter.PhotoPath,
+                PhotoId = shelter.PhotoId,
                 Email = shelter.Email,
                 PhoneNumber = shelter.PhoneNumber
             };
@@ -44,7 +44,7 @@ namespace Lapka.Identity.Infrastructure.Exceptions
         public static Shelter AsBusiness(this ShelterDocument shelter)
         {
             return new Shelter(shelter.Id, shelter.Name, shelter.Address.AsBusiness(),
-                shelter.GeoLocation.AsBusiness(), shelter.PhotoPath, shelter.PhoneNumber, shelter.Email);
+                shelter.GeoLocation.AsBusiness(), shelter.Id, shelter.PhoneNumber, shelter.Email);
         }
         
         public static Location AsBusiness(this LocationDocument shelter)
@@ -67,7 +67,7 @@ namespace Lapka.Identity.Infrastructure.Exceptions
                 Email = user.Email,
                 Password = user.Password,
                 PhoneNumber = user.PhoneNumber,
-                PhotoPath = user.PhotoPath,
+                PhotoId = user.PhotoId,
                 Role = user.Role,
                 CreatedAt = user.CreatedAt,
                 UserPets = user.UserPets
@@ -77,7 +77,7 @@ namespace Lapka.Identity.Infrastructure.Exceptions
         public static User AsBusiness(this UserDocument user)
         {
             return new User(user.Id, user.Username, user.FirstName, user.LastName, user.Email, user.Password, 
-                user.PhoneNumber, user.PhotoPath, user.CreatedAt, user.Role, user.UserPets);
+                user.PhoneNumber, user.PhotoId, user.CreatedAt, user.Role, user.UserPets);
         }
 
         public static JsonWebToken AsBusiness(this Convey.Auth.JsonWebToken jsonWebToken)
@@ -101,6 +101,17 @@ namespace Lapka.Identity.Infrastructure.Exceptions
                 ExpiresAt = token.RevokedAt
             };
         }
+        
+        public static GetPhotoPathRequest.Types.Bucket AsGrpcUGet(this BucketName bucket)
+        {
+            return bucket switch
+            {
+                BucketName.PetPhotos => GetPhotoPathRequest.Types.Bucket.PetPhotos,
+                BucketName.ShelterPhotos => GetPhotoPathRequest.Types.Bucket.ShelterPhotos,
+                BucketName.UserPhotos => GetPhotoPathRequest.Types.Bucket.UserPhotos,
+                _ => throw new InvalidBucketNameException(bucket.ToString())
+            };
+        }
 
         public static UploadPhotoRequest.Types.Bucket AsGrpcUpload(this BucketName bucket)
         {
@@ -120,6 +131,17 @@ namespace Lapka.Identity.Infrastructure.Exceptions
                 BucketName.PetPhotos => DeletePhotoRequest.Types.Bucket.PetPhotos,
                 BucketName.ShelterPhotos => DeletePhotoRequest.Types.Bucket.ShelterPhotos,
                 BucketName.UserPhotos => DeletePhotoRequest.Types.Bucket.UserPhotos,
+                _ => throw new InvalidBucketNameException(bucket.ToString())
+            };
+        }
+        
+        public static SetExternalPhotoRequest.Types.Bucket AsGrpcUploadExternal(this BucketName bucket)
+        {
+            return bucket switch
+            {
+                BucketName.PetPhotos => SetExternalPhotoRequest.Types.Bucket.PetPhotos,
+                BucketName.ShelterPhotos => SetExternalPhotoRequest.Types.Bucket.ShelterPhotos,
+                BucketName.UserPhotos => SetExternalPhotoRequest.Types.Bucket.UserPhotos,
                 _ => throw new InvalidBucketNameException(bucket.ToString())
             };
         }

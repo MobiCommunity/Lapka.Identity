@@ -7,14 +7,12 @@ namespace Lapka.Identity.Application.Commands
     public class UpdateUserPhoto : ICommand
     {
         public Guid UserId { get; }
-        public File Photo { get; }
-        public Guid PhotoId { get; }
+        public PhotoFile Photo { get; }
 
-        public UpdateUserPhoto(Guid userId, File photo, Guid photoId)
+        public UpdateUserPhoto(Guid userId, PhotoFile photo)
         {
             UserId = userId;
             Photo = photo;
-            PhotoId = photoId;
         }
     }
 }

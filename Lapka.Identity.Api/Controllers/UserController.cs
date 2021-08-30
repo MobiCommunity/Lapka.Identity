@@ -53,7 +53,7 @@ namespace Lapka.Identity.Api.Controllers
         {
             Guid photoId = Guid.NewGuid();
 
-            await _commandDispatcher.SendAsync(new UpdateUserPhoto(id, photoRequest.Photo.AsValueObject(), photoId));
+            await _commandDispatcher.SendAsync(new UpdateUserPhoto(id, photoRequest.Photo.AsValueObject(photoId)));
 
             return NoContent();
         }

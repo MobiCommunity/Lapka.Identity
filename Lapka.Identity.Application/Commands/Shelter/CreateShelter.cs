@@ -13,11 +13,10 @@ namespace Lapka.Identity.Application.Commands
         public Address Address { get; }
         public string PhoneNumber { get; }
         public string Email { get; }
-        public File Photo { get; }
-        public Guid PhotoId { get; }
+        public PhotoFile Photo { get; }
 
         public CreateShelter(Guid id, string name, string phoneNumber, string email, Address address, 
-            Location geoLocation, File photo, Guid photoId)
+            Location geoLocation, PhotoFile photo)
         {
             Id = id;
             Name = name;
@@ -26,7 +25,6 @@ namespace Lapka.Identity.Application.Commands
             Address = address;
             GeoLocation = geoLocation;
             Photo = photo;
-            PhotoId = photoId;
         }
     }
 }

@@ -28,22 +28,20 @@ namespace Lapka.Identity.Application.Commands.Handlers
 
         public async Task HandleAsync(UpdateShelterPhoto command)
         {
-            string photoPath =  $"{command.PhotoId:N}.{command.Photo.GetFileExtension()}";
             Core.Entities.Shelter shelter = await _shelterRepository.GetByIdAsync(command.Id);
-            string oldPhotoPath = shelter.PhotoPath;
             
-            shelter.UpdatePhoto(photoPath);
-
             try
             {
-                await _grpcPhotoService.DeleteAsync(oldPhotoPath, BucketName.ShelterPhotos);
-                await _grpcPhotoService.AddAsync(photoPath, command.Photo.Content, BucketName.ShelterPhotos);
+                await _grpcPhotoService.DeleteAsync(shelter.PhotoId, BucketName.ShelterPhotos);
+                await _grpcPhotoService.AddAsync(command.Photo.Id, command.Photo.Name, command.Photo.Content, BucketName.ShelterPhotos);
             }
             catch(Exception ex)
             {
                 throw new CannotRequestFilesMicroserviceException(ex);
             }
             
+            shelter.UpdatePhoto(command.Photo.Id);
+
             await _shelterRepository.UpdateAsync(shelter);
             await _eventProcessor.ProcessAsync(shelter.Events);
         }

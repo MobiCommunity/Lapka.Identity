@@ -10,7 +10,7 @@ namespace Lapka.Identity.Infrastructure.Exceptions
         public string Name { get; set; }
         public AddressDocument Address { get; set; }
         public LocationDocument GeoLocation { get; set; }
-        public string PhotoPath { get; set; }
+        public Guid PhotoId { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         
