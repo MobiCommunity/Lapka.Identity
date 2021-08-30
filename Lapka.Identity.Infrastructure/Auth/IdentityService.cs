@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Lapka.Identity.Application.Commands;
@@ -145,10 +146,12 @@ namespace Lapka.Identity.Infrastructure.Auth
 
         private async Task<AuthDto> GetTokensAsync(User user)
         {
+            
             Dictionary<string, IEnumerable<string>> claims = new Dictionary<string, IEnumerable<string>>
             {
                 [ClaimTypes.Email] = new[] {user.Email}
             };
+            claims.Add("UserPets", user.UserPets.ToArray().Select(x => x.ToString()));
 
             if (user.FirstName != null) claims.Add(ClaimTypes.GivenName, new[] {user.FirstName});
             if (user.LastName != null) claims.Add(ClaimTypes.Surname, new[] {user.LastName});

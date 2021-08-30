@@ -31,6 +31,14 @@ namespace Lapka.Identity.Api.Controllers
         {
             Id = id
         }));
+        
+        /// <summary>
+        /// At the moment for testing purpose to get user's IDs
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> GetUser() => Ok(await _queryDispatcher.QueryAsync(new GetUsers()));
 
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteUser(Guid id)

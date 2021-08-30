@@ -69,7 +69,8 @@ namespace Lapka.Identity.Infrastructure.Exceptions
                 PhoneNumber = user.PhoneNumber,
                 PhotoPath = user.PhotoPath,
                 Role = user.Role,
-                CreatedAt = user.CreatedAt
+                CreatedAt = user.CreatedAt,
+                UserPets = user.UserPets
             };
         }
         

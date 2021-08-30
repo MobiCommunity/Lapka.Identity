@@ -1,4 +1,7 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Convey.Persistence.MongoDB;
 using Lapka.Identity.Application.Services;
@@ -21,8 +24,15 @@ namespace Lapka.Identity.Infrastructure.Services
         public async Task<User> GetAsync(Guid id)
         {
             UserDocument user = await _repository.GetAsync(id);
-
+            
             return user?.AsBusiness();
+        }
+
+        public async Task<IEnumerable<User>> GetAllAsync()
+        {
+            IReadOnlyList<UserDocument> users = await _repository.FindAsync(_ => true);
+
+            return users.Select(x => x.AsBusiness());
         }
 
         public async Task<User> GetAsync(string email)
