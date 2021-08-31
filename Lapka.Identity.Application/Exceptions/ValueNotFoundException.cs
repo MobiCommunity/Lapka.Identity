@@ -1,4 +1,4 @@
-﻿namespace Lapka.Identity.Application.Exceptions
+namespace Lapka.Identity.Application.Exceptions
 {
     public class ValueNotFoundException : AppException
     {

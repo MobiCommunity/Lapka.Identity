@@ -5,6 +5,7 @@ using Convey.CQRS.Queries;
 using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Queries;
 using Lapka.Identity.Application.Services;
+using Lapka.Identity.Application.Services.Shelter;
 using Lapka.Identity.Core.Entities;
 using Microsoft.AspNetCore.Routing.Matching;
 

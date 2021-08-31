@@ -1,27 +1,25 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Threading.Tasks;
 using Convey;
+using Convey.Auth;
 using Convey.Logging;
+using Convey.WebApi;
+using Lapka.Identity.Api.Attributes;
+using Lapka.Identity.Application;
+using Lapka.Identity.Infrastructure;
+using Lapka.Pets.Api.gRPC.Controllers;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.OpenApi.Models;
 using Open.Serialization.Json.Newtonsoft;
-using System;
-using System.IO;
-using System.Reflection;
-using System.Threading.Tasks;
-using Convey.Persistence.MongoDB;
-using Lapka.Identity.Api.Attributes;
-using Lapka.Identity.Api.Models;
-using Lapka.Identity.Application;
-using Lapka.Identity.Application.Dto;
-using Lapka.Identity.Application.Services;
-using Lapka.Identity.Core.Entities;
-using Lapka.Identity.Infrastructure;
-using Lapka.Identity.Infrastructure.Services;
-using Microsoft.Extensions.Options;
 
 namespace Lapka.Identity.Api
 {
@@ -32,22 +30,29 @@ namespace Lapka.Identity.Api
             await CreateWebHostBuilder(args).Build().RunAsync();
         }
 
-        private static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args).ConfigureServices(services =>
+        private static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        {
+            return WebHost.CreateDefaultBuilder(args).ConfigureKestrel(options =>
+                {
+                    options.ListenAnyIP(5014, o => o.Protocols =
+                        HttpProtocols.Http2);
+                    options.ListenAnyIP(5004, o => o.Protocols =
+                        HttpProtocols.Http1);
+                }).ConfigureServices(services =>
                 {
                     services.AddControllers();
-                    
+
                     services.TryAddSingleton(new JsonSerializerFactory().GetSerializer());
+                    services.AddGrpc();
 
                     services
                         .AddConvey()
                         .AddInfrastructure()
                         .AddApplication();
-                    
-                    services.AddSingleton<IShelterRepository, ShelterRepository>();
+
 
                     services.AddSwaggerGen(c =>
-                    {   
+                    {
                         c.SwaggerDoc("v1", new OpenApiInfo
                         {
                             Version = "v1",
@@ -58,16 +63,43 @@ namespace Lapka.Identity.Api
                         string xmlFile2 = "Lapka.Identity.Application.xml";
                         string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                         string xmlPath2 = Path.Combine(AppContext.BaseDirectory, xmlFile2);
-                        c.OperationFilter<BasicAuthOperationsFilter>();
                         c.IncludeXmlComments(xmlPath);
                         c.IncludeXmlComments(xmlPath2);
+                        c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                        {
+                            Description = @"JWT Authorization header using the Bearer scheme.
+                                           Enter 'Bearer' [space] and then your token in the text input below.
+                                           Example: 'Bearer 12345abcdef'",
+                            Name = "Authorization",
+                            In = ParameterLocation.Header,
+                            Type = SecuritySchemeType.ApiKey,
+                            Scheme = "Bearer"
+                        });
+                        
+                        c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                        {
+                            {
+                                new OpenApiSecurityScheme
+                                {
+                                    Reference = new OpenApiReference
+                                    {
+                                        Type = ReferenceType.SecurityScheme,
+                                        Id = "Bearer"
+                                    },
+                                    Scheme = "oauth2",
+                                    Name = "Bearer",
+                                    In = ParameterLocation.Header,
+                                },
+                                new List<string>()
+                            }
+                        });
                     });
-
+                    
                     services.BuildServiceProvider();
                 }).Configure(app =>
                 {
                     app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
-                    
+
                     app
                         .UseConvey()
                         .UseInfrastructure()
@@ -81,9 +113,11 @@ namespace Lapka.Identity.Api
                         .UseEndpoints(e =>
                         {
                             e.MapControllers();
+                            e.MapGrpcService<GrpcPetController>();
                             e.Map("ping", async ctx => { await ctx.Response.WriteAsync("Alive"); });
                         });
                 })
                 .UseLogging();
+        }
     }
 }

@@ -31,15 +31,22 @@ namespace Lapka.Identity.Core.ValueObjects
             {
                 throw new InvalidLongitudeValueException(Longitude);
             }
-                
-            if (double.Parse(Longitude) <= MinLongitudeValue)
+            
+            bool isDouble = double.TryParse(Longitude, out double doubleLongitude);
+
+            if (!isDouble)
             {
-                throw new LongitudeTooLowException(Longitude);
+                throw new LongitudeIncorrectDataTypeException(Latitude);
+            }
+                
+            if (doubleLongitude <= MinLongitudeValue)
+            {
+                throw new LongitudeTooLowException(Latitude);
             }
 
-            if (double.Parse(Longitude) >= MaxLongitudeValue)
+            if (doubleLongitude >= MaxLongitudeValue)
             {
-                throw new LongitudeTooBigException(Longitude);
+                throw new LongitudeTooBigException(Latitude);
             }
         }
 
@@ -50,12 +57,19 @@ namespace Lapka.Identity.Core.ValueObjects
                 throw new InvalidLatitudeValueException(Latitude);
             }
             
-            if (double.Parse(Latitude) <= MinLatitudeValue)
+            bool isDouble = double.TryParse(Latitude, out double doubleLatitude);
+
+            if (!isDouble)
+            {
+                throw new LongitudeIncorrectDataTypeException(Latitude);
+            }
+            
+            if (doubleLatitude <= MinLatitudeValue)
             {
                 throw new LatitudeTooLowException(Latitude);
             }
 
-            if (double.Parse(Latitude) >= MaxLatitudeValue)
+            if (doubleLatitude >= MaxLatitudeValue)
             {
                 throw new LatitudeTooBigException(Latitude);
             }

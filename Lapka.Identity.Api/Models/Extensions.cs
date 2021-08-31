@@ -1,4 +1,6 @@
+using System;
 using Lapka.Identity.Core.ValueObjects;
+using Microsoft.AspNetCore.Http;
 
 namespace Lapka.Identity.Api.Models
 {
@@ -9,6 +11,11 @@ namespace Lapka.Identity.Api.Models
 
         public static Location AsValueObject(this LocationModel model)
             => new Location(model.Latitude, model.Longitude);
-
+        
+        public static File AsValueObject(this IFormFile file) =>
+            new File(file.FileName, file.OpenReadStream(), file.ContentType);
+        
+        public static PhotoFile AsValueObject(this IFormFile file, Guid photoId) =>
+            new PhotoFile(photoId, file.FileName, file.OpenReadStream(), file.ContentType);
     }
 }

@@ -7,6 +7,7 @@
 
     <ItemGroup>
         <PackageReference Include="Convey" Version="0.4.360" />
+        <PackageReference Include="Convey.Auth" Version="0.4.360" />
         <PackageReference Include="Convey.CQRS.Queries" Version="0.4.360" />
         <PackageReference Include="Convey.Discovery.Consul" Version="0.4.360" />
         <PackageReference Include="Convey.HTTP" Version="0.4.360" />
@@ -18,6 +19,10 @@
         <PackageReference Include="Convey.Metrics.AppMetrics" Version="0.4.360" />
         <PackageReference Include="Convey.Persistence.MongoDB" Version="0.4.360" />
         <PackageReference Include="Convey.WebApi.CQRS" Version="0.4.360" />
+        <PackageReference Include="Google.Apis.Auth.AspNetCore3" Version="1.54.0" />
+        <PackageReference Include="Grpc.AspNetCore" Version="2.39.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.1.18" />
+        <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
 
     </ItemGroup>
 
@@ -27,7 +32,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Queries\Handlers" />
+        <Protobuf Include="gRPC\Protos\photo.proto" GrpcServices="Client" />
     </ItemGroup>
 
 </Project>
