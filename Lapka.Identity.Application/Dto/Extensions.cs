@@ -13,6 +13,7 @@ namespace Lapka.Identity.Application.Dto
                 Address = shelter.Address.AsDto(),
                 Email = shelter.Email,
                 GeoLocation = shelter.GeoLocation.AsDto(),
+                PhotoId = shelter.PhotoId,
                 Name = shelter.Name,
                 PhoneNumber = shelter.PhoneNumber
             };

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Threading.Tasks;
 using Convey.Auth;
 using Convey.Persistence.MongoDB;
 using Lapka.Identity.Application.Events.Abstract;
@@ -20,6 +21,9 @@ using Lapka.Identity.Infrastructure.Documents;
 using Lapka.Identity.Infrastructure.Exceptions;
 using Lapka.Identity.Infrastructure.Options;
 using Lapka.Identity.Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 
@@ -82,7 +86,7 @@ namespace Lapka.Identity.Infrastructure
             services.AddSingleton<IGrpcPhotoService, GrpcPhotoService>();
             services.AddTransient<IGoogleAuthHelper, GoogleAuthHelper>();
             services.AddScoped<IGrpcPhotoService, GrpcPhotoService>();
-
+            
             FacebookAuthSettings facebookOptions = new FacebookAuthSettings();
             configuration.GetSection("FacebookAuthSettings").Bind(facebookOptions);
             services.AddSingleton(facebookOptions);
@@ -112,8 +116,14 @@ namespace Lapka.Identity.Infrastructure
                 //.UseRabbitMq()
                 ;
 
-
             return app;
+        }
+        
+        public static async Task<Guid> AuthenticateUsingJwtAsync(this HttpContext context)
+        {
+            var authentication = await context.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme);
+
+            return authentication.Succeeded ? Guid.Parse(authentication.Principal.Identity.Name) : Guid.Empty;
         }
     }
 }

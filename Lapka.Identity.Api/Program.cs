@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using Convey;
+using Convey.Auth;
 using Convey.Logging;
+using Convey.WebApi;
 using Lapka.Identity.Api.Attributes;
 using Lapka.Identity.Application;
 using Lapka.Identity.Infrastructure;
@@ -31,7 +34,7 @@ namespace Lapka.Identity.Api
         {
             return WebHost.CreateDefaultBuilder(args).ConfigureKestrel(options =>
                 {
-                    options.ListenAnyIP(5014, o => o.Protocols = 
+                    options.ListenAnyIP(5014, o => o.Protocols =
                         HttpProtocols.Http2);
                     options.ListenAnyIP(5004, o => o.Protocols =
                         HttpProtocols.Http1);
@@ -41,12 +44,12 @@ namespace Lapka.Identity.Api
 
                     services.TryAddSingleton(new JsonSerializerFactory().GetSerializer());
                     services.AddGrpc();
-                    
+
                     services
                         .AddConvey()
                         .AddInfrastructure()
                         .AddApplication();
-                    
+
 
                     services.AddSwaggerGen(c =>
                     {
@@ -60,12 +63,38 @@ namespace Lapka.Identity.Api
                         string xmlFile2 = "Lapka.Identity.Application.xml";
                         string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                         string xmlPath2 = Path.Combine(AppContext.BaseDirectory, xmlFile2);
-                        c.OperationFilter<BasicAuthOperationsFilter>();
                         c.IncludeXmlComments(xmlPath);
                         c.IncludeXmlComments(xmlPath2);
+                        c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                        {
+                            Description = @"JWT Authorization header using the Bearer scheme.
+                                           Enter 'Bearer' [space] and then your token in the text input below.
+                                           Example: 'Bearer 12345abcdef'",
+                            Name = "Authorization",
+                            In = ParameterLocation.Header,
+                            Type = SecuritySchemeType.ApiKey,
+                            Scheme = "Bearer"
+                        });
+                        
+                        c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                        {
+                            {
+                                new OpenApiSecurityScheme
+                                {
+                                    Reference = new OpenApiReference
+                                    {
+                                        Type = ReferenceType.SecurityScheme,
+                                        Id = "Bearer"
+                                    },
+                                    Scheme = "oauth2",
+                                    Name = "Bearer",
+                                    In = ParameterLocation.Header,
+                                },
+                                new List<string>()
+                            }
+                        });
                     });
                     
-
                     services.BuildServiceProvider();
                 }).Configure(app =>
                 {

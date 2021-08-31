@@ -5,10 +5,10 @@ using Convey.CQRS.Queries;
 using Lapka.Identity.Api.Models;
 using Lapka.Identity.Api.Models.Request;
 using Lapka.Identity.Application.Commands;
-using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Queries;
-using Lapka.Identity.Application.Services;
-using Lapka.Identity.Application.Services.Auth;
+
+using Lapka.Identity.Infrastructure;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lapka.Identity.Api.Controllers
@@ -31,7 +31,7 @@ namespace Lapka.Identity.Api.Controllers
         {
             Id = id
         }));
-        
+
         /// <summary>
         /// At the moment for testing purpose to get user's IDs
         /// </summary>
@@ -40,6 +40,7 @@ namespace Lapka.Identity.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUser() => Ok(await _queryDispatcher.QueryAsync(new GetUsers()));
 
+
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
@@ -47,37 +48,61 @@ namespace Lapka.Identity.Api.Controllers
 
             return NoContent();
         }
-
-        [HttpPatch("{id:guid}/photo")]
-        public async Task<IActionResult> UpdatePhoto(Guid id, [FromForm] UpdateUserPhotoRequest photoRequest)
+        
+        [HttpPatch("photo")]
+        public async Task<IActionResult> UpdatePhoto([FromForm] UpdateUserPhotoRequest photoRequest)
         {
+            Guid userId = await HttpContext.AuthenticateUsingJwtAsync();
+            if (userId == Guid.Empty)
+            {
+                return Unauthorized();
+            }
+
             Guid photoId = Guid.NewGuid();
 
-            await _commandDispatcher.SendAsync(new UpdateUserPhoto(id, photoRequest.Photo.AsValueObject(photoId)));
+            await _commandDispatcher.SendAsync(new UpdateUserPhoto(userId, photoRequest.Photo.AsValueObject(photoId)));
 
             return NoContent();
         }
-
-        [HttpPatch("{id:guid}/password")]
-        public async Task<IActionResult> UpdatePassword(Guid id, [FromBody] UpdateUserPasswordRequest request)
+        
+        [HttpPatch("password")]
+        public async Task<IActionResult> UpdatePassword([FromBody] UpdateUserPasswordRequest request)
         {
-            await _commandDispatcher.SendAsync(new UpdateUserPassword(id, request.Password));
+            Guid userId = await HttpContext.AuthenticateUsingJwtAsync();
+            if (userId == Guid.Empty)
+            {
+                return Unauthorized();
+            }
+
+            await _commandDispatcher.SendAsync(new UpdateUserPassword(userId, request.Password));
 
             return NoContent();
         }
-
-        [HttpPatch("{id:guid}/email")]
-        public async Task<IActionResult> UpdateEmail(Guid id, [FromForm] UpdateUserEmailRequest photoRequest)
+        
+        [HttpPatch("email")]
+        public async Task<IActionResult> UpdateEmail([FromForm] UpdateUserEmailRequest photoRequest)
         {
-            await _commandDispatcher.SendAsync(new UpdateUserEmail(id, photoRequest.Email));
+            Guid userId = await HttpContext.AuthenticateUsingJwtAsync();
+            if (userId == Guid.Empty)
+            {
+                return Unauthorized();
+            }
+
+            await _commandDispatcher.SendAsync(new UpdateUserEmail(userId, photoRequest.Email));
 
             return NoContent();
         }
-
-        [HttpPatch("{id:guid}")]
-        public async Task<IActionResult> Update(Guid id, [FromForm] UpdateUserRequest user)
+        
+        [HttpPatch]
+        public async Task<IActionResult> Update([FromForm] UpdateUserRequest user)
         {
-            await _commandDispatcher.SendAsync(new UpdateUser(id, user.Username, user.FirstName, user.LastName,
+            Guid userId = await HttpContext.AuthenticateUsingJwtAsync();
+            if (userId == Guid.Empty)
+            {
+                return Unauthorized();
+            }
+
+            await _commandDispatcher.SendAsync(new UpdateUser(userId, user.Username, user.FirstName, user.LastName,
                 user.PhoneNumber));
 
             return NoContent();

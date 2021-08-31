@@ -15,7 +15,7 @@ namespace Lapka.Identity.Application.Dto
         [Required]
         public LocationDto GeoLocation { get; set; }
         [Required]
-        public string PhotoPath { get; set; }
+        public Guid PhotoId { get; set; }
         [Required]
         public string PhoneNumber { get; set; }
         [Required]

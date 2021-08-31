@@ -45,7 +45,7 @@ namespace Lapka.Identity.Api.Controllers
             return NoContent();    
         }
         
-        [HttpPatch("photo/{id:guid}")]
+        [HttpPatch("{id:guid}/photo")]
         public async Task<IActionResult> UpdatePhoto(Guid id, [FromForm]UpdateShelterPhotoRequest shelter)
         {
             Guid photoId = Guid.NewGuid();

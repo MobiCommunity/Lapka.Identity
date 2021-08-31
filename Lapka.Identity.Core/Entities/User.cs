@@ -81,6 +81,7 @@ namespace Lapka.Identity.Core.Entities
         public void UpdateEmail(string email)
         {
             Email = email;
+            ValidateEmail();
 
             AddEvent(new UserUpdated(this));
         }
