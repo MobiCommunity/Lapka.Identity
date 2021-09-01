@@ -89,14 +89,19 @@ namespace Lapka.Identity.Infrastructure
             
             FacebookAuthSettings facebookOptions = new FacebookAuthSettings();
             configuration.GetSection("FacebookAuthSettings").Bind(facebookOptions);
+            
+            FilesMicroserviceOptions filesMicroserviceOptions = new FilesMicroserviceOptions();
+            configuration.GetSection("filesMicroservice").Bind(filesMicroserviceOptions);
+            
             services.AddSingleton(facebookOptions);
+            services.AddSingleton(filesMicroserviceOptions);
             services.AddHttpClient();
             services.AddSingleton<IFacebookAuthHelper, FacebookAuthHelper>();
             
 
             services.AddGrpcClient<Photo.PhotoClient>(o =>
             {
-                o.Address = new Uri("http://localhost:5013");
+                o.Address = new Uri(filesMicroserviceOptions.UrlHttp2);
             });
             
             builder.Services.Scan(s => s.FromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
