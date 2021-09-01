@@ -16,7 +16,7 @@ namespace Lapka.Identity.Api.Controllers
     [ApiController]
     [Route("api/shelter")]
     public class ShelterController : ControllerBase
-    {
+    { 
         private readonly ICommandDispatcher _commandDispatcher;
         private readonly IQueryDispatcher _queryDispatcher;
 
