@@ -34,9 +34,9 @@ namespace Lapka.Identity.Api
         {
             return WebHost.CreateDefaultBuilder(args).ConfigureKestrel(options =>
                 {
-                    options.ListenAnyIP(5014, o => o.Protocols =
+                    options.ListenAnyIP(5011, o => o.Protocols =
                         HttpProtocols.Http2);
-                    options.ListenAnyIP(5004, o => o.Protocols =
+                    options.ListenAnyIP(5001, o => o.Protocols =
                         HttpProtocols.Http1);
                 }).ConfigureServices(services =>
                 {
