@@ -19,7 +19,7 @@ namespace Lapka.Identity.Infrastructure.Services
         public AuthDto Create(Guid userId, string role, string audience = null,
             IDictionary<string, IEnumerable<string>> claims = null)
         {
-            JsonWebToken jwt = _jwtHandler.CreateToken(userId.ToString("N"), role, audience, claims);
+            JsonWebToken jwt = _jwtHandler.CreateToken(userId.ToString(), role, audience, claims);
 
             return new AuthDto
             {
