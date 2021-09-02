@@ -21,10 +21,9 @@ namespace Lapka.Identity.Core.Entities
         public Guid PhotoId { get; private set; }
         public DateTime CreatedAt { get; private set; }
         public string Role { get; private set; }
-        public List<Guid> UserPets { get; private set; }
 
         public User(Guid id, string username, string? firstName, string? lastName, string email, string password,
-            string? phoneNumber, Guid photoId, DateTime createdAt, string role, List<Guid> userPets)
+            string? phoneNumber, Guid photoId, DateTime createdAt, string role)
         {
             Id = new AggregateId(id);
             Username = username;
@@ -36,7 +35,6 @@ namespace Lapka.Identity.Core.Entities
             PhotoId = photoId;
             CreatedAt = createdAt;
             Role = role;
-            UserPets = userPets;
 
             Validate();
         }
@@ -45,7 +43,7 @@ namespace Lapka.Identity.Core.Entities
             string password, DateTime createdAt, string role)
         {
             User user = new User(id, username, firstName, lastName, email, password, phoneNumber: null, photoId: Guid.Empty, 
-                createdAt, role, new List<Guid>());
+                createdAt, role);
 
             user.AddEvent(new UserCreated(user));
             return user;
@@ -82,21 +80,6 @@ namespace Lapka.Identity.Core.Entities
         {
             Email = email;
             ValidateEmail();
-
-            AddEvent(new UserUpdated(this));
-        }
-
-        public void AddPet(Guid petId)
-        {
-            UserPets.Add(petId);
-
-            AddEvent(new UserUpdated(this));
-        }
-        
-        public void DeletePet(Guid petId)
-        {
-            Guid pet = UserPets.FirstOrDefault(x => x == petId);
-            UserPets.Remove(pet);
 
             AddEvent(new UserUpdated(this));
         }
