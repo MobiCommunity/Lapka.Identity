@@ -70,14 +70,13 @@ namespace Lapka.Identity.Infrastructure.Exceptions
                 PhotoId = user.PhotoId,
                 Role = user.Role,
                 CreatedAt = user.CreatedAt,
-                UserPets = user.UserPets
             };
         }
         
         public static User AsBusiness(this UserDocument user)
         {
             return new User(user.Id, user.Username, user.FirstName, user.LastName, user.Email, user.Password, 
-                user.PhoneNumber, user.PhotoId, user.CreatedAt, user.Role, user.UserPets);
+                user.PhoneNumber, user.PhotoId, user.CreatedAt, user.Role);
         }
 
         public static JsonWebToken AsBusiness(this Convey.Auth.JsonWebToken jsonWebToken)

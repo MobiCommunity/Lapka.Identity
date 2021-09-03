@@ -25,10 +25,9 @@ namespace Lapka.Identity.Tests.Unit
             {
                 validCreatedAt = createdAt;
             }
-            List<Guid> ValidUserPets = userPets ?? new List<Guid>();
 
             User user = new User(validId.Value, validUsername, validFirstName, validLastName, validEmail, validPassword,
-                null, Guid.Empty, validCreatedAt, validRole, ValidUserPets);
+                null, Guid.Empty, validCreatedAt, validRole);
 
             return user;
         }

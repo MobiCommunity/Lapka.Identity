@@ -37,9 +37,5 @@
     <ItemGroup>
       <Folder Include="Models\Response\" />
     </ItemGroup>
-    
-    <ItemGroup>
-        <Protobuf Include="gRPC\Protos\pet.proto" GrpcServices="Server" />
-    </ItemGroup>
 
 </Project>

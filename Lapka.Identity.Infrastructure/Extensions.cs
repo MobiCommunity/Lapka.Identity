@@ -87,22 +87,34 @@ namespace Lapka.Identity.Infrastructure
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddSingleton<IGrpcPhotoService, GrpcPhotoService>();
             services.AddTransient<IGoogleAuthHelper, GoogleAuthHelper>();
+            services.AddTransient<IGrpcPetService, GrpcPetService>();
             services.AddScoped<IGrpcPhotoService, GrpcPhotoService>();
 
             FacebookAuthSettings facebookOptions = new FacebookAuthSettings();
             configuration.GetSection("FacebookAuthSettings").Bind(facebookOptions);
-
+            services.AddSingleton(facebookOptions);
+            
             FilesMicroserviceOptions filesMicroserviceOptions = new FilesMicroserviceOptions();
             configuration.GetSection("filesMicroservice").Bind(filesMicroserviceOptions);
-
-            services.AddSingleton(facebookOptions);
             services.AddSingleton(filesMicroserviceOptions);
+            
+            PetsMicroserviceOptions petsMicroserviceOptions = new PetsMicroserviceOptions();
+            configuration.GetSection("petsMicroservice").Bind(petsMicroserviceOptions);
+            services.AddSingleton(petsMicroserviceOptions);
+
             services.AddHttpClient();
             services.AddSingleton<IFacebookAuthHelper, FacebookAuthHelper>();
 
-
-            services.AddGrpcClient<Photo.PhotoClient>(o => { o.Address = new Uri(filesMicroserviceOptions.UrlHttp2); });
-
+            services.AddGrpcClient<PhotoProto.PhotoProtoClient>(o =>
+            {
+                o.Address = new Uri(filesMicroserviceOptions.UrlHttp2);
+            });
+            
+            services.AddGrpcClient<PetProto.PetProtoClient>(o =>
+            {
+                o.Address = new Uri(petsMicroserviceOptions.UrlHttp2);
+            });
+            
             builder.Services.Scan(s => s.FromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
                 .AddClasses(c => c.AssignableTo(typeof(IDomainEventHandler<>)))
                 .AsImplementedInterfaces().WithTransientLifetime());

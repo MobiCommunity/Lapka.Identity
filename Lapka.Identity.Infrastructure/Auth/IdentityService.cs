@@ -25,10 +25,11 @@ namespace Lapka.Identity.Infrastructure.Auth
         private readonly IFacebookAuthHelper _facebookAuthHelper;
         private readonly IGoogleAuthHelper _googleAuthHelper;
         private readonly IGrpcPhotoService _photoService;
+        private readonly IGrpcPetService _grpcPetService;
 
         public IdentityService(IUserRepository userRepository, IPasswordService passwordService,
             IJwtProvider jwtProvider, IRefreshTokenService refreshTokenService, IFacebookAuthHelper facebookAuthHelper,
-            IGoogleAuthHelper googleAuthHelper, IGrpcPhotoService photoService)
+            IGoogleAuthHelper googleAuthHelper, IGrpcPhotoService photoService, IGrpcPetService grpcPetService)
         {
             _userRepository = userRepository;
             _passwordService = passwordService;
@@ -37,6 +38,7 @@ namespace Lapka.Identity.Infrastructure.Auth
             _facebookAuthHelper = facebookAuthHelper;
             _googleAuthHelper = googleAuthHelper;
             _photoService = photoService;
+            _grpcPetService = grpcPetService;
         }
 
         public async Task<AuthDto> SignInAsync(SignIn command)
@@ -51,7 +53,7 @@ namespace Lapka.Identity.Infrastructure.Auth
             {
                 throw new InvalidCredentialsException(command.Email);
             }
-
+            
             AuthDto auth = await GetTokensAsync(user);
 
             return auth;
@@ -90,11 +92,21 @@ namespace Lapka.Identity.Infrastructure.Auth
             {
                 throw new EmailInUseException(command.Email);
             }
-
+            
+            
             string role = "user";
             string password = _passwordService.Hash(command.Password);
             user = User.Create(command.Id, command.Username, command.FirstName, command.LastName, command.Email,
                 password, command.CreatedAt, role);
+            
+            try
+            {
+                await _grpcPetService.CreatePetListsRequest(user.Id.Value);
+            }
+            catch (Exception e)
+            {
+                throw new CannotRequestPetsMicroserviceException(e);
+            }
 
             await _userRepository.AddAsync(user);
         }
