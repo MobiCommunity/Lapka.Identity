@@ -26,8 +26,8 @@ namespace Lapka.Identity.Infrastructure.Exceptions
         {
             return new LocationDocument
             {
-                Latitude = shelter.Latitude,
-                Longitude = shelter.Longitude
+                Latitude = shelter.Latitude.AsDouble(),
+                Longitude = shelter.Longitude.AsDouble()
             };
         }
         
@@ -44,12 +44,12 @@ namespace Lapka.Identity.Infrastructure.Exceptions
         public static Shelter AsBusiness(this ShelterDocument shelter)
         {
             return new Shelter(shelter.Id, shelter.Name, shelter.Address.AsBusiness(),
-                shelter.GeoLocation.AsBusiness(), shelter.PhotoId, shelter.PhoneNumber, shelter.Email);
+                shelter.GeoLocation.AsBusiness(), shelter.PhotoId, shelter.PhoneNumber, shelter.Email, shelter.BankNumber);
         }
         
         public static Location AsBusiness(this LocationDocument shelter)
         {
-            return new Location(shelter.Latitude, shelter.Longitude);
+            return new Location(shelter.Latitude.ToString(), shelter.Longitude.ToString());
         }
 
         public static Address AsBusiness(this AddressDocument shelter)

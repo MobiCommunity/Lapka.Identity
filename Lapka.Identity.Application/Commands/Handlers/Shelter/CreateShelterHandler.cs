@@ -27,22 +27,22 @@ namespace Lapka.Identity.Application.Commands.Handlers.Shelter
 
         public async Task HandleAsync(CreateShelter command)
         {
-            Core.Entities.Shelter created = Core.Entities.Shelter.Create(command.Id, command.Name, command.Address, 
-                command.GeoLocation, command.Photo.Id, command.PhoneNumber, command.Email);
+            Core.Entities.Shelter created = Core.Entities.Shelter.Create(command.Id, command.Name, command.Address,
+                command.GeoLocation, command.Photo.Id, command.PhoneNumber, command.Email, command.BankNumber);
 
             await _shelterRepository.AddAsync(created);
-            
+
             try
             {
-                await _grpcPhotoService.AddAsync(command.Photo.Id, command.Photo.Name, command.Photo.Content, BucketName.ShelterPhotos);
+                await _grpcPhotoService.AddAsync(command.Photo.Id, command.Photo.Name, command.Photo.Content,
+                    BucketName.ShelterPhotos);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
             }
-            
+
             await _eventProcessor.ProcessAsync(created.Events);
-            
         }
     }
 }

@@ -9,14 +9,14 @@ using Lapka.Identity.Api.Models.Request;
 using Lapka.Identity.Application.Commands;
 using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Queries;
-using Microsoft.AspNetCore.Http;
+using Lapka.Identity.Infrastructure;
 
 namespace Lapka.Identity.Api.Controllers
 {
     [ApiController]
     [Route("api/shelter")]
     public class ShelterController : ControllerBase
-    { 
+    {
         private readonly ICommandDispatcher _commandDispatcher;
         private readonly IQueryDispatcher _queryDispatcher;
 
@@ -25,60 +25,92 @@ namespace Lapka.Identity.Api.Controllers
             _commandDispatcher = commandDispatcher;
             _queryDispatcher = queryDispatcher;
         }
-        
+
         [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetById(Guid id)
+        public async Task<IActionResult> GetById(Guid id, string longitude, string latitude)
         {
             return Ok(await _queryDispatcher.QueryAsync(new GetShelter
             {
-                Id = id
+                Id = id,
+                Longitude = longitude,
+                Latitude = latitude
             }));
         }
-        
+
         [HttpPatch("{id:guid}")]
         public async Task<IActionResult> Update(Guid id, UpdateShelterRequest shelter)
         {
-                await _commandDispatcher.SendAsync(new UpdateShelter(id, shelter.Name,
-                shelter.PhoneNumber, shelter.Email, shelter.Address.AsValueObject(),
-                shelter.GeoLocation.AsValueObject()));
+            string userRole = await HttpContext.AuthenticateUsingJwtGetUserRoleAsync();
+            if (string.IsNullOrEmpty(userRole) || userRole != "shelter")
+            {
+                return Unauthorized();
+            }
 
-            return NoContent();    
+            await _commandDispatcher.SendAsync(new UpdateShelter(id, shelter.Name,
+                shelter.PhoneNumber, shelter.Email, shelter.Address.AsValueObject(),
+                shelter.GeoLocation.AsValueObject(), shelter.BankNumber));
+
+            return NoContent();
         }
         
         [HttpPatch("{id:guid}/photo")]
-        public async Task<IActionResult> UpdatePhoto(Guid id, [FromForm]UpdateShelterPhotoRequest shelter)
+        public async Task<IActionResult> UpdatePhoto(Guid id, [FromForm] UpdateShelterPhotoRequest shelter)
         {
+            string userRole = await HttpContext.AuthenticateUsingJwtGetUserRoleAsync();
+            if (string.IsNullOrEmpty(userRole) || userRole != "shelter")
+            {
+                return Unauthorized();
+            }
+
             Guid photoId = Guid.NewGuid();
 
             await _commandDispatcher.SendAsync(new UpdateShelterPhoto(id, shelter.Photo.AsValueObject(photoId)));
 
-            return NoContent();    
+            return NoContent();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromForm]CreateShelterRequest createShelterRequest)
+        public async Task<IActionResult> Add([FromForm] CreateShelterRequest createShelterRequest)
         {
+            string userRole = await HttpContext.AuthenticateUsingJwtGetUserRoleAsync();
+            if (string.IsNullOrEmpty(userRole) || userRole != "shelter")
+            {
+                return Unauthorized();
+            }
+
             Guid id = Guid.NewGuid();
             Guid photoId = Guid.NewGuid();
-            
+
             await _commandDispatcher.SendAsync(new CreateShelter(id, createShelterRequest.Name,
-                createShelterRequest.PhoneNumber, createShelterRequest.Email, createShelterRequest.Address.AsValueObject(),
-                createShelterRequest.GeoLocation.AsValueObject(), createShelterRequest.Photo.AsValueObject(photoId)));
+                createShelterRequest.PhoneNumber, createShelterRequest.Email,
+                createShelterRequest.Address.AsValueObject(),
+                createShelterRequest.GeoLocation.AsValueObject(), createShelterRequest.Photo.AsValueObject(photoId),
+                createShelterRequest.BankNumber));
 
             return Created($"api/shelter/{id}", null);
         }
-        
+
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
+            string userRole = await HttpContext.AuthenticateUsingJwtGetUserRoleAsync();
+            if (string.IsNullOrEmpty(userRole) || userRole != "shelter")
+            {
+                return Unauthorized();
+            }
+
             await _commandDispatcher.SendAsync(new DeleteShelter(id));
 
             return NoContent();
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ShelterDto>>> GetShelters() 
-            => Ok(await _queryDispatcher.QueryAsync(new GetShelters()));
+        public async Task<ActionResult<IEnumerable<ShelterDto>>> GetShelters(string longitude, string latitude) 
+            => Ok(await _queryDispatcher.QueryAsync(new GetShelters
+            {
+                Longitude = longitude,
+                Latitude = latitude
+            }));
 
     }
 }

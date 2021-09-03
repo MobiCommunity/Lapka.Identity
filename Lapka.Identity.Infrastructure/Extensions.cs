@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Convey.Auth;
 using Convey.Persistence.MongoDB;
@@ -58,10 +60,10 @@ namespace Lapka.Identity.Infrastructure
             builder.Services.Configure<IISServerOptions>(o => o.AllowSynchronousIO = true);
 
             IServiceCollection services = builder.Services;
-            
+
             ServiceProvider provider = services.BuildServiceProvider();
             IConfiguration configuration = provider.GetService<IConfiguration>();
-            
+
             GoogleAuthSettings googleAuthSettings = new GoogleAuthSettings();
             configuration.GetSection("google").Bind(googleAuthSettings);
             services.AddSingleton(googleAuthSettings);
@@ -87,7 +89,7 @@ namespace Lapka.Identity.Infrastructure
             services.AddTransient<IGoogleAuthHelper, GoogleAuthHelper>();
             services.AddTransient<IGrpcPetService, GrpcPetService>();
             services.AddScoped<IGrpcPhotoService, GrpcPhotoService>();
-            
+
             FacebookAuthSettings facebookOptions = new FacebookAuthSettings();
             configuration.GetSection("FacebookAuthSettings").Bind(facebookOptions);
             services.AddSingleton(facebookOptions);
@@ -102,7 +104,6 @@ namespace Lapka.Identity.Infrastructure
 
             services.AddHttpClient();
             services.AddSingleton<IFacebookAuthHelper, FacebookAuthHelper>();
-            
 
             services.AddGrpcClient<PhotoProto.PhotoProtoClient>(o =>
             {
@@ -133,12 +134,21 @@ namespace Lapka.Identity.Infrastructure
 
             return app;
         }
-        
-        public static async Task<Guid> AuthenticateUsingJwtAsync(this HttpContext context)
+
+        public static async Task<Guid> AuthenticateUsingJwtGetUserIdAsync(this HttpContext context)
         {
-            var authentication = await context.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme);
+            AuthenticateResult authentication = await context.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme);
 
             return authentication.Succeeded ? Guid.Parse(authentication.Principal.Identity.Name) : Guid.Empty;
+        }
+
+        public static async Task<string> AuthenticateUsingJwtGetUserRoleAsync(this HttpContext context)
+        {
+            AuthenticateResult authentication = await context.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme);
+
+            return authentication.Succeeded
+                ? authentication.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value
+                : string.Empty;
         }
     }
 }

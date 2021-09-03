@@ -8,7 +8,6 @@ namespace Lapka.Identity.Application.Commands.Handlers.Shelter
 {
     public class UpdateShelterHandler : ICommandHandler<UpdateShelter>
     {
-        
         private readonly IShelterRepository _shelterRepository;
         private readonly IEventProcessor _eventProcessor;
 
@@ -26,11 +25,12 @@ namespace Lapka.Identity.Application.Commands.Handlers.Shelter
             {
                 throw new ShelterNotFoundException();
             }
-            
-            shelter.Update(command.Name, command.Address, command.GeoLocation, command.PhoneNumber, command.Email);
-            
+
+            shelter.Update(command.Name, command.Address, command.GeoLocation, command.PhoneNumber, command.Email,
+                command.BankNumber);
+
             await _shelterRepository.UpdateAsync(shelter);
-            
+
             await _eventProcessor.ProcessAsync(shelter.Events);
         }
     }
