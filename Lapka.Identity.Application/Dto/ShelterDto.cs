@@ -6,21 +6,14 @@ namespace Lapka.Identity.Application.Dto
 {
     public class ShelterDto
     {
-        [Required]
         public Guid Id { get; set; }
-        [Required]
         public string Name { get; set; }
-        [Required]
         public AddressDto Address { get; set; }
-        [Required]
         public LocationDto GeoLocation { get; set; }
-        [Required]
         public Guid PhotoId { get; set; }
-        [Required]
         public string PhoneNumber { get; set; }
-        [Required]
         public string Email { get; set; }
-        [Required]
         public double? Distance { get; set; }
+        public string BankNumber { get; set; }
     }
 }

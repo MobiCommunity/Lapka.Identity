@@ -32,7 +32,10 @@ namespace Lapka.Identity.Application.Commands.Handlers
             
             try
             {
-                await _grpcPhotoService.DeleteAsync(shelter.PhotoId, BucketName.ShelterPhotos);
+                if (shelter.PhotoId != Guid.Empty)
+                {
+                    await _grpcPhotoService.DeleteAsync(shelter.PhotoId, BucketName.ShelterPhotos);
+                }
                 await _grpcPhotoService.AddAsync(command.Photo.Id, command.Photo.Name, command.Photo.Content, BucketName.ShelterPhotos);
             }
             catch(Exception ex)

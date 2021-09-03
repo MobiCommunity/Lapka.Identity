@@ -36,7 +36,10 @@ namespace Lapka.Identity.Application.Commands.Handlers.Shelter
             shelter.Delete();
             try
             {
-                await _photoService.DeleteAsync(shelter.PhotoId, BucketName.ShelterPhotos);
+                if (shelter.PhotoId != Guid.Empty)
+                {
+                    await _photoService.DeleteAsync(shelter.PhotoId, BucketName.ShelterPhotos);
+                }
             }
             catch (Exception ex)
             {

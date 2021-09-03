@@ -40,6 +40,9 @@ namespace Lapka.Identity.Application.Commands.Handlers.Shelter
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
+                created.UpdatePhoto(Guid.Empty);
+                
+                await _shelterRepository.UpdateAsync(created);
             }
 
             await _eventProcessor.ProcessAsync(created.Events);

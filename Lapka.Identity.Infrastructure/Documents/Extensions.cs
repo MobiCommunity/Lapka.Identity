@@ -18,7 +18,8 @@ namespace Lapka.Identity.Infrastructure.Exceptions
                 GeoLocation = shelter.GeoLocation.AsDocument(),
                 PhotoId = shelter.PhotoId,
                 Email = shelter.Email,
-                PhoneNumber = shelter.PhoneNumber
+                PhoneNumber = shelter.PhoneNumber,
+                BankNumber = shelter.BankNumber
             };
         }
 

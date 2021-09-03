@@ -27,7 +27,8 @@ namespace Lapka.Identity.Application.Dto
                 PhotoId = shelter.PhotoId,
                 Name = shelter.Name,
                 PhoneNumber = shelter.PhoneNumber,
-                Distance = distance
+                Distance = distance,
+                BankNumber = shelter.BankNumber
             };
         }
 

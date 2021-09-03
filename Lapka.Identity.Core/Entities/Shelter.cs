@@ -37,6 +37,8 @@ namespace Lapka.Identity.Core.Entities
         
         public void Update(string name, Address address, Location location, string phoneNumber, string email, string bankNumber)
         {
+            ValidShelter(name, phoneNumber, email, bankNumber);
+
             Name = name;
             Address = address;
             GeoLocation = location;
@@ -57,6 +59,15 @@ namespace Lapka.Identity.Core.Entities
         public static Shelter Create(Guid id, string name, Address address, Location location, Guid photoId,
             string phoneNumber, string email, string bankNumber)
         {
+            ValidShelter(name, phoneNumber, email, bankNumber);
+
+            Shelter shelter = new Shelter(id, name, address, location, photoId, phoneNumber, email, bankNumber);
+            shelter.AddEvent(new ShelterCreated(shelter));
+            return shelter;
+        }
+
+        private static void ValidShelter(string name, string phoneNumber, string email, string bankNumber)
+        {
             if (IsNameInvalid(name))
                 throw new InvalidShelterNameException(name);
 
@@ -68,16 +79,20 @@ namespace Lapka.Identity.Core.Entities
 
             if (IsBankNumberInvalid(bankNumber))
                 throw new InvalidBankNumberException(bankNumber);
-            
-            Shelter shelter = new Shelter(id, name, address, location, photoId, phoneNumber, email, bankNumber);
-            shelter.AddEvent(new ShelterCreated(shelter));
-            return shelter;
         }
 
         private static bool IsEmailInvalid(string email) => string.IsNullOrWhiteSpace(email);
         private static bool IsPhoneNumberInvalid(string phoneNumber) => string.IsNullOrWhiteSpace(phoneNumber);
         private static bool IsNameInvalid(string name) => string.IsNullOrWhiteSpace(name);
 
-        private static bool IsBankNumberInvalid(string bankNumber) => bankNumber.Length < BankNumberMinimumLetters;
+        private static bool IsBankNumberInvalid(string bankNumber)
+        {
+            if (!string.IsNullOrEmpty(bankNumber))
+            {
+                return bankNumber.Length < BankNumberMinimumLetters;
+            }
+
+            return false;
+        }
     }
 }
