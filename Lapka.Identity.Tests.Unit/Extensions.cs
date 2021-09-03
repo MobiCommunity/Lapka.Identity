@@ -34,7 +34,7 @@ namespace Lapka.Identity.Tests.Unit
         }
         
         public static Shelter ArrangeShelter(AggregateId id = null, string name = null, Address address = null,
-            Location location = null, Guid? photoId = null, string phoneNumber = null, string email = null)
+            Location location = null, Guid? photoId = null, string phoneNumber = null, string email = null, string bankNumber = null)
         {
             AggregateId validId = id ?? new AggregateId();
             string validName = name ?? "Miniok";
@@ -43,9 +43,10 @@ namespace Lapka.Identity.Tests.Unit
             Guid validPhotoId = photoId ?? Guid.NewGuid();
             string validPhoneNumber = phoneNumber ?? "435731934";
             string validEmail = email ?? "support@lappka.com";
+            string validBankNumber = bankNumber ?? "24204530505030050350535035";
 
             Shelter shelter = new Shelter(validId.Value, validName, validAddress, validLocation, validPhotoId,
-                validPhoneNumber, validEmail);
+                validPhoneNumber, validEmail, validBankNumber);
 
             return shelter;
         }

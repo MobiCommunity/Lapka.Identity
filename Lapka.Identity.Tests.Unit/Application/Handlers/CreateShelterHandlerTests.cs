@@ -51,7 +51,7 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
             PhotoFile file = Extensions.ArrangePhotoFile(id: photoId);
 
             CreateShelter command = new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
-                shelter.Email, shelter.Address, shelter.GeoLocation, file);
+                shelter.Email, shelter.Address, shelter.GeoLocation, file, shelter.BankNumber);
 
             await Act(command);
 
@@ -79,7 +79,7 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
             Guid photoId = Guid.NewGuid();
 
             CreateShelter command = new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
-                shelter.Email, shelter.Address, shelter.GeoLocation, file);
+                shelter.Email, shelter.Address, shelter.GeoLocation, file, shelter.BankNumber);
 
             Exception exception = await Record.ExceptionAsync(async () => await Act(command));
 
@@ -95,7 +95,7 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
             Guid photoId = Guid.NewGuid();
 
             CreateShelter command = new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
-                shelter.Email, shelter.Address, shelter.GeoLocation, file);
+                shelter.Email, shelter.Address, shelter.GeoLocation, file, shelter.BankNumber);
 
             Exception exception = await Record.ExceptionAsync(async () => await Act(command));
 
@@ -111,7 +111,7 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
             Guid photoId = Guid.NewGuid();
 
             CreateShelter command = new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
-                shelter.Email, shelter.Address, shelter.GeoLocation, file);
+                shelter.Email, shelter.Address, shelter.GeoLocation, file, shelter.BankNumber);
 
             Exception exception = await Record.ExceptionAsync(async () => await Act(command));
 
@@ -128,7 +128,7 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
 
             Exception exception = await Record.ExceptionAsync(async () =>
                 await Act(new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
-                    shelter.Email, Extensions.ArrangeAddress(city: ""), shelter.GeoLocation, file)));
+                    shelter.Email, Extensions.ArrangeAddress(city: ""), shelter.GeoLocation, file, shelter.BankNumber)));
 
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<InvalidCityValueException>();
@@ -143,7 +143,7 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
 
             Exception exception = await Record.ExceptionAsync(async () =>
                 await Act(new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
-                    shelter.Email, Extensions.ArrangeAddress(street: ""), shelter.GeoLocation, file)));
+                    shelter.Email, Extensions.ArrangeAddress(street: ""), shelter.GeoLocation, file, shelter.BankNumber)));
 
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<InvalidStreetValueException>();
@@ -158,7 +158,7 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
 
             Exception exception = await Record.ExceptionAsync(async () =>
                 await Act(new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
-                    shelter.Email, Extensions.ArrangeAddress(zipcode: ""), shelter.GeoLocation, file)));
+                    shelter.Email, Extensions.ArrangeAddress(zipcode: ""), shelter.GeoLocation, file, shelter.BankNumber)));
 
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<InvalidZipCodeValueException>();
@@ -173,7 +173,7 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
 
             Exception exception = await Record.ExceptionAsync(async () =>
                 await Act(new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
-                    shelter.Email, shelter.Address, Extensions.ArrangeLocation(latitude: ""), file)));
+                    shelter.Email, shelter.Address, Extensions.ArrangeLocation(latitude: ""), file, shelter.BankNumber)));
 
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<InvalidLatitudeValueException>();
@@ -188,7 +188,7 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
 
             Exception exception = await Record.ExceptionAsync(async () =>
                 await Act(new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
-                    shelter.Email, shelter.Address, Extensions.ArrangeLocation(latitude: "90"), file)));
+                    shelter.Email, shelter.Address, Extensions.ArrangeLocation(latitude: "90"), file, shelter.BankNumber)));
 
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<LatitudeTooBigException>();
@@ -203,7 +203,7 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
 
             Exception exception = await Record.ExceptionAsync(async () =>
                 await Act(new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
-                    shelter.Email, shelter.Address, Extensions.ArrangeLocation(latitude: "-90"), file)));
+                    shelter.Email, shelter.Address, Extensions.ArrangeLocation(latitude: "-90"), file, shelter.BankNumber)));
 
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<LatitudeTooLowException>();
@@ -218,7 +218,7 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
 
             Exception exception = await Record.ExceptionAsync(async () => await Act(new CreateShelter(shelter.Id.Value,
                 shelter.Name, shelter.PhoneNumber,
-                shelter.Email, shelter.Address, Extensions.ArrangeLocation(longitude: ""), file)));
+                shelter.Email, shelter.Address, Extensions.ArrangeLocation(longitude: ""), file, shelter.BankNumber)));
 
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<InvalidLongitudeValueException>();
@@ -233,7 +233,7 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
 
             Exception exception = await Record.ExceptionAsync(async () => await Act(new CreateShelter(shelter.Id.Value,
                 shelter.Name, shelter.PhoneNumber, shelter.Email, shelter.Address,
-                Extensions.ArrangeLocation(longitude: "180"), file)));
+                Extensions.ArrangeLocation(longitude: "180"), file, shelter.BankNumber)));
 
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<LongitudeTooBigException>();
@@ -248,7 +248,7 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
 
             Exception exception = await Record.ExceptionAsync(async () =>
                 await Act(new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
-                    shelter.Email, shelter.Address, Extensions.ArrangeLocation(longitude: "-180"), file)));
+                    shelter.Email, shelter.Address, Extensions.ArrangeLocation(longitude: "-180"), file, shelter.BankNumber)));
 
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<LongitudeTooLowException>();
