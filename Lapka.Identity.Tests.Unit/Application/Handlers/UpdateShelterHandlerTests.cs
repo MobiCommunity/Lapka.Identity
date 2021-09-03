@@ -35,11 +35,11 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
             Shelter shelterArrange = Extensions.ArrangeShelter();
 
             Shelter shelter = Shelter.Create(shelterArrange.Id.Value, shelterArrange.Name, shelterArrange.Address,
-                shelterArrange.GeoLocation, shelterArrange.PhotoId, shelterArrange.PhoneNumber, shelterArrange.Email);
+                shelterArrange.GeoLocation, shelterArrange.PhotoId, shelterArrange.PhoneNumber, shelterArrange.Email, shelterArrange.BankNumber);
 
             UpdateShelter command = new UpdateShelter(shelter.Id.Value, "new name", "111222333",
                 "newemail@laapka.com", Extensions.ArrangeAddress("rzeszowska 101", "33-333 Rzeszów",
-                    "Nowe City"), Extensions.ArrangeLocation(latitude: "5", longitude: "50"));
+                    "Nowe City"), Extensions.ArrangeLocation(latitude: "5", longitude: "50"), "32483283284238");
 
             _shelterRepository.GetByIdAsync(command.Id).Returns(shelter);
 

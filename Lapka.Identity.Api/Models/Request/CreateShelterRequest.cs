@@ -19,5 +19,6 @@ namespace Lapka.Identity.Api.Models.Request
         public string PhoneNumber { get; set; }
         [Required]
         public IFormFile Photo { get; set; }
+        public string BankNumber { get; set; }
     }
 }
