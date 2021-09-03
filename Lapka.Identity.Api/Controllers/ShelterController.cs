@@ -10,7 +10,6 @@ using Lapka.Identity.Application.Commands;
 using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Queries;
 using Lapka.Identity.Infrastructure;
-using Microsoft.AspNetCore.Http;
 
 namespace Lapka.Identity.Api.Controllers
 {
