@@ -16,10 +16,10 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.ShelterTests
         {
             Shelter shelter = Extensions.ArrangeShelter();
             Shelter shelterUpdated = Extensions.ArrangeShelter(name: "new name", address: Extensions.ArrangeAddress(city: "new city"),
-                location: Extensions.ArrangeLocation(latitude: "5"), email: "newemail@lappka.com", phoneNumber: "tak");
+                location: Extensions.ArrangeLocation(latitude: "5"), email: "newemail@lappka.com", phoneNumber: "tak", bankNumber: "3848328482");
 
             shelter.Update(shelterUpdated.Name, shelterUpdated.Address, shelterUpdated.GeoLocation,
-                shelterUpdated.PhoneNumber, shelterUpdated.Email);
+                shelterUpdated.PhoneNumber, shelterUpdated.Email, shelterUpdated.BankNumber);
 
             shelter.ShouldNotBeNull();
             shelter.Id.ShouldBe(shelter.Id);
@@ -28,6 +28,7 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.ShelterTests
             shelter.GeoLocation.ShouldBe(shelterUpdated.GeoLocation);
             shelter.PhoneNumber.ShouldBe(shelterUpdated.PhoneNumber);
             shelter.Email.ShouldBe(shelterUpdated.Email);
+            shelter.BankNumber.ShouldBe(shelterUpdated.BankNumber);
             shelter.Events.Count().ShouldBe(1);
             IDomainEvent @event = shelter.Events.Single();
             @event.ShouldBeOfType<ShelterUpdated>();

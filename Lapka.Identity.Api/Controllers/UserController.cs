@@ -52,7 +52,7 @@ namespace Lapka.Identity.Api.Controllers
         [HttpPatch("photo")]
         public async Task<IActionResult> UpdatePhoto([FromForm] UpdateUserPhotoRequest photoRequest)
         {
-            Guid userId = await HttpContext.AuthenticateUsingJwtAsync();
+            Guid userId = await HttpContext.AuthenticateUsingJwtGetUserIdAsync();
             if (userId == Guid.Empty)
             {
                 return Unauthorized();
@@ -68,7 +68,7 @@ namespace Lapka.Identity.Api.Controllers
         [HttpPatch("password")]
         public async Task<IActionResult> UpdatePassword([FromBody] UpdateUserPasswordRequest request)
         {
-            Guid userId = await HttpContext.AuthenticateUsingJwtAsync();
+            Guid userId = await HttpContext.AuthenticateUsingJwtGetUserIdAsync();
             if (userId == Guid.Empty)
             {
                 return Unauthorized();
@@ -82,7 +82,7 @@ namespace Lapka.Identity.Api.Controllers
         [HttpPatch("email")]
         public async Task<IActionResult> UpdateEmail([FromForm] UpdateUserEmailRequest photoRequest)
         {
-            Guid userId = await HttpContext.AuthenticateUsingJwtAsync();
+            Guid userId = await HttpContext.AuthenticateUsingJwtGetUserIdAsync();
             if (userId == Guid.Empty)
             {
                 return Unauthorized();
@@ -96,7 +96,7 @@ namespace Lapka.Identity.Api.Controllers
         [HttpPatch]
         public async Task<IActionResult> Update([FromForm] UpdateUserRequest user)
         {
-            Guid userId = await HttpContext.AuthenticateUsingJwtAsync();
+            Guid userId = await HttpContext.AuthenticateUsingJwtGetUserIdAsync();
             if (userId == Guid.Empty)
             {
                 return Unauthorized();
@@ -104,6 +104,18 @@ namespace Lapka.Identity.Api.Controllers
 
             await _commandDispatcher.SendAsync(new UpdateUser(userId, user.Username, user.FirstName, user.LastName,
                 user.PhoneNumber));
+
+            return NoContent();
+        }
+        
+        /// <summary>
+        /// For testing purpose, at the moment to give user a shelter
+        /// role, use this endpoint. 
+        /// </summary>
+        [HttpPatch("{userId:guid}/shelterRole")]
+        public async Task<IActionResult> GiveShelterRole(Guid userId)
+        {
+            await _commandDispatcher.SendAsync(new GiveShelterRole(userId));
 
             return NoContent();
         }

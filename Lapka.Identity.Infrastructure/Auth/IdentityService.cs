@@ -151,18 +151,7 @@ namespace Lapka.Identity.Infrastructure.Auth
 
         private async Task<AuthDto> GetTokensAsync(User user)
         {
-            Dictionary<string, IEnumerable<string>> claims = new Dictionary<string, IEnumerable<string>>
-            {
-                [ClaimTypes.Email] = new[] {user.Email}
-            };
-            claims.Add("UserPets", user.UserPets.ToArray().Select(x => x.ToString()));
-
-            if (user.FirstName != null) claims.Add(ClaimTypes.GivenName, new[] {user.FirstName});
-            if (user.LastName != null) claims.Add(ClaimTypes.Surname, new[] {user.LastName});
-            if (user.PhoneNumber != null) claims.Add("PhoneNumber", new[] {user.PhoneNumber});
-            if (user.PhotoId != Guid.Empty) claims.Add("Avatar", new[] {user.PhotoId.ToString()});
-
-            AuthDto auth = _jwtProvider.Create(user.Id.Value, user.Role, claims: claims);
+            AuthDto auth = _jwtProvider.Create(user.Id.Value, user.Role, claims: new Dictionary<string, IEnumerable<string>>());
             auth.RefreshToken = await _refreshTokenService.CreateAsync(user.Id.Value);
             return auth;
         }
