@@ -23,7 +23,7 @@ namespace Lapka.Identity.Infrastructure.Queries.Handlers
             Shelter shelter = await _shelterRepository.GetByIdAsync(query.Id);
             if (shelter is null) throw new ShelterNotFoundException();
             
-            return shelter.AsDto();
+            return shelter.AsDto(query.Latitude, query.Longitude);
         }
     }
 }

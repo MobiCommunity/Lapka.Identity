@@ -27,11 +27,13 @@ namespace Lapka.Identity.Api.Controllers
         }
         
         [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetById(Guid id)
+        public async Task<IActionResult> GetById(Guid id, string longitude, string latitude)
         {
             return Ok(await _queryDispatcher.QueryAsync(new GetShelter
             {
-                Id = id
+                Id = id,
+                Longitude = longitude,
+                Latitude = latitude
             }));
         }
         
@@ -77,8 +79,12 @@ namespace Lapka.Identity.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ShelterDto>>> GetShelters() 
-            => Ok(await _queryDispatcher.QueryAsync(new GetShelters()));
+        public async Task<ActionResult<IEnumerable<ShelterDto>>> GetShelters(string longitude, string latitude) 
+            => Ok(await _queryDispatcher.QueryAsync(new GetShelters
+            {
+                Longitude = longitude,
+                Latitude = latitude
+            }));
 
     }
 }
