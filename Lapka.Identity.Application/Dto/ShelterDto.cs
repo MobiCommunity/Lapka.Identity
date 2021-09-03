@@ -20,5 +20,7 @@ namespace Lapka.Identity.Application.Dto
         public string PhoneNumber { get; set; }
         [Required]
         public string Email { get; set; }
+        [Required]
+        public double? Distance { get; set; }
     }
 }

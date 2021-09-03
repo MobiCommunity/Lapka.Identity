@@ -23,7 +23,7 @@ namespace Lapka.Identity.Infrastructure.Queries.Handlers
         public async Task<IEnumerable<ShelterDto>> HandleAsync(GetShelters query)
         {
             IEnumerable<Shelter> shelters = await _repository.GetAllAsync();
-            return shelters.Select(s => s.AsDto());
+            return shelters.Select(s => s.AsDto(query.Latitude, query.Longitude));
         }
     }
 }
