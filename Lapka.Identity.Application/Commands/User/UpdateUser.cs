@@ -9,9 +9,9 @@ namespace Lapka.Identity.Application.Commands
         public string Username { get; }
         public string FirstName { get;}
         public string LastName{ get; }
-        public string? PhoneNumber { get; }
+        public string PhoneNumber { get; }
 
-        public UpdateUser(Guid id, string username, string firstName, string lastName, string? phoneNumber)
+        public UpdateUser(Guid id, string username, string firstName, string lastName, string phoneNumber = null)
         {
             Id = id;
             Username = username;

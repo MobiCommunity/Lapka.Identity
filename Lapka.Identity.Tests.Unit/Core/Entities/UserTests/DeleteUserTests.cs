@@ -1,30 +1,26 @@
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.Events.Abstract;
 using Lapka.Identity.Core.Events.Concrete;
-using Lapka.Identity.Core.ValueObjects;
 using Shouldly;
 using Xunit;
 
 namespace Lapka.Identity.Tests.Unit.Core.Entities.UserTests
 {
-    public class UpdateUserPassword
+    public class DeleteUserTests
     {
         [Fact]
-        public void given_valid_user_password_should_be_updated()
+        public void given_valid_user_should_be_deleted()
         {
-            const string newPassword = "Newsecretpassword"; 
             User user = Extensions.ArrangeUser();
             
-            user.UpdatePassword(newPassword);
-
             user.ShouldNotBeNull();
-            user.Password.ShouldBe(newPassword);
+            user.Delete();
+            
             user.Events.Count().ShouldBe(1);
             IDomainEvent @event = user.Events.Single();
-            @event.ShouldBeOfType<UserUpdated>();
+            @event.ShouldBeOfType<UserDeleted>();
         }
     }
 }

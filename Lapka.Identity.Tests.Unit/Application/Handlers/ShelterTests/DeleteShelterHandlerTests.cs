@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Lapka.Identity.Application.Commands;
 using Lapka.Identity.Application.Commands.Handlers.Shelter;
@@ -6,25 +5,30 @@ using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Shelter;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.ValueObjects;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Xunit;
 
-namespace Lapka.Identity.Tests.Unit.Application.Handlers
+namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
 {
-    public class UpdateShelterHandlerTests
+    public class DeleteShelterHandlerTests
     {
         private readonly IEventProcessor _eventProcessor;
-        private readonly UpdateShelterHandler _handler;
+        private readonly ILogger<DeleteShelterHandler> _logger;
+        private readonly DeleteShelterHandler _handler;
+        private readonly IGrpcPhotoService _photoService;
         private readonly IShelterRepository _shelterRepository;
 
-        public UpdateShelterHandlerTests()
+        public DeleteShelterHandlerTests()
         {
             _shelterRepository = Substitute.For<IShelterRepository>();
+            _logger = Substitute.For<ILogger<DeleteShelterHandler>>();
+            _photoService = Substitute.For<IGrpcPhotoService>();
             _eventProcessor = Substitute.For<IEventProcessor>();
-            _handler = new UpdateShelterHandler(_shelterRepository, _eventProcessor);
+            _handler = new DeleteShelterHandler(_logger, _shelterRepository, _eventProcessor, _photoService);
         }
 
-        private Task Act(UpdateShelter command)
+        private Task Act(DeleteShelter command)
         {
             return _handler.HandleAsync(command);
         }
@@ -37,15 +41,14 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
             Shelter shelter = Shelter.Create(shelterArrange.Id.Value, shelterArrange.Name, shelterArrange.Address,
                 shelterArrange.GeoLocation, shelterArrange.PhotoId, shelterArrange.PhoneNumber, shelterArrange.Email, shelterArrange.BankNumber);
 
-            UpdateShelter command = new UpdateShelter(shelter.Id.Value, "new name", "111222333",
-                "newemail@laapka.com", Extensions.ArrangeAddress("rzeszowska 101", "33-333 Rzeszów",
-                    "Nowe City"), Extensions.ArrangeLocation(latitude: "5", longitude: "50"), "32483283284238");
+            DeleteShelter command = new DeleteShelter(shelter.Id.Value);
 
             _shelterRepository.GetByIdAsync(command.Id).Returns(shelter);
 
             await Act(command);
 
-            await _shelterRepository.Received().UpdateAsync(shelter);
+            await _shelterRepository.Received().DeleteAsync(shelter);
+            await _photoService.DeleteAsync(shelter.PhotoId, BucketName.PetPhotos);
             await _eventProcessor.Received().ProcessAsync(shelter.Events);
         }
     }

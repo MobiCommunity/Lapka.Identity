@@ -1,15 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Lapka.Identity.Application.Commands;
 using Lapka.Identity.Application.Commands.Handlers.Auth;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Core.Entities;
-using Lapka.Identity.Core.ValueObjects;
 using NSubstitute;
 using Xunit;
 
-namespace Lapka.Identity.Tests.Unit.Application.Handlers
+namespace Lapka.Identity.Tests.Unit.Application.Handlers.AuthTests
 {
     public class SignUpHandlerTests
     {

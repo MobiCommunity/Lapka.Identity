@@ -13,11 +13,13 @@ namespace Lapka.Identity.Application.Commands.Handlers
 {
     public class UpdateUserPhotoHandler : ICommandHandler<UpdateUserPhoto>
     {
+        private readonly IEventProcessor _eventProcessor;
         private readonly IUserRepository _userRepository;
         private readonly IGrpcPhotoService _grpcPhotoService;
 
-        public UpdateUserPhotoHandler(IUserRepository userRepository, IGrpcPhotoService grpcPhotoService)
+        public UpdateUserPhotoHandler(IEventProcessor eventProcessor, IUserRepository userRepository, IGrpcPhotoService grpcPhotoService)
         {
+            _eventProcessor = eventProcessor;
             _userRepository = userRepository;
             _grpcPhotoService = grpcPhotoService;
         }
@@ -29,22 +31,32 @@ namespace Lapka.Identity.Application.Commands.Handlers
                 throw new UserNotFoundException(command.UserId.ToString());
             }
             
-            try
-            {
-                if (Guid.Empty != user.PhotoId)
-                {
-                    await _grpcPhotoService.DeleteAsync(user.PhotoId, BucketName.UserPhotos);
-                }
-                
-                await _grpcPhotoService.AddAsync(command.Photo.Id, command.Photo.Name, command.Photo.Content, BucketName.UserPhotos);
-            }
-            catch(Exception ex)
-            {
-                throw new CannotRequestFilesMicroserviceException(ex);
-            }
+            await ReplaceThePhoto(command, user);
             
             user.UpdatePhoto(command.Photo.Id);
             await _userRepository.UpdateAsync(user);
+            await _eventProcessor.ProcessAsync(user.Events);
+        }
+
+        private async Task ReplaceThePhoto(UpdateUserPhoto command, User user)
+        {
+            try
+            {
+                await DeletePhoto(user);
+                await _grpcPhotoService.AddAsync(command.Photo.Id, command.Photo.Name, command.Photo.Content, BucketName.UserPhotos);
+            }
+            catch (Exception ex)
+            {
+                throw new CannotRequestFilesMicroserviceException(ex);
+            }
+        }
+
+        private async Task DeletePhoto(User user)
+        {
+            if (Guid.Empty != user.PhotoId)
+            {
+                await _grpcPhotoService.DeleteAsync(user.PhotoId, BucketName.UserPhotos);
+            }
         }
     }
 }

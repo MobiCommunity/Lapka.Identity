@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using Lapka.Identity.Core.Events.Abstract;
 using Lapka.Identity.Core.Events.Concrete;
 using Lapka.Identity.Core.Exceptions;
@@ -15,11 +16,13 @@ namespace Lapka.Identity.Core.Entities
         public Guid PhotoId { get; private set; }
         public string PhoneNumber { get; private set; }
         public string Email { get; private set; }
-        public string? BankNumber { get; private set; }
+        public string BankNumber { get; private set; }
 
         public Shelter(Guid id, string name, Address address, Location location, Guid photoId, string phoneNumber,
             string email, string bankNumber)
         {
+            ValidShelter(name, phoneNumber, email, bankNumber);
+
             Id = new AggregateId(id);
             Name = name;
             Address = address;
@@ -59,8 +62,6 @@ namespace Lapka.Identity.Core.Entities
         public static Shelter Create(Guid id, string name, Address address, Location location, Guid photoId,
             string phoneNumber, string email, string bankNumber)
         {
-            ValidShelter(name, phoneNumber, email, bankNumber);
-
             Shelter shelter = new Shelter(id, name, address, location, photoId, phoneNumber, email, bankNumber);
             shelter.AddEvent(new ShelterCreated(shelter));
             return shelter;
@@ -82,7 +83,16 @@ namespace Lapka.Identity.Core.Entities
         }
 
         private static bool IsEmailInvalid(string email) => string.IsNullOrWhiteSpace(email);
-        private static bool IsPhoneNumberInvalid(string phoneNumber) => string.IsNullOrWhiteSpace(phoneNumber);
+
+        private static bool IsPhoneNumberInvalid(string phoneNumber)
+        {
+            if (PhoneNumberRegex.IsMatch(phoneNumber))
+            {
+                return false;
+            }
+
+            return true;
+        }
         private static bool IsNameInvalid(string name) => string.IsNullOrWhiteSpace(name);
 
         private static bool IsBankNumberInvalid(string bankNumber)
@@ -94,5 +104,9 @@ namespace Lapka.Identity.Core.Entities
 
             return false;
         }
+        
+        private static readonly Regex PhoneNumberRegex =
+            new Regex(@"(?<!\w)(\(?(\+|00)?48\)?)?[ -]?\d{3}[ -]?\d{3}[ -]?\d{3}(?!\w)",
+                RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
     }
 }
