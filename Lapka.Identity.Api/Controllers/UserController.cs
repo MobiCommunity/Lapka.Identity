@@ -35,8 +35,6 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// At the moment for testing purpose to get user's IDs
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetUser() => Ok(await _queryDispatcher.QueryAsync(new GetUsers()));
 

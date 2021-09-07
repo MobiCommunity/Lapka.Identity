@@ -30,10 +30,9 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.UserTests
         [InlineData("t.com")]
         [InlineData("t@.com")]
         [InlineData("t@com")]
-        [InlineData("t@.com")]
         [InlineData("")]
         [InlineData(" ")]
-        public void given_invalid_user_phone_number_should_throw_an_exception(string email)
+        public void given_invalid_user_email_should_throw_an_exception(string email)
         {
             User user = Extensions.ArrangeUser();
 

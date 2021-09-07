@@ -13,7 +13,7 @@ namespace Lapka.Identity.Infrastructure.Exceptions
         public Guid PhotoId { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
-        public string? BankNumber { get; set; }
+        public string BankNumber { get; set; }
         
     }
 }

@@ -86,8 +86,7 @@ namespace Lapka.Identity.Infrastructure
             services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddSingleton<IGrpcPhotoService, GrpcPhotoService>();
-            services.AddTransient<IGoogleAuthHelper, GoogleAuthHelper>();
-            services.AddTransient<IGrpcPetService, GrpcPetService>();
+            services.AddTransient<IGoogleAuthenticator, GoogleAuthenticator>();
             services.AddScoped<IGrpcPhotoService, GrpcPhotoService>();
 
             FacebookAuthSettings facebookOptions = new FacebookAuthSettings();
@@ -98,23 +97,14 @@ namespace Lapka.Identity.Infrastructure
             configuration.GetSection("filesMicroservice").Bind(filesMicroserviceOptions);
             services.AddSingleton(filesMicroserviceOptions);
             
-            PetsMicroserviceOptions petsMicroserviceOptions = new PetsMicroserviceOptions();
-            configuration.GetSection("petsMicroservice").Bind(petsMicroserviceOptions);
-            services.AddSingleton(petsMicroserviceOptions);
-
             services.AddHttpClient();
-            services.AddSingleton<IFacebookAuthHelper, FacebookAuthHelper>();
+            services.AddSingleton<IFacebookAuthenticator, FacebookAuthenticator>();
 
             services.AddGrpcClient<PhotoProto.PhotoProtoClient>(o =>
             {
                 o.Address = new Uri(filesMicroserviceOptions.UrlHttp2);
             });
-            
-            services.AddGrpcClient<PetProto.PetProtoClient>(o =>
-            {
-                o.Address = new Uri(petsMicroserviceOptions.UrlHttp2);
-            });
-            
+
             builder.Services.Scan(s => s.FromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
                 .AddClasses(c => c.AssignableTo(typeof(IDomainEventHandler<>)))
                 .AsImplementedInterfaces().WithTransientLifetime());

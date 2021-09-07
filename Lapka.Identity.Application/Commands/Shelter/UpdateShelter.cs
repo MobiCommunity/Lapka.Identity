@@ -12,7 +12,7 @@ namespace Lapka.Identity.Application.Commands
         public Address Address { get; }
         public string PhoneNumber { get; }
         public string Email { get; }
-        public string? BankNumber { get; }
+        public string BankNumber { get; }
 
 
         public UpdateShelter(Guid id, string name, string phoneNumber, string email, Address address,

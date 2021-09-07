@@ -3,7 +3,7 @@ using Lapka.Identity.Core.ValueObjects;
 
 namespace Lapka.Identity.Application.Services.Auth
 {
-    public interface IGoogleAuthHelper
+    public interface IGoogleAuthenticator
     {
         Task<GoogleUser> GetUserInfoAsync(string accessToken);
     }
