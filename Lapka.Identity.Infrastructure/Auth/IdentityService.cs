@@ -72,7 +72,7 @@ namespace Lapka.Identity.Infrastructure.Auth
             }
             else
             {
-                user.Update(user.Email, googleUser.GivenName, googleUser.FamilyName, user.PhoneNumber, user.Role);
+                user.Update(user.Email, googleUser.GivenName, googleUser.FamilyName, user.PhoneNumber);
             }
             
             await CheckIfPhotoUpdated(user, googleUser.Picture);
@@ -133,7 +133,7 @@ namespace Lapka.Identity.Infrastructure.Auth
             }
             else
             {
-                user.Update(user.Email, userInfo.FirstName, userInfo.LastName, user.PhoneNumber, user.Role);
+                user.Update(user.Email, userInfo.FirstName, userInfo.LastName, user.PhoneNumber);
             }
             
             await CheckIfPhotoUpdated(user, userInfo.FacebookPicture.Data.Url.AbsoluteUri);

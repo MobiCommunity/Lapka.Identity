@@ -11,10 +11,6 @@ namespace Lapka.Identity.Core.Entities
         public DateTime? RevokedAt { get; private set; }
         public bool Revoked => RevokedAt.HasValue;
         
-        protected RefreshToken()
-        {
-        }
-
         public RefreshToken(Guid id, Guid userId, string token, DateTime createdAt,
             DateTime? revokedAt = null)
         {

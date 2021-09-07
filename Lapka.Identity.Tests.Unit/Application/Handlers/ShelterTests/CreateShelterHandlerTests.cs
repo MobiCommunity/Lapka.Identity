@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Lapka.Identity.Application.Commands;
@@ -17,9 +16,8 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Shouldly;
 using Xunit;
-using File = Lapka.Identity.Core.ValueObjects.File;
 
-namespace Lapka.Identity.Tests.Unit.Application.Handlers
+namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
 {
     public class CreatePetHandlerTests
     {
@@ -48,7 +46,7 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
         {
             Guid photoId = Guid.NewGuid();
             Shelter shelter = Extensions.ArrangeShelter(photoId: photoId);
-            PhotoFile file = Extensions.ArrangePhotoFile(id: photoId);
+            PhotoFile file = Extensions.ArrangePhotoFile(photoId);
 
             CreateShelter command = new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
                 shelter.Email, shelter.Address, shelter.GeoLocation, file, shelter.BankNumber);
@@ -74,11 +72,10 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
         [Fact]
         public async Task given_invalid_shelter_name_should_throw_an_exception()
         {
-            Shelter shelter = Extensions.ArrangeShelter(name: "");
+            Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
-            Guid photoId = Guid.NewGuid();
 
-            CreateShelter command = new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
+            CreateShelter command = new CreateShelter(shelter.Id.Value, "", shelter.PhoneNumber,
                 shelter.Email, shelter.Address, shelter.GeoLocation, file, shelter.BankNumber);
 
             Exception exception = await Record.ExceptionAsync(async () => await Act(command));
@@ -90,11 +87,10 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
         [Fact]
         public async Task given_invalid_shelter_phone_number_should_throw_an_exception()
         {
-            Shelter shelter = Extensions.ArrangeShelter(phoneNumber: "");
+            Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
-            Guid photoId = Guid.NewGuid();
 
-            CreateShelter command = new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
+            CreateShelter command = new CreateShelter(shelter.Id.Value, shelter.Name, "",
                 shelter.Email, shelter.Address, shelter.GeoLocation, file, shelter.BankNumber);
 
             Exception exception = await Record.ExceptionAsync(async () => await Act(command));
@@ -106,12 +102,11 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
         [Fact]
         public async Task given_invalid_shelter_email_should_throw_an_exception()
         {
-            Shelter shelter = Extensions.ArrangeShelter(email: "");
+            Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
-            Guid photoId = Guid.NewGuid();
 
             CreateShelter command = new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
-                shelter.Email, shelter.Address, shelter.GeoLocation, file, shelter.BankNumber);
+                "", shelter.Address, shelter.GeoLocation, file, shelter.BankNumber);
 
             Exception exception = await Record.ExceptionAsync(async () => await Act(command));
 
@@ -124,7 +119,6 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
         {
             Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
-            Guid photoId = Guid.NewGuid();
 
             Exception exception = await Record.ExceptionAsync(async () =>
                 await Act(new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
@@ -139,7 +133,6 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
         {
             Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
-            Guid photoId = Guid.NewGuid();
 
             Exception exception = await Record.ExceptionAsync(async () =>
                 await Act(new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
@@ -154,7 +147,6 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
         {
             Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
-            Guid photoId = Guid.NewGuid();
 
             Exception exception = await Record.ExceptionAsync(async () =>
                 await Act(new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
@@ -169,7 +161,6 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
         {
             Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
-            Guid photoId = Guid.NewGuid();
 
             Exception exception = await Record.ExceptionAsync(async () =>
                 await Act(new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
@@ -184,7 +175,6 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
         {
             Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
-            Guid photoId = Guid.NewGuid();
 
             Exception exception = await Record.ExceptionAsync(async () =>
                 await Act(new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
@@ -199,7 +189,6 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
         {
             Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
-            Guid photoId = Guid.NewGuid();
 
             Exception exception = await Record.ExceptionAsync(async () =>
                 await Act(new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
@@ -214,7 +203,6 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
         {
             Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
-            Guid photoId = Guid.NewGuid();
 
             Exception exception = await Record.ExceptionAsync(async () => await Act(new CreateShelter(shelter.Id.Value,
                 shelter.Name, shelter.PhoneNumber,
@@ -229,7 +217,6 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
         {
             Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
-            Guid photoId = Guid.NewGuid();
 
             Exception exception = await Record.ExceptionAsync(async () => await Act(new CreateShelter(shelter.Id.Value,
                 shelter.Name, shelter.PhoneNumber, shelter.Email, shelter.Address,
@@ -244,7 +231,6 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers
         {
             Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
-            Guid photoId = Guid.NewGuid();
 
             Exception exception = await Record.ExceptionAsync(async () =>
                 await Act(new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,

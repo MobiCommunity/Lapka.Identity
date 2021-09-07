@@ -13,18 +13,22 @@ namespace Lapka.Identity.Core.Entities
     public class User : AggregateRoot
     {
         public string Username { get; private set; }
-        public string? FirstName { get; private set; }
-        public string? LastName { get; private set; }
+        public string FirstName { get; private set; }
+        public string LastName { get; private set; }
         public string Email { get; private set; }
         public string Password { get; private set; }
-        public string? PhoneNumber { get; private set; }
+        public string PhoneNumber { get; private set; }
         public Guid PhotoId { get; private set; }
-        public DateTime CreatedAt { get; private set; }
+        public DateTime CreatedAt { get; }
         public string Role { get; private set; }
 
-        public User(Guid id, string username, string? firstName, string? lastName, string email, string password,
-            string? phoneNumber, Guid photoId, DateTime createdAt, string role)
+        public User(Guid id, string username, string firstName, string lastName, string email, string password,
+            string phoneNumber, Guid photoId, DateTime createdAt, string role)
         {
+            Validate(username, firstName, lastName, phoneNumber);
+            ValidateEmail(email);
+            ValidatePassword(password);
+            
             Id = new AggregateId(id);
             Username = username;
             FirstName = firstName;
@@ -35,29 +39,33 @@ namespace Lapka.Identity.Core.Entities
             PhotoId = photoId;
             CreatedAt = createdAt;
             Role = role;
-
-            Validate();
         }
 
-        public static User Create(Guid id, string username, string? firstName, string? lastName, string email,
+        public static User Create(Guid id, string username, string firstName, string lastName, string email,
             string password, DateTime createdAt, string role)
         {
-            User user = new User(id, username, firstName, lastName, email, password, phoneNumber: null, photoId: Guid.Empty, 
+            User user = new User(id, username, firstName, lastName, email, password, phoneNumber: string.Empty, photoId: Guid.Empty, 
                 createdAt, role);
 
             user.AddEvent(new UserCreated(user));
             return user;
         }
 
-        public void Update(string username, string? firstName, string? lastName, string? phoneNumber, string role)
+        public void Update(string username, string firstName, string lastName, string phoneNumber)
         {
+            Validate(username, firstName, lastName, phoneNumber);
+
             Username = username;
             FirstName = firstName;
             LastName = lastName;
             PhoneNumber = phoneNumber;
-            Role = role;
 
-            Validate();
+            AddEvent(new UserUpdated(this));
+        }
+        
+        public void ChangeRole(string role)
+        {
+            Role = role;
 
             AddEvent(new UserUpdated(this));
         }
@@ -71,6 +79,7 @@ namespace Lapka.Identity.Core.Entities
 
         public void UpdatePassword(string password)
         {
+            ValidatePassword(password);
             Password = password;
 
             AddEvent(new UserUpdated(this));
@@ -78,8 +87,8 @@ namespace Lapka.Identity.Core.Entities
 
         public void UpdateEmail(string email)
         {
+            ValidateEmail(email);
             Email = email;
-            ValidateEmail();
 
             AddEvent(new UserUpdated(this));
         }
@@ -89,75 +98,95 @@ namespace Lapka.Identity.Core.Entities
             AddEvent(new UserDeleted(this));
         }
 
-        private void Validate()
+        private static void Validate(string username, string firstName, string lastName, string phoneNumber)
         {
-            ValidateUsername();
-            ValidateFirstName();
-            ValidateLastName();
-            ValidateEmail();
-            ValidatePhoneNumber();
+            ValidateUsername(username);
+            ValidateFirstName(firstName);
+            ValidateLastName(lastName);
+            ValidatePhoneNumber(phoneNumber);
         }
 
-        private void ValidatePhoneNumber()
+        private static void ValidatePhoneNumber(string phoneNumber)
         {
-            if (string.IsNullOrWhiteSpace(PhoneNumber)) return;
+            if (string.IsNullOrWhiteSpace(phoneNumber)) return;
 
-            if (!PhoneNumberRegex.IsMatch(PhoneNumber))
+            if (!PhoneNumberRegex.IsMatch(phoneNumber))
             {
-                throw new InvalidPhoneNumberException(PhoneNumber);
-            }
-        }
-
-        private void ValidateEmail()
-        {
-            if (!EmailRegex.IsMatch(Email))
-            {
-                throw new InvalidEmailValueException(Email);
+                throw new InvalidPhoneNumberException(phoneNumber);
             }
         }
 
-        private void ValidateFirstName()
+        private static void ValidateEmail(string email)
         {
-            if (string.IsNullOrWhiteSpace(FirstName)) return;
-
-            if (FirstName.Length < 2)
+            if (!EmailRegex.IsMatch(email))
             {
-                throw new TooShortUserFirstNameException(FirstName);
+                throw new InvalidEmailValueException(email);
             }
-
-            if (FirstName.Length > 50)
+        }
+        
+        private static void ValidatePassword(string password)
+        {
+            if (password.Length < MinimumPasswordLength)
             {
-                throw new TooLongUserFirstNameException(FirstName);
+                throw new TooShortPasswordException();
             }
         }
 
-        private void ValidateLastName()
+        private static void ValidateFirstName(string firstName)
         {
-            if (string.IsNullOrWhiteSpace(LastName)) return;
+            if (string.IsNullOrWhiteSpace(firstName)) return;
 
-            if (LastName.Length < 2)
+            if (firstName.Length < MinimumFirstNameLength)
             {
-                throw new TooShortUserLastNameException(LastName);
+                throw new TooShortUserFirstNameException(firstName);
             }
 
-            if (LastName.Length > 50)
+            if (firstName.Length > MaximumFirstNameLength)
             {
-                throw new TooLongUserLastNameException(LastName);
+                throw new TooLongUserFirstNameException(firstName);
             }
         }
 
-        private void ValidateUsername()
+        private static void ValidateLastName(string lastName)
         {
-            if (string.IsNullOrWhiteSpace(Username))
+            if (string.IsNullOrWhiteSpace(lastName)) return;
+
+            if (lastName.Length < MinimumLastNameLength)
             {
-                throw new InvalidUsernameValueException(Username);
+                throw new TooShortUserLastNameException(lastName);
             }
 
-            if (Username.Length < 2)
+            if (lastName.Length > MaximumLastNameLength)
             {
-                throw new UsernameTooShortException(Username);
+                throw new TooLongUserLastNameException(lastName);
             }
         }
+
+        private static void ValidateUsername(string username)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                throw new InvalidUsernameValueException(username);
+            }
+
+            if (username.Length < MinimumUsernameLength)
+            {
+                throw new UsernameTooShortException(username);
+            }
+            
+            if (username.Length > MaximumUsernameLength)
+            {
+                throw new UsernameTooLongException(username);
+            }
+        }
+
+        private const int MinimumPasswordLength = 6;
+        private const int MinimumUsernameLength = 2;
+        private const int MinimumFirstNameLength = 2;
+        private const int MinimumLastNameLength = 2;
+        private const int MaximumUsernameLength = 20;
+        private const int MaximumFirstNameLength = 20;
+        private const int MaximumLastNameLength = 20;
 
         private static readonly Regex EmailRegex = new Regex(
             @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +

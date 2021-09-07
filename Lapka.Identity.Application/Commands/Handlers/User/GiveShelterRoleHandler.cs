@@ -26,7 +26,7 @@ namespace Lapka.Identity.Application.Commands.Handlers
                 throw new UserNotFoundException(command.UserId.ToString());
             }
             
-            user.Update(user.Username, user.FirstName, user.LastName, user.PhoneNumber, "shelter");
+            user.ChangeRole("shelter");
 
             await _userRepository.UpdateAsync(user);
             await _eventProcessor.ProcessAsync(user.Events);
