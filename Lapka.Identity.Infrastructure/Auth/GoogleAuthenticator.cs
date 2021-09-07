@@ -8,11 +8,11 @@ using static Google.Apis.Auth.GoogleJsonWebSignature;
 
 namespace Lapka.Identity.Infrastructure.Auth
 {
-    public class GoogleAuthHelper : IGoogleAuthHelper
+    public class GoogleAuthenticator : IGoogleAuthenticator
     {
         private readonly GoogleAuthSettings _googleAuthSettings;
 
-        public GoogleAuthHelper(GoogleAuthSettings googleAuthSettings)
+        public GoogleAuthenticator(GoogleAuthSettings googleAuthSettings)
         {
             _googleAuthSettings = googleAuthSettings;
         }

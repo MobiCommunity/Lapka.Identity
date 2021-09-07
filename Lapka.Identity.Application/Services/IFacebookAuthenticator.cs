@@ -3,7 +3,7 @@ using Lapka.Identity.Application.Dto;
 
 namespace Lapka.Identity.Application.Services
 {
-    public interface IFacebookAuthHelper
+    public interface IFacebookAuthenticator
     {
         Task<FacebookTokenValidationResult> ValidateAccessTokenAsync(string accessToken);
 

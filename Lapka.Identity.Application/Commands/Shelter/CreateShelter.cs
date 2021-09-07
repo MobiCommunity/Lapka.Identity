@@ -14,7 +14,7 @@ namespace Lapka.Identity.Application.Commands
         public string PhoneNumber { get; }
         public string Email { get; }
         public PhotoFile Photo { get; }
-        public string? BankNumber { get; }
+        public string BankNumber { get; }
 
         public CreateShelter(Guid id, string name, string phoneNumber, string email, Address address, 
             Location geoLocation, PhotoFile photo, string bankNumber)

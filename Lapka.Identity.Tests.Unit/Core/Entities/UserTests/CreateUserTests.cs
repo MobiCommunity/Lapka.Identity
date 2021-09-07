@@ -49,7 +49,6 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.UserTests
         [InlineData("t.com")]
         [InlineData("t@.com")]
         [InlineData("t@com")]
-        [InlineData("t@.com")]
         [InlineData("")]
         [InlineData(" ")]
         public void given_invalid_user_email_should_throw_an_exception(string invalidEmail)

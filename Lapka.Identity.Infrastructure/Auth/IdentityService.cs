@@ -22,21 +22,21 @@ namespace Lapka.Identity.Infrastructure.Auth
         private readonly IPasswordService _passwordService;
         private readonly IJwtProvider _jwtProvider;
         private readonly IRefreshTokenService _refreshTokenService;
-        private readonly IFacebookAuthHelper _facebookAuthHelper;
-        private readonly IGoogleAuthHelper _googleAuthHelper;
+        private readonly IFacebookAuthenticator _facebookAuthenticator;
+        private readonly IGoogleAuthenticator _googleAuthenticator;
         private readonly IGrpcPhotoService _photoService;
         private readonly IGrpcPetService _grpcPetService;
 
         public IdentityService(IUserRepository userRepository, IPasswordService passwordService,
-            IJwtProvider jwtProvider, IRefreshTokenService refreshTokenService, IFacebookAuthHelper facebookAuthHelper,
-            IGoogleAuthHelper googleAuthHelper, IGrpcPhotoService photoService, IGrpcPetService grpcPetService)
+            IJwtProvider jwtProvider, IRefreshTokenService refreshTokenService, IFacebookAuthenticator facebookAuthenticator,
+            IGoogleAuthenticator googleAuthenticator, IGrpcPhotoService photoService, IGrpcPetService grpcPetService)
         {
             _userRepository = userRepository;
             _passwordService = passwordService;
             _jwtProvider = jwtProvider;
             _refreshTokenService = refreshTokenService;
-            _facebookAuthHelper = facebookAuthHelper;
-            _googleAuthHelper = googleAuthHelper;
+            _facebookAuthenticator = facebookAuthenticator;
+            _googleAuthenticator = googleAuthenticator;
             _photoService = photoService;
             _grpcPetService = grpcPetService;
         }
@@ -61,7 +61,7 @@ namespace Lapka.Identity.Infrastructure.Auth
 
         public async Task<AuthDto> SignInByGoogleAsync(SignInGoogle command)
         {
-            GoogleUser googleUser = await _googleAuthHelper.GetUserInfoAsync(command.AccessToken);
+            GoogleUser googleUser = await _googleAuthenticator.GetUserInfoAsync(command.AccessToken);
             User user = await _userRepository.GetAsync(googleUser.Email);
 
             if (user is null)
@@ -114,14 +114,14 @@ namespace Lapka.Identity.Infrastructure.Auth
         public async Task<AuthDto> FacebookLoginAsync(SignInFacebook command)
         {
             FacebookTokenValidationResult validatedTokenResult =
-                await _facebookAuthHelper.ValidateAccessTokenAsync(command.AccessToken);
+                await _facebookAuthenticator.ValidateAccessTokenAsync(command.AccessToken);
 
             if (!validatedTokenResult.Data.IsValid)
             {
                 throw new InvalidAccessTokenException(command.AccessToken);
             }
 
-            FacebookUserInfoResult userInfo = await _facebookAuthHelper.GetUserInfoAsync(command.AccessToken);
+            FacebookUserInfoResult userInfo = await _facebookAuthenticator.GetUserInfoAsync(command.AccessToken);
 
             User user = await _userRepository.GetAsync(userInfo.Email);
 

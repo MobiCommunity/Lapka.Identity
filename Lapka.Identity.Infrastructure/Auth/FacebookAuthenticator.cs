@@ -9,12 +9,12 @@ using Newtonsoft.Json;
 
 namespace Lapka.Identity.Infrastructure.Services
 {
-    public class FacebookAuthHelper : IFacebookAuthHelper
+    public class FacebookAuthenticator : IFacebookAuthenticator
     {
         private readonly FacebookAuthSettings _facebookAuthSettings;
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public FacebookAuthHelper(FacebookAuthSettings facebookAuthSettings, IHttpClientFactory httpClientFactory)
+        public FacebookAuthenticator(FacebookAuthSettings facebookAuthSettings, IHttpClientFactory httpClientFactory)
         {
             _facebookAuthSettings = facebookAuthSettings;
             _httpClientFactory = httpClientFactory;
