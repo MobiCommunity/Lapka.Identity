@@ -1,15 +1,15 @@
-using Convey.CQRS.Commands;
-using Convey.CQRS.Queries;
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Convey.CQRS.Commands;
+using Convey.CQRS.Queries;
 using Lapka.Identity.Api.Models;
 using Lapka.Identity.Api.Models.Request;
-using Lapka.Identity.Application.Commands;
+using Lapka.Identity.Application.Commands.Shelters;
 using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Queries;
 using Lapka.Identity.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Lapka.Identity.Api.Controllers
 {
@@ -40,31 +40,32 @@ namespace Lapka.Identity.Api.Controllers
         [HttpPatch("{id:guid}")]
         public async Task<IActionResult> Update(Guid id, UpdateShelterRequest shelter)
         {
-            string userRole = await HttpContext.AuthenticateUsingJwtGetUserRoleAsync();
-            if (string.IsNullOrEmpty(userRole) || userRole != "shelter")
+            UserAuth userAuth = await HttpContext.AuthenticateUsingJwtGetUserAuthAsync();
+            if (userAuth is null)
             {
                 return Unauthorized();
             }
 
-            await _commandDispatcher.SendAsync(new UpdateShelter(id, shelter.Name,
+            await _commandDispatcher.SendAsync(new UpdateShelter(id, userAuth, shelter.Name,
                 shelter.PhoneNumber, shelter.Email, shelter.Address.AsValueObject(),
                 shelter.GeoLocation.AsValueObject(), shelter.BankNumber));
 
             return NoContent();
         }
-        
+
         [HttpPatch("{id:guid}/photo")]
         public async Task<IActionResult> UpdatePhoto(Guid id, [FromForm] UpdateShelterPhotoRequest shelter)
         {
-            string userRole = await HttpContext.AuthenticateUsingJwtGetUserRoleAsync();
-            if (string.IsNullOrEmpty(userRole) || userRole != "shelter")
+            UserAuth userAuth = await HttpContext.AuthenticateUsingJwtGetUserAuthAsync();
+            if (userAuth is null)
             {
                 return Unauthorized();
             }
 
             Guid photoId = Guid.NewGuid();
 
-            await _commandDispatcher.SendAsync(new UpdateShelterPhoto(id, shelter.Photo.AsValueObject(photoId)));
+            await _commandDispatcher.SendAsync(new UpdateShelterPhoto(id, userAuth,
+                shelter.Photo.AsValueObject(photoId)));
 
             return NoContent();
         }
@@ -72,8 +73,8 @@ namespace Lapka.Identity.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Add([FromForm] CreateShelterRequest createShelterRequest)
         {
-            string userRole = await HttpContext.AuthenticateUsingJwtGetUserRoleAsync();
-            if (string.IsNullOrEmpty(userRole) || userRole != "shelter")
+            UserAuth userAuth = await HttpContext.AuthenticateUsingJwtGetUserAuthAsync();
+            if (userAuth is null)
             {
                 return Unauthorized();
             }
@@ -81,7 +82,7 @@ namespace Lapka.Identity.Api.Controllers
             Guid id = Guid.NewGuid();
             Guid photoId = Guid.NewGuid();
 
-            await _commandDispatcher.SendAsync(new CreateShelter(id, createShelterRequest.Name,
+            await _commandDispatcher.SendAsync(new CreateShelter(id, userAuth, createShelterRequest.Name,
                 createShelterRequest.PhoneNumber, createShelterRequest.Email,
                 createShelterRequest.Address.AsValueObject(),
                 createShelterRequest.GeoLocation.AsValueObject(), createShelterRequest.Photo.AsValueObject(photoId),
@@ -93,24 +94,25 @@ namespace Lapka.Identity.Api.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            string userRole = await HttpContext.AuthenticateUsingJwtGetUserRoleAsync();
-            if (string.IsNullOrEmpty(userRole) || userRole != "shelter")
+            UserAuth userAuth = await HttpContext.AuthenticateUsingJwtGetUserAuthAsync();
+            if (userAuth is null)
             {
                 return Unauthorized();
             }
-
-            await _commandDispatcher.SendAsync(new DeleteShelter(id));
+            
+            await _commandDispatcher.SendAsync(new DeleteShelter(id, userAuth));
 
             return NoContent();
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ShelterDto>>> GetShelters(string longitude, string latitude) 
-            => Ok(await _queryDispatcher.QueryAsync(new GetShelters
+        public async Task<ActionResult<IEnumerable<ShelterDto>>> GetShelters(string longitude, string latitude)
+        {
+            return Ok(await _queryDispatcher.QueryAsync(new GetShelters
             {
                 Longitude = longitude,
                 Latitude = latitude
             }));
-
+        }
     }
 }

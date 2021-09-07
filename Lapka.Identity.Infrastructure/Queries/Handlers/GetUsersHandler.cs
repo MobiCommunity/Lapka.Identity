@@ -1,27 +1,26 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Convey.CQRS.Queries;
+using Convey.Persistence.MongoDB;
 using Lapka.Identity.Application.Dto;
-using Lapka.Identity.Application.Exceptions;
 using Lapka.Identity.Application.Queries;
-using Lapka.Identity.Application.Services.User;
-using Lapka.Identity.Core.Entities;
+using Lapka.Identity.Infrastructure.Documents;
 
 namespace Lapka.Identity.Infrastructure.Queries.Handlers
 {
     public class GetUsersHandler : IQueryHandler<GetUsers, IEnumerable<UserDto>>
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IMongoRepository<UserDocument, Guid> _repository;
 
-        public GetUsersHandler(IUserRepository userRepository)
+        public GetUsersHandler(IMongoRepository<UserDocument, Guid> repository)
         {
-            _userRepository = userRepository;
+            _repository = repository;
         }
         public async Task<IEnumerable<UserDto>> HandleAsync(GetUsers query)
         {
-            IEnumerable<User> users = await _userRepository.GetAllAsync();
+            IEnumerable<UserDocument> users = await _repository.FindAsync(_ => true);
 
             return users.Select(x => x.AsDto());
         }

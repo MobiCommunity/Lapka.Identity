@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Lapka.Identity.Api.Models.Request
+namespace Lapka.Identity.Api.Models.Request.User
 {
     public class UpdateUserRequest
     {

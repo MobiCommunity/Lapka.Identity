@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Lapka.Identity.Application.Dto;
+using Lapka.Identity.Application.Dto.Auths;
 
 namespace Lapka.Identity.Application.Services
 {

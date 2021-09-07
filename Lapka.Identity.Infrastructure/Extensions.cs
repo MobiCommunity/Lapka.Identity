@@ -13,12 +13,13 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Convey.Auth;
 using Convey.Persistence.MongoDB;
+using Lapka.Identity.Api.Models;
 using Lapka.Identity.Application.Events.Abstract;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Auth;
 using Lapka.Identity.Application.Services.Shelter;
 using Lapka.Identity.Application.Services.User;
-using Lapka.Identity.Infrastructure.Auth;
+using Lapka.Identity.Infrastructure.Auths;
 using Lapka.Identity.Infrastructure.Documents;
 using Lapka.Identity.Infrastructure.Exceptions;
 using Lapka.Identity.Infrastructure.Options;
@@ -48,6 +49,7 @@ namespace Lapka.Identity.Infrastructure
                 .AddMongoRepository<ShelterDocument, Guid>("Shelters")
                 .AddMongoRepository<UserDocument, Guid>("Users")
                 .AddMongoRepository<JsonWebTokenDocument, Guid>("RefreshTokens")
+                .AddMongoRepository<ShelterOwnerApplicationDocument, Guid>("ShelterOwnerApplications")
                 // .AddConsul()
                 // .AddFabio()
                 // .AddMessageOutbox()
@@ -75,8 +77,8 @@ namespace Lapka.Identity.Infrastructure
             services.AddTransient<IEventProcessor, EventProcessor>();
             services.AddTransient<IMessageBroker, DummyMessageBroker>();
 
-            services.AddSingleton<IShelterRepository, ShelterRepository>();
-            services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddTransient<IShelterRepository, ShelterRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
             services.AddSingleton<IJwtProvider, JwtProvider>();
             services.AddSingleton<IPasswordService, PasswordService>();
             services.AddSingleton<IPasswordHasher<IPasswordService>, PasswordHasher<IPasswordService>>();
@@ -85,9 +87,10 @@ namespace Lapka.Identity.Infrastructure
             services.AddSingleton<IRng, Rng>();
             services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
-            services.AddSingleton<IGrpcPhotoService, GrpcPhotoService>();
+            services.AddTransient<IGrpcPhotoService, GrpcPhotoService>();
             services.AddTransient<IGoogleAuthenticator, GoogleAuthenticator>();
-            services.AddScoped<IGrpcPhotoService, GrpcPhotoService>();
+            services.AddTransient<IGrpcPhotoService, GrpcPhotoService>();
+            services.AddTransient<IShelterOwnerApplicationRepository, ShelterOwnerApplicationRepository>();
 
             FacebookAuthSettings facebookOptions = new FacebookAuthSettings();
             configuration.GetSection("FacebookAuthSettings").Bind(facebookOptions);
@@ -99,7 +102,8 @@ namespace Lapka.Identity.Infrastructure
             
             services.AddHttpClient();
             services.AddSingleton<IFacebookAuthenticator, FacebookAuthenticator>();
-
+            services.AddSingleton<IMongoDbSeeder, MongoDbSeeder>();
+            
             services.AddGrpcClient<PhotoProto.PhotoProtoClient>(o =>
             {
                 o.Address = new Uri(filesMicroserviceOptions.UrlHttp2);
@@ -123,6 +127,19 @@ namespace Lapka.Identity.Infrastructure
                 ;
 
             return app;
+        }
+
+        public static async Task<UserAuth> AuthenticateUsingJwtGetUserAuthAsync(this HttpContext context)
+        {
+            AuthenticateResult authentication = await context.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme);
+            if (!authentication.Succeeded) return null;
+            
+            UserAuth userAuth = new UserAuth(
+                authentication.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value,
+                Guid.Parse(authentication.Principal.Identity.Name));
+
+            return userAuth;
+
         }
 
         public static async Task<Guid> AuthenticateUsingJwtGetUserIdAsync(this HttpContext context)
