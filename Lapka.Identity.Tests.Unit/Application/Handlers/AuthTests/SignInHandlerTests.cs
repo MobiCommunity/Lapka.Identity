@@ -1,8 +1,10 @@
 using System;
 using System.Threading.Tasks;
 using Lapka.Identity.Application.Commands;
+using Lapka.Identity.Application.Commands.Auth;
 using Lapka.Identity.Application.Commands.Handlers.Auth;
 using Lapka.Identity.Application.Services;
+using Lapka.Identity.Application.Services.Auth;
 using Lapka.Identity.Core.Entities;
 using NSubstitute;
 using Xunit;

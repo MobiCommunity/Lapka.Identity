@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
-using Lapka.Identity.Application.Commands;
-using Lapka.Identity.Application.Commands.Handlers.Shelter;
+using Lapka.Identity.Api.Models;
+using Lapka.Identity.Application.Commands.Handlers.Shelters;
+using Lapka.Identity.Application.Commands.Shelters;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Shelter;
 using Lapka.Identity.Core.Entities;
@@ -37,11 +38,13 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
         public async Task given_valid_shelter_should_update()
         {
             Shelter shelterArrange = Extensions.ArrangeShelter();
+            UserAuth userAuth = Extensions.ArrangeUserAuth();
 
             Shelter shelter = Shelter.Create(shelterArrange.Id.Value, shelterArrange.Name, shelterArrange.Address,
-                shelterArrange.GeoLocation, shelterArrange.PhotoId, shelterArrange.PhoneNumber, shelterArrange.Email, shelterArrange.BankNumber);
+                shelterArrange.GeoLocation, shelterArrange.PhotoId, shelterArrange.PhoneNumber, shelterArrange.Email,
+                shelterArrange.BankNumber, shelterArrange.Owners);
 
-            DeleteShelter command = new DeleteShelter(shelter.Id.Value);
+            DeleteShelter command = new DeleteShelter(shelter.Id.Value, userAuth);
 
             _shelterRepository.GetByIdAsync(command.Id).Returns(shelter);
 

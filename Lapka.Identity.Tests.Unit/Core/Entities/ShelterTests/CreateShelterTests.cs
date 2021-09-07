@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Lapka.Identity.Application.Commands;
@@ -17,7 +18,7 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.ShelterTests
     {
         private Shelter Act(AggregateId id, string name, Address address, Location location, Guid photoPath,
             string phoneNumber, string email, string bankNumber) =>
-            Shelter.Create(id.Value, name, address, location, photoPath, phoneNumber, email, bankNumber);
+            Shelter.Create(id.Value, name, address, location, photoPath, phoneNumber, email, bankNumber, new List<Guid>());
 
         [Theory]
         [InlineData("Złote łuki", "Aleji 25", "33-123 Rzeszów", "Rzeszów", "33,53253252", "55,623623535", "123123123",

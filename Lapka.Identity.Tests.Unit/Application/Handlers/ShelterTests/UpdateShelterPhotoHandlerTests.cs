@@ -1,12 +1,12 @@
 using System;
 using System.Threading.Tasks;
-using Lapka.Identity.Application.Commands;
-using Lapka.Identity.Application.Commands.Handlers.Shelter;
+using Lapka.Identity.Api.Models;
+using Lapka.Identity.Application.Commands.Handlers.Shelters;
+using Lapka.Identity.Application.Commands.Shelters;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Shelter;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.ValueObjects;
-using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Xunit;
 
@@ -39,11 +39,12 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
             Shelter shelterArrange = Extensions.ArrangeShelter();
             Guid oldPhotoId = shelterArrange.PhotoId;
             PhotoFile file = Extensions.ArrangePhotoFile(photoId);
+            UserAuth userAuth = Extensions.ArrangeUserAuth();
 
             Shelter shelter = Shelter.Create(shelterArrange.Id.Value, shelterArrange.Name, shelterArrange.Address,
-                shelterArrange.GeoLocation, shelterArrange.PhotoId, shelterArrange.PhoneNumber, shelterArrange.Email, shelterArrange.BankNumber);
+                shelterArrange.GeoLocation, shelterArrange.PhotoId, shelterArrange.PhoneNumber, shelterArrange.Email, shelterArrange.BankNumber, shelterArrange.Owners);
 
-            UpdateShelterPhoto command = new UpdateShelterPhoto(shelter.Id.Value, file);
+            UpdateShelterPhoto command = new UpdateShelterPhoto(shelter.Id.Value, userAuth, file);
 
             _shelterRepository.GetByIdAsync(command.Id).Returns(shelter);
 

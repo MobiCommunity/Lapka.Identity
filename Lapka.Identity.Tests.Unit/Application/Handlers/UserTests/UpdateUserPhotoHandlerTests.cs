@@ -2,6 +2,8 @@ using System;
 using System.Threading.Tasks;
 using Lapka.Identity.Application.Commands;
 using Lapka.Identity.Application.Commands.Handlers;
+using Lapka.Identity.Application.Commands.Handlers.Users;
+using Lapka.Identity.Application.Commands.Users;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.User;
 using Lapka.Identity.Core.Entities;

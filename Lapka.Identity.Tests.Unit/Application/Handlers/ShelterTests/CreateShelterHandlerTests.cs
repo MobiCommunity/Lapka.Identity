@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Lapka.Identity.Application.Commands;
-using Lapka.Identity.Application.Commands.Handlers.Shelter;
+using Lapka.Identity.Api.Models;
+using Lapka.Identity.Application.Commands.Handlers.Shelters;
+using Lapka.Identity.Application.Commands.Shelters;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Shelter;
 using Lapka.Identity.Core.Entities;
@@ -47,8 +48,9 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
             Guid photoId = Guid.NewGuid();
             Shelter shelter = Extensions.ArrangeShelter(photoId: photoId);
             PhotoFile file = Extensions.ArrangePhotoFile(photoId);
+            UserAuth userAuth = Extensions.ArrangeUserAuth();
 
-            CreateShelter command = new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
+            CreateShelter command = new CreateShelter(shelter.Id.Value, userAuth, shelter.Name, shelter.PhoneNumber,
                 shelter.Email, shelter.Address, shelter.GeoLocation, file, shelter.BankNumber);
 
             await Act(command);
@@ -74,8 +76,9 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
         {
             Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
+            UserAuth userAuth = Extensions.ArrangeUserAuth();
 
-            CreateShelter command = new CreateShelter(shelter.Id.Value, "", shelter.PhoneNumber,
+            CreateShelter command = new CreateShelter(shelter.Id.Value, userAuth, "", shelter.PhoneNumber,
                 shelter.Email, shelter.Address, shelter.GeoLocation, file, shelter.BankNumber);
 
             Exception exception = await Record.ExceptionAsync(async () => await Act(command));
@@ -89,8 +92,9 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
         {
             Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
+            UserAuth userAuth = Extensions.ArrangeUserAuth();
 
-            CreateShelter command = new CreateShelter(shelter.Id.Value, shelter.Name, "",
+            CreateShelter command = new CreateShelter(shelter.Id.Value, userAuth, shelter.Name, "",
                 shelter.Email, shelter.Address, shelter.GeoLocation, file, shelter.BankNumber);
 
             Exception exception = await Record.ExceptionAsync(async () => await Act(command));
@@ -104,8 +108,9 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
         {
             Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
+            UserAuth userAuth = Extensions.ArrangeUserAuth();
 
-            CreateShelter command = new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
+            CreateShelter command = new CreateShelter(shelter.Id.Value, userAuth, shelter.Name, shelter.PhoneNumber,
                 "", shelter.Address, shelter.GeoLocation, file, shelter.BankNumber);
 
             Exception exception = await Record.ExceptionAsync(async () => await Act(command));
@@ -119,10 +124,12 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
         {
             Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
+            UserAuth userAuth = Extensions.ArrangeUserAuth();
 
             Exception exception = await Record.ExceptionAsync(async () =>
-                await Act(new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
-                    shelter.Email, Extensions.ArrangeAddress(city: ""), shelter.GeoLocation, file, shelter.BankNumber)));
+                await Act(new CreateShelter(shelter.Id.Value, userAuth, shelter.Name, shelter.PhoneNumber,
+                    shelter.Email, Extensions.ArrangeAddress(city: ""), shelter.GeoLocation, file,
+                    shelter.BankNumber)));
 
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<InvalidCityValueException>();
@@ -133,10 +140,12 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
         {
             Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
+            UserAuth userAuth = Extensions.ArrangeUserAuth();
 
             Exception exception = await Record.ExceptionAsync(async () =>
-                await Act(new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
-                    shelter.Email, Extensions.ArrangeAddress(street: ""), shelter.GeoLocation, file, shelter.BankNumber)));
+                await Act(new CreateShelter(shelter.Id.Value, userAuth, shelter.Name, shelter.PhoneNumber,
+                    shelter.Email, Extensions.ArrangeAddress(street: ""), shelter.GeoLocation, file,
+                    shelter.BankNumber)));
 
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<InvalidStreetValueException>();
@@ -147,10 +156,12 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
         {
             Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
+            UserAuth userAuth = Extensions.ArrangeUserAuth();
 
             Exception exception = await Record.ExceptionAsync(async () =>
-                await Act(new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
-                    shelter.Email, Extensions.ArrangeAddress(zipcode: ""), shelter.GeoLocation, file, shelter.BankNumber)));
+                await Act(new CreateShelter(shelter.Id.Value, userAuth, shelter.Name, shelter.PhoneNumber,
+                    shelter.Email, Extensions.ArrangeAddress(zipcode: ""), shelter.GeoLocation, file,
+                    shelter.BankNumber)));
 
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<InvalidZipCodeValueException>();
@@ -161,10 +172,12 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
         {
             Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
+            UserAuth userAuth = Extensions.ArrangeUserAuth();
 
             Exception exception = await Record.ExceptionAsync(async () =>
-                await Act(new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
-                    shelter.Email, shelter.Address, Extensions.ArrangeLocation(latitude: ""), file, shelter.BankNumber)));
+                await Act(new CreateShelter(shelter.Id.Value, userAuth, shelter.Name, shelter.PhoneNumber,
+                    shelter.Email, shelter.Address, Extensions.ArrangeLocation(latitude: ""), file,
+                    shelter.BankNumber)));
 
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<InvalidLatitudeValueException>();
@@ -175,10 +188,12 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
         {
             Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
+            UserAuth userAuth = Extensions.ArrangeUserAuth();
 
             Exception exception = await Record.ExceptionAsync(async () =>
-                await Act(new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
-                    shelter.Email, shelter.Address, Extensions.ArrangeLocation(latitude: "90"), file, shelter.BankNumber)));
+                await Act(new CreateShelter(shelter.Id.Value, userAuth, shelter.Name, shelter.PhoneNumber,
+                    shelter.Email, shelter.Address, Extensions.ArrangeLocation(latitude: "90"), file,
+                    shelter.BankNumber)));
 
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<LatitudeTooBigException>();
@@ -189,10 +204,12 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
         {
             Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
+            UserAuth userAuth = Extensions.ArrangeUserAuth();
 
             Exception exception = await Record.ExceptionAsync(async () =>
-                await Act(new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
-                    shelter.Email, shelter.Address, Extensions.ArrangeLocation(latitude: "-90"), file, shelter.BankNumber)));
+                await Act(new CreateShelter(shelter.Id.Value, userAuth, shelter.Name, shelter.PhoneNumber,
+                    shelter.Email, shelter.Address, Extensions.ArrangeLocation(latitude: "-90"), file,
+                    shelter.BankNumber)));
 
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<LatitudeTooLowException>();
@@ -203,8 +220,10 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
         {
             Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
+            UserAuth userAuth = Extensions.ArrangeUserAuth();
 
             Exception exception = await Record.ExceptionAsync(async () => await Act(new CreateShelter(shelter.Id.Value,
+                userAuth,
                 shelter.Name, shelter.PhoneNumber,
                 shelter.Email, shelter.Address, Extensions.ArrangeLocation(longitude: ""), file, shelter.BankNumber)));
 
@@ -217,8 +236,10 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
         {
             Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
+            UserAuth userAuth = Extensions.ArrangeUserAuth();
 
             Exception exception = await Record.ExceptionAsync(async () => await Act(new CreateShelter(shelter.Id.Value,
+                userAuth,
                 shelter.Name, shelter.PhoneNumber, shelter.Email, shelter.Address,
                 Extensions.ArrangeLocation(longitude: "180"), file, shelter.BankNumber)));
 
@@ -231,10 +252,12 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
         {
             Shelter shelter = Extensions.ArrangeShelter();
             PhotoFile file = Extensions.ArrangePhotoFile();
+            UserAuth userAuth = Extensions.ArrangeUserAuth();
 
             Exception exception = await Record.ExceptionAsync(async () =>
-                await Act(new CreateShelter(shelter.Id.Value, shelter.Name, shelter.PhoneNumber,
-                    shelter.Email, shelter.Address, Extensions.ArrangeLocation(longitude: "-180"), file, shelter.BankNumber)));
+                await Act(new CreateShelter(shelter.Id.Value, userAuth, shelter.Name, shelter.PhoneNumber,
+                    shelter.Email, shelter.Address, Extensions.ArrangeLocation(longitude: "-180"), file,
+                    shelter.BankNumber)));
 
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<LongitudeTooLowException>();

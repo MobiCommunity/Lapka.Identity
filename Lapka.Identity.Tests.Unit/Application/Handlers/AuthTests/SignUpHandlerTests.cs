@@ -1,8 +1,11 @@
 using System;
 using System.Threading.Tasks;
+using Lapka.Identity.Api.Models;
 using Lapka.Identity.Application.Commands;
+using Lapka.Identity.Application.Commands.Auth;
 using Lapka.Identity.Application.Commands.Handlers.Auth;
 using Lapka.Identity.Application.Services;
+using Lapka.Identity.Application.Services.Auth;
 using Lapka.Identity.Core.Entities;
 using NSubstitute;
 using Xunit;
@@ -32,9 +35,10 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.AuthTests
             Guid id = Guid.NewGuid();
             DateTime createdAt = DateTime.Now;
             User arrangeUser = Extensions.ArrangeUser();
+            UserAuth userAuth = Extensions.ArrangeUserAuth();
             
             SignUp command = new SignUp(id, arrangeUser.Username, arrangeUser.FirstName,
-                arrangeUser.LastName, arrangeUser.Email, arrangeUser.Password, createdAt);
+                arrangeUser.LastName, arrangeUser.Email, arrangeUser.Password, createdAt, userAuth.Role);
 
             await Act(command);
 
