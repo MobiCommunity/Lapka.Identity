@@ -28,7 +28,7 @@ namespace Lapka.Identity.Application.Commands.Handlers.Shelters
                 throw new ShelterNotFoundException(command.Id.ToString());
             }
 
-            if (shelter.Owners.Any(x => x != command.UserAuth.UserId) || command.UserAuth.Role != "admin")
+            if (shelter.Owners.Any(x => x != command.UserAuth.UserId) && command.UserAuth.Role != "admin")
             {
                 throw new UnauthorizedAccessException();
             }

@@ -5,12 +5,14 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Convey;
 using Convey.Logging;
+using Lapka.Identity.Api.Grpc.Controllers;
 using Lapka.Identity.Application;
 using Lapka.Identity.Infrastructure;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.OpenApi.Models;
@@ -27,7 +29,11 @@ namespace Lapka.Identity.Api
 
         private static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
-            return WebHost.CreateDefaultBuilder(args).ConfigureServices(services =>
+            return WebHost.CreateDefaultBuilder(args).ConfigureKestrel(options =>
+                {
+                    options.ListenAnyIP(5001, o => o.Protocols = HttpProtocols.Http1);
+                    options.ListenAnyIP(5011, o => o.Protocols = HttpProtocols.Http2);
+                }).ConfigureServices(services =>
                 {
                     services.AddControllers();
 
@@ -37,6 +43,9 @@ namespace Lapka.Identity.Api
                         .AddConvey()
                         .AddInfrastructure()
                         .AddApplication();
+                    
+                    AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+                    services.AddGrpc();
 
 
                     services.AddSwaggerGen(c =>
@@ -101,6 +110,7 @@ namespace Lapka.Identity.Api
                         .UseEndpoints(e =>
                         {
                             e.MapControllers();
+                            e.MapGrpcService<GrpcIdentityController>();
                             e.Map("ping", async ctx => { await ctx.Response.WriteAsync("Alive"); });
                         });
                 })

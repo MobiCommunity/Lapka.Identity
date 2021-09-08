@@ -28,7 +28,7 @@ namespace Lapka.Identity.Application.Commands.Handlers.Shelters
         {
             Core.Entities.Shelter shelter = await _shelterRepository.GetByIdAsync(command.Id);
 
-            if (shelter.Owners.Any(x => x != command.UserAuth.UserId) || command.UserAuth.Role != "admin")
+            if (shelter.Owners.Any(x => x != command.UserAuth.UserId) && command.UserAuth.Role != "admin")
             {
                 throw new Exceptions.UnauthorizedAccessException();
             }
