@@ -38,4 +38,8 @@
       <Folder Include="Models\Response\" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Protobuf Include="gRPC\Protos\identity.proto" GrpcServices="Server" />
+    </ItemGroup>
+    
 </Project>

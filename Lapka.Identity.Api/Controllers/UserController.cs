@@ -35,7 +35,7 @@ namespace Lapka.Identity.Api.Controllers
         }
 
         /// <summary>
-        ///     At the moment for testing purpose to get user's IDs
+        /// At the moment for testing purpose to get all user's IDs
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> GetUser()
@@ -91,7 +91,7 @@ namespace Lapka.Identity.Api.Controllers
         }
 
         /// <summary>
-        ///     For testing purpose, adds admin if does not exists. Login - Email: admin@admin.com | Password: admin
+        /// For testing purpose, adds admin if does not exists. Login - Email: admin@admin.com | Password: admin
         /// </summary>
         [HttpPost("admin")]
         public async Task<IActionResult> AddAdmin()
