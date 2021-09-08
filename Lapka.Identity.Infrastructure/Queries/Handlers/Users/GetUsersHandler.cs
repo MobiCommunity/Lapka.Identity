@@ -8,7 +8,7 @@ using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Queries;
 using Lapka.Identity.Infrastructure.Documents;
 
-namespace Lapka.Identity.Infrastructure.Queries.Handlers
+namespace Lapka.Identity.Infrastructure.Queries.Handlers.Users
 {
     public class GetUsersHandler : IQueryHandler<GetUsers, IEnumerable<UserDto>>
     {

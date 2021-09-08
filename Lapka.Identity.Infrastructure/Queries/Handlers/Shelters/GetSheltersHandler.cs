@@ -6,11 +6,9 @@ using Convey.CQRS.Queries;
 using Convey.Persistence.MongoDB;
 using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Queries;
-using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Infrastructure.Documents;
-using Lapka.Identity.Infrastructure.Exceptions;
 
-namespace Lapka.Identity.Infrastructure.Queries.Handlers
+namespace Lapka.Identity.Infrastructure.Queries.Handlers.Shelters
 {
     public class GetSheltersHandler : IQueryHandler<GetShelters, IEnumerable<ShelterDto>>
     {
