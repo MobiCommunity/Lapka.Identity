@@ -1,9 +1,7 @@
 #nullable enable
-using System;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Http;
 
-namespace Lapka.Identity.Api.Models.Request
+namespace Lapka.Identity.Api.Models.Request.Auth
 {
     public class SignUpRequest
     {

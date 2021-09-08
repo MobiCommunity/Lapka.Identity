@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Convey.CQRS.Commands;
+using Lapka.Identity.Application.Commands.Auth;
 using Lapka.Identity.Application.Services.Auth;
 
 namespace Lapka.Identity.Application.Commands.Handlers.Auth

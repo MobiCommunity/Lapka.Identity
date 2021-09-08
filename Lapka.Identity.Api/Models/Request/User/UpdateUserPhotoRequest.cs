@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 
-namespace Lapka.Identity.Api.Models.Request
+namespace Lapka.Identity.Api.Models.Request.User
 {
     public class UpdateUserPhotoRequest
     {

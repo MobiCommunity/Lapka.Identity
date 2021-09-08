@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Lapka.Identity.Core.Events.Abstract;
 using Lapka.Identity.Core.Events.Concrete;
@@ -17,9 +18,10 @@ namespace Lapka.Identity.Core.Entities
         public string PhoneNumber { get; private set; }
         public string Email { get; private set; }
         public string BankNumber { get; private set; }
+        public List<Guid> Owners { get; private set; }
 
         public Shelter(Guid id, string name, Address address, Location location, Guid photoId, string phoneNumber,
-            string email, string bankNumber)
+            string email, string bankNumber, List<Guid> owners)
         {
             ValidShelter(name, phoneNumber, email, bankNumber);
 
@@ -31,14 +33,16 @@ namespace Lapka.Identity.Core.Entities
             PhoneNumber = phoneNumber;
             Email = email;
             BankNumber = bankNumber;
+            Owners = owners;
         }
 
         public void Delete()
         {
             AddEvent(new ShelterDeleted(this));
         }
-        
-        public void Update(string name, Address address, Location location, string phoneNumber, string email, string bankNumber)
+
+        public void Update(string name, Address address, Location location, string phoneNumber, string email,
+            string bankNumber)
         {
             ValidShelter(name, phoneNumber, email, bankNumber);
 
@@ -48,21 +52,37 @@ namespace Lapka.Identity.Core.Entities
             PhoneNumber = phoneNumber;
             Email = email;
             BankNumber = bankNumber;
-            
+
             AddEvent(new ShelterUpdated(this));
         }
-        
+
         public void UpdatePhoto(Guid photoId)
         {
             PhotoId = photoId;
-            
+
             AddEvent(new ShelterPhotoUpdated(this));
         }
-        
-        public static Shelter Create(Guid id, string name, Address address, Location location, Guid photoId,
-            string phoneNumber, string email, string bankNumber)
+
+        public void AddOwner(Guid ownerId)
         {
-            Shelter shelter = new Shelter(id, name, address, location, photoId, phoneNumber, email, bankNumber);
+            Owners.Add(ownerId);
+
+            AddEvent(new ShelterUpdated(this));
+        }
+
+        public void RemoveOwner(Guid ownerId)
+        {
+            Owners.Remove(ownerId);
+
+            AddEvent(new ShelterUpdated(this));
+        }
+
+        public static Shelter Create(Guid id, string name, Address address, Location location, Guid photoId,
+            string phoneNumber, string email, string bankNumber, List<Guid> owners)
+        {
+            Shelter shelter = new Shelter(id, name, address, location, photoId, phoneNumber, email, bankNumber,
+                owners ?? new List<Guid>());
+            
             shelter.AddEvent(new ShelterCreated(shelter));
             return shelter;
         }
@@ -93,6 +113,7 @@ namespace Lapka.Identity.Core.Entities
 
             return true;
         }
+
         private static bool IsNameInvalid(string name) => string.IsNullOrWhiteSpace(name);
 
         private static bool IsBankNumberInvalid(string bankNumber)
@@ -104,7 +125,7 @@ namespace Lapka.Identity.Core.Entities
 
             return false;
         }
-        
+
         private static readonly Regex PhoneNumberRegex =
             new Regex(@"(?<!\w)(\(?(\+|00)?48\)?)?[ -]?\d{3}[ -]?\d{3}[ -]?\d{3}(?!\w)",
                 RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);

@@ -6,6 +6,7 @@ using Convey.Persistence.MongoDB;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Shelter;
 using Lapka.Identity.Core.Entities;
+using Lapka.Identity.Infrastructure.Documents;
 using Lapka.Identity.Infrastructure.Exceptions;
 
 namespace Lapka.Identity.Infrastructure.Services

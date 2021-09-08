@@ -1,8 +1,8 @@
 using System;
+using System.Collections.Generic;
 using Convey.Types;
-using Lapka.Identity.Core.ValueObjects;
 
-namespace Lapka.Identity.Infrastructure.Exceptions
+namespace Lapka.Identity.Infrastructure.Documents
 {
     public class ShelterDocument : IIdentifiable<Guid>
     {
@@ -14,6 +14,7 @@ namespace Lapka.Identity.Infrastructure.Exceptions
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public string BankNumber { get; set; }
+        public List<Guid> Owners { get; set; }
         
     }
 }

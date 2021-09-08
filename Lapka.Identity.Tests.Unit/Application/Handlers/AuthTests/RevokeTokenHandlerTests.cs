@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Lapka.Identity.Application.Commands;
+using Lapka.Identity.Application.Commands.Auth;
 using Lapka.Identity.Application.Commands.Handlers.Auth;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Auth;

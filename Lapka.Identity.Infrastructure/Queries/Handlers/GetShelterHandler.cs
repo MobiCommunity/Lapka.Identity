@@ -1,27 +1,27 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Convey.CQRS.Queries;
+using Convey.Persistence.MongoDB;
 using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Exceptions;
 using Lapka.Identity.Application.Queries;
-using Lapka.Identity.Application.Services;
-using Lapka.Identity.Application.Services.Shelter;
-using Lapka.Identity.Core.Entities;
+using Lapka.Identity.Infrastructure.Documents;
 
 namespace Lapka.Identity.Infrastructure.Queries.Handlers
 {
     public class GetShelterHandler : IQueryHandler<GetShelter, ShelterDto>
     {
-        private readonly IShelterRepository _shelterRepository;
+        private readonly IMongoRepository<ShelterDocument, Guid> _repository;
 
-        public GetShelterHandler(IShelterRepository shelterRepository)
+        public GetShelterHandler(IMongoRepository<ShelterDocument, Guid> repository)
         {
-            _shelterRepository = shelterRepository;
+            _repository = repository;
         }
         
         public async Task<ShelterDto> HandleAsync(GetShelter query)
         {
-            Shelter shelter = await _shelterRepository.GetByIdAsync(query.Id);
-            if (shelter is null) throw new ShelterNotFoundException();
+            ShelterDocument shelter = await _repository.GetAsync(query.Id);
+            if (shelter is null) throw new ShelterNotFoundException(query.Id.ToString());
             
             return shelter.AsDto(query.Latitude, query.Longitude);
         }

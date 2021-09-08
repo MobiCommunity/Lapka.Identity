@@ -1,6 +1,6 @@
 using Convey.CQRS.Commands;
 
-namespace Lapka.Identity.Application.Commands
+namespace Lapka.Identity.Application.Commands.Auth
 {
     public class SignIn : ICommand
     {

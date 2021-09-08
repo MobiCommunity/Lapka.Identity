@@ -1,4 +1,4 @@
-namespace Lapka.Identity.Infrastructure.Exceptions
+namespace Lapka.Identity.Infrastructure.Documents
 {
     public class LocationDocument
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Lapka.Identity.Api.Models;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.ValueObjects;
 using File = Lapka.Identity.Core.ValueObjects.File;
@@ -31,9 +32,10 @@ namespace Lapka.Identity.Tests.Unit
 
             return user;
         }
-        
+
         public static Shelter ArrangeShelter(AggregateId id = null, string name = null, Address address = null,
-            Location location = null, Guid? photoId = null, string phoneNumber = null, string email = null, string bankNumber = null)
+            Location location = null, Guid? photoId = null, string phoneNumber = null, string email = null,
+            string bankNumber = null, List<Guid> owners = null)
         {
             AggregateId validId = id ?? new AggregateId();
             string validName = name ?? "Miniok";
@@ -43,9 +45,10 @@ namespace Lapka.Identity.Tests.Unit
             string validPhoneNumber = phoneNumber ?? "435731934";
             string validEmail = email ?? "support@lappka.com";
             string validBankNumber = bankNumber ?? "24204530505030050350535035";
+            List<Guid> validOwners = owners ?? new List<Guid>();
 
             Shelter shelter = new Shelter(validId.Value, validName, validAddress, validLocation, validPhotoId,
-                validPhoneNumber, validEmail, validBankNumber);
+                validPhoneNumber, validEmail, validBankNumber, validOwners);
 
             return shelter;
         }
@@ -71,7 +74,8 @@ namespace Lapka.Identity.Tests.Unit
             return location;
         }
 
-        public static PhotoFile ArrangePhotoFile(Guid? id = null, string name = null, Stream stream = null, string contentType = null)
+        public static PhotoFile ArrangePhotoFile(Guid? id = null, string name = null, Stream stream = null,
+            string contentType = null)
         {
             Guid validId = id ?? Guid.NewGuid();
             string validName = name ?? $"{Guid.NewGuid()}.jpg";
@@ -81,6 +85,16 @@ namespace Lapka.Identity.Tests.Unit
             PhotoFile file = new PhotoFile(validId, validName, validStream, validContentType);
 
             return file;
+        }
+
+        public static UserAuth ArrangeUserAuth(Guid? id = null, string role = null)
+        {
+            Guid validId = id ?? Guid.NewGuid();
+            string validRole = role ?? $"admin";
+
+            UserAuth userAuth = new UserAuth(validRole, validId);
+
+            return userAuth;
         }
     }
 }

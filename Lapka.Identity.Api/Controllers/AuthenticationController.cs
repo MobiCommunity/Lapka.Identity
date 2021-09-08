@@ -2,7 +2,9 @@ using System;
 using System.Threading.Tasks;
 using Convey.CQRS.Commands;
 using Lapka.Identity.Api.Models.Request;
+using Lapka.Identity.Api.Models.Request.Auth;
 using Lapka.Identity.Application.Commands;
+using Lapka.Identity.Application.Commands.Auth;
 using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Auth;
@@ -15,8 +17,8 @@ namespace Lapka.Identity.Api.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly ICommandDispatcher _commandDispatcher;
-        private readonly IRefreshTokenService _refreshTokenService;
         private readonly IIdentityService _identityService;
+        private readonly IRefreshTokenService _refreshTokenService;
 
         public AuthenticationController(ICommandDispatcher commandDispatcher, IRefreshTokenService refreshTokenService,
             IIdentityService identityService)
@@ -41,7 +43,7 @@ namespace Lapka.Identity.Api.Controllers
 
             return Ok(token);
         }
-        
+
         [HttpPost("signin")]
         public async Task<IActionResult> SingIn(SignInRequest user)
         {
@@ -49,7 +51,7 @@ namespace Lapka.Identity.Api.Controllers
 
             return Ok(token);
         }
-        
+
         [HttpPost("signin-google")]
         public async Task<IActionResult> SingInByGoogle(SignInGoogleRequest token)
         {
@@ -57,7 +59,7 @@ namespace Lapka.Identity.Api.Controllers
 
             return Ok(authDto);
         }
-        
+
         [HttpPost("signin-facebook")]
         public async Task<IActionResult> SignInFacebook(SignInFacebookRequest signInFacebookRequest)
         {
@@ -66,15 +68,16 @@ namespace Lapka.Identity.Api.Controllers
 
             return Ok(token);
         }
-        
+
         [HttpPost("signup")]
         public async Task<IActionResult> SingUp([FromBody] SignUpRequest user)
         {
             Guid id = Guid.NewGuid();
             DateTime createdAt = DateTime.Now;
+            const string basicUserRole = "user";
 
             await _identityService.SignUpAsync(new SignUp(id, user.Username, user.FirstName, user.LastName, user.Email,
-                user.Password, createdAt));
+                user.Password, createdAt, basicUserRole));
 
             return Created($"api/user/{id}", null);
         }

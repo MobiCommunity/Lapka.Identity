@@ -1,10 +1,11 @@
+using GeoCoordinatePortable;
+using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.Exceptions;
 using Lapka.Identity.Core.ValueObjects;
-using Lapka.Identity.Infrastructure.Documents;
+using Lapka.Identity.Infrastructure.Exceptions;
 
-
-namespace Lapka.Identity.Infrastructure.Exceptions
+namespace Lapka.Identity.Infrastructure.Documents
 {
     public static class Extensions
     {
@@ -19,7 +20,8 @@ namespace Lapka.Identity.Infrastructure.Exceptions
                 PhotoId = shelter.PhotoId,
                 Email = shelter.Email,
                 PhoneNumber = shelter.PhoneNumber,
-                BankNumber = shelter.BankNumber
+                BankNumber = shelter.BankNumber,
+                Owners = shelter.Owners
             };
         }
 
@@ -31,7 +33,7 @@ namespace Lapka.Identity.Infrastructure.Exceptions
                 Longitude = shelter.Longitude.AsDouble()
             };
         }
-        
+
         public static AddressDocument AsDocument(this Address shelter)
         {
             return new AddressDocument
@@ -41,13 +43,58 @@ namespace Lapka.Identity.Infrastructure.Exceptions
                 ZipCode = shelter.ZipCode
             };
         }
-        
+
         public static Shelter AsBusiness(this ShelterDocument shelter)
         {
-            return new Shelter(shelter.Id, shelter.Name, shelter.Address.AsBusiness(),
-                shelter.GeoLocation.AsBusiness(), shelter.PhotoId, shelter.PhoneNumber, shelter.Email, shelter.BankNumber);
+            return new Shelter(shelter.Id, shelter.Name, shelter.Address.AsBusiness(), shelter.GeoLocation.AsBusiness(),
+                shelter.PhotoId, shelter.PhoneNumber, shelter.Email, shelter.BankNumber, shelter.Owners);
         }
         
+        public static ShelterDto AsDto(this ShelterDocument shelter, string latitude, string longitude)
+        {
+            double? distance = null;
+            if (!string.IsNullOrEmpty(latitude) && !string.IsNullOrEmpty(longitude))
+            {
+                Location location = new Location(latitude, longitude);
+                GeoCoordinate pin1 = new GeoCoordinate(shelter.GeoLocation.Latitude,
+                    shelter.GeoLocation.Longitude);
+                GeoCoordinate pin2 = new GeoCoordinate(location.Latitude.AsDouble(), location.Longitude.AsDouble());
+                distance = pin1.GetDistanceTo(pin2);
+            }
+
+            return new ShelterDto
+            {
+                Id = shelter.Id,
+                Address = shelter.Address.AsDto(),
+                Email = shelter.Email,
+                GeoLocation = shelter.GeoLocation.AsDto(),
+                PhotoId = shelter.PhotoId,
+                Name = shelter.Name,
+                PhoneNumber = shelter.PhoneNumber,
+                Distance = distance,
+                BankNumber = shelter.BankNumber
+            };
+        }
+
+        public static AddressDto AsDto(this AddressDocument address)
+        {
+            return new AddressDto
+            {
+                Street = address.Street,
+                City = address.City,
+                ZipCode = address.ZipCode
+            };
+        }
+
+        public static LocationDto AsDto(this LocationDocument location)
+        {
+            return new LocationDto
+            {
+                Latitude = location.Latitude,
+                Longitude = location.Longitude
+            };
+        }
+
         public static Location AsBusiness(this LocationDocument shelter)
         {
             return new Location(shelter.Latitude.ToString(), shelter.Longitude.ToString());
@@ -57,6 +104,7 @@ namespace Lapka.Identity.Infrastructure.Exceptions
         {
             return new Address(shelter.Street, shelter.ZipCode, shelter.City);
         }
+
         public static UserDocument AsDocument(this User user)
         {
             return new UserDocument
@@ -73,23 +121,63 @@ namespace Lapka.Identity.Infrastructure.Exceptions
                 CreatedAt = user.CreatedAt,
             };
         }
-        
+
         public static User AsBusiness(this UserDocument user)
         {
-            return new User(user.Id, user.Username, user.FirstName, user.LastName, user.Email, user.Password, 
+            return new User(user.Id, user.Username, user.FirstName, user.LastName, user.Email, user.Password,
                 user.PhoneNumber, user.PhotoId, user.CreatedAt, user.Role);
         }
-
-        public static JsonWebToken AsBusiness(this Convey.Auth.JsonWebToken jsonWebToken)
+        
+        public static UserDto AsDto(this UserDocument user)
         {
-            return new JsonWebToken(jsonWebToken.AccessToken, jsonWebToken.RefreshToken, jsonWebToken.Expires);
+            return new UserDto
+            {
+                Id = user.Id,
+                CreatedAt = user.CreatedAt,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber,
+                PhotoId = user.PhotoId,
+                Role = user.Role,
+                Username = user.Username,
+            };
+        }
+
+        public static ShelterOwnerApplicationDocument AsDocument(this ShelterOwnerApplication application)
+        {
+            return new ShelterOwnerApplicationDocument
+            {
+                Id = application.Id,
+                ShelterId = application.ShelterId,
+                UserId = application.UserId,
+                Status = application.Status,
+                CreationDate = application.CreationDate
+            };
+        }
+        
+        public static ShelterOwnerApplicationDto AsDto(this ShelterOwnerApplicationDocument application)
+        {
+            return new ShelterOwnerApplicationDto
+            {
+                Id = application.Id,
+                ShelterId = application.ShelterId,
+                UserId = application.UserId,
+                Status = application.Status,
+                CreationDate = application.CreationDate
+            };
+        }
+        public static ShelterOwnerApplication AsBusiness(this ShelterOwnerApplicationDocument application)
+        {
+            return new ShelterOwnerApplication(application.Id, application.ShelterId, application.UserId,
+                application.Status, application.CreationDate);
         }
 
         public static RefreshToken AsBusiness(this JsonWebTokenDocument token)
         {
             return new RefreshToken(token.Id, token.UserId, token.RefreshToken, token.CreatedAt, token.ExpiresAt);
         }
-        
+
         public static JsonWebTokenDocument AsDocument(this RefreshToken token)
         {
             return new JsonWebTokenDocument
@@ -101,7 +189,7 @@ namespace Lapka.Identity.Infrastructure.Exceptions
                 ExpiresAt = token.RevokedAt
             };
         }
-        
+
         public static GetPhotoPathRequest.Types.Bucket AsGrpcUGet(this BucketName bucket)
         {
             return bucket switch
@@ -123,7 +211,7 @@ namespace Lapka.Identity.Infrastructure.Exceptions
                 _ => throw new InvalidBucketNameException(bucket.ToString())
             };
         }
-        
+
         public static DeletePhotoRequest.Types.Bucket AsGrpcDelete(this BucketName bucket)
         {
             return bucket switch
@@ -134,7 +222,7 @@ namespace Lapka.Identity.Infrastructure.Exceptions
                 _ => throw new InvalidBucketNameException(bucket.ToString())
             };
         }
-        
+
         public static SetExternalPhotoRequest.Types.Bucket AsGrpcUploadExternal(this BucketName bucket)
         {
             return bucket switch

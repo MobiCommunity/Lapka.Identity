@@ -1,24 +1,25 @@
+using System;
 using System.Threading.Tasks;
 using Convey.CQRS.Queries;
+using Convey.Persistence.MongoDB;
 using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Exceptions;
 using Lapka.Identity.Application.Queries;
-using Lapka.Identity.Application.Services.User;
-using Lapka.Identity.Core.Entities;
+using Lapka.Identity.Infrastructure.Documents;
 
 namespace Lapka.Identity.Infrastructure.Queries.Handlers
 {
     public class GetUserHandler : IQueryHandler<GetUser, UserDto>
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IMongoRepository<UserDocument, Guid> _repository;
 
-        public GetUserHandler(IUserRepository userRepository)
+        public GetUserHandler(IMongoRepository<UserDocument, Guid> repository)
         {
-            _userRepository = userRepository;
+            _repository = repository;
         }
         public async Task<UserDto> HandleAsync(GetUser query)
         {
-            User user = await _userRepository.GetAsync(query.Id);
+            UserDocument user = await _repository.GetAsync(query.Id);
 
             if (user is null)
             {
