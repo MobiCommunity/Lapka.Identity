@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Convey.CQRS.Queries;
 using Convey.Persistence.MongoDB;
-using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Queries;
 using Lapka.Identity.Infrastructure.Documents;
 
-namespace Lapka.Identity.Infrastructure.Queries.Handlers
+namespace Lapka.Identity.Infrastructure.Queries.Handlers.Shelters
 {
     public class CheckUserShelterOwnershipHandler : IQueryHandler<CheckUserShelterOwnership, bool>
     {
