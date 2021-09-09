@@ -43,4 +43,4 @@ volumes:
   rabbitmq:
     driver: local
   seq:
-    driver: local
+    driver: local 
