@@ -4,6 +4,7 @@ using Convey.CQRS.Commands;
 using Convey.CQRS.Queries;
 using Grpc.Core;
 using Lapka.Identity.Application.Dto;
+using Lapka.Identity.Application.Exceptions;
 using Lapka.Identity.Application.Queries;
 
 namespace Lapka.Identity.Api.Grpc.Controllers
@@ -48,6 +49,24 @@ namespace Lapka.Identity.Api.Grpc.Controllers
                     ShelterId = shelterId,
                     UserId = userId
                 })
+            };        
+        }
+
+        public override async Task<DoesShelterExistsReply> DoesShelterExists(DoesShelterExistsRequest request, ServerCallContext context)
+        {
+            if(!Guid.TryParse(request.ShelterId, out Guid shelterId))
+            {
+                throw new InvalidShelterIdException(request.ShelterId);
+            }
+
+            ShelterDto shelter = await _queryDispatcher.QueryAsync(new GetShelter
+            {
+                Id = shelterId
+            });
+
+            return new DoesShelterExistsReply
+            {
+                DoesExists = shelter is { }
             };        
         }
     }

@@ -25,6 +25,12 @@ namespace Lapka.Identity.Infrastructure.Exceptions
 
                 AppException ex => ex switch
                 {
+                    InvalidShelterIdException invalidShelterIdException =>
+                        new ExceptionResponse(new
+                        {
+                            code = invalidShelterIdException.Code,
+                            reason = invalidShelterIdException.Message
+                        }, HttpStatusCode.BadRequest),
                     UserNotFoundException userNotFoundException =>
                         new ExceptionResponse(new
                         {
