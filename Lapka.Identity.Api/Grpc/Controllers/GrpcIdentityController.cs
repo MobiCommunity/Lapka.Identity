@@ -51,5 +51,35 @@ namespace Lapka.Identity.Api.Grpc.Controllers
                 })
             };        
         }
+
+        public override async Task<DoesShelterExistsReply> DoesShelterExists(DoesShelterExistsRequest request, ServerCallContext context)
+        {
+            if(!Guid.TryParse(request.ShelterId, out Guid shelterId))
+            {
+                throw new InvalidShelterIdException(request.ShelterId);
+            }
+
+            bool isExists = false;
+
+            try
+            {
+                ShelterDto shelter = await _queryDispatcher.QueryAsync(new GetShelter
+                {
+                    Id = shelterId
+                });
+
+                if (shelter is { })
+                    isExists = true;
+            }
+            catch
+            {
+                isExists = false;
+            }
+
+            return new DoesShelterExistsReply
+            {
+                DoesExists = isExists
+            };  
+        }
     }
 }
