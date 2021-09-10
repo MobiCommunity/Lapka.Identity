@@ -36,6 +36,21 @@ namespace Lapka.Identity.Api.Controllers
                 Latitude = latitude
             }));
         }
+        
+        [HttpGet("user")]
+        public async Task<IActionResult> GetUserShelters()
+        {
+            Guid userId = await HttpContext.AuthenticateUsingJwtGetUserIdAsync();
+            if (userId == Guid.Empty)
+            {
+                return Unauthorized();
+            }
+            
+            return Ok(await _queryDispatcher.QueryAsync(new GetUserShelters
+            {
+                UserId = userId
+            }));
+        }
 
         [HttpPatch("{id:guid}")]
         public async Task<IActionResult> Update(Guid id, UpdateShelterRequest shelter)
