@@ -50,6 +50,17 @@ namespace Lapka.Identity.Infrastructure.Documents
                 shelter.PhotoId, shelter.PhoneNumber, shelter.Email, shelter.BankNumber, shelter.Owners);
         }
         
+        public static ShelterBasicDto AsDto(this ShelterDocument shelter)
+        {
+            return new ShelterBasicDto
+            {
+                Id = shelter.Id,
+                Address = shelter.Address.AsDto(),
+                PhotoId = shelter.PhotoId,
+                Name = shelter.Name
+            };
+        }
+        
         public static ShelterDto AsDto(this ShelterDocument shelter, string latitude, string longitude)
         {
             double? distance = null;
