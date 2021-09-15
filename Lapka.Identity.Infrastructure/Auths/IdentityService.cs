@@ -12,6 +12,7 @@ using Lapka.Identity.Application.Services.User;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.Exceptions;
 using Lapka.Identity.Core.Exceptions.Identity;
+using Lapka.Identity.Core.Exceptions.User;
 using Lapka.Identity.Core.ValueObjects;
 
 namespace Lapka.Identity.Infrastructure.Auths
@@ -90,6 +91,11 @@ namespace Lapka.Identity.Infrastructure.Auths
             if (user is { })
             {
                 throw new EmailInUseException(command.Email);
+            }
+
+            if (command.Password.Length < MinimumPasswordLength)
+            {
+                throw new TooShortPasswordException();
             }
             
             string password = _passwordService.Hash(command.Password);
@@ -179,5 +185,7 @@ namespace Lapka.Identity.Infrastructure.Auths
                 BucketName.UserPhotos);
             user.UpdatePhoto(photoId);
         }
+        
+        private const int MinimumPasswordLength = 5;
     }
 }

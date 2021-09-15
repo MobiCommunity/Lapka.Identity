@@ -27,6 +27,10 @@ namespace Lapka.Identity.Application.Commands.Handlers.Shelters
         public async Task HandleAsync(UpdateShelterPhoto command)
         {
             Core.Entities.Shelter shelter = await _shelterRepository.GetByIdAsync(command.Id);
+            if (shelter == null)
+            {
+                throw new ShelterNotFoundException(command.Id.ToString());
+            }
 
             if (shelter.Owners.Any(x => x != command.UserAuth.UserId) && command.UserAuth.Role != "admin")
             {

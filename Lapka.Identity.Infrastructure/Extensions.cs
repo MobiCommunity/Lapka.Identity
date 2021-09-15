@@ -62,6 +62,8 @@ namespace Lapka.Identity.Infrastructure
             builder.Services.Configure<IISServerOptions>(o => o.AllowSynchronousIO = true);
 
             IServiceCollection services = builder.Services;
+            services.AddHttpClient();
+            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 
             ServiceProvider provider = services.BuildServiceProvider();
             IConfiguration configuration = provider.GetService<IConfiguration>();
@@ -69,30 +71,7 @@ namespace Lapka.Identity.Infrastructure
             GoogleAuthSettings googleAuthSettings = new GoogleAuthSettings();
             configuration.GetSection("google").Bind(googleAuthSettings);
             services.AddSingleton(googleAuthSettings);
-
-            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-            services.AddSingleton<IExceptionToResponseMapper, ExceptionToResponseMapper>();
-            services.AddSingleton<IDomainToIntegrationEventMapper, DomainToIntegrationEventMapper>();
-
-            services.AddTransient<IEventProcessor, EventProcessor>();
-            services.AddTransient<IMessageBroker, DummyMessageBroker>();
-
-            services.AddTransient<IShelterRepository, ShelterRepository>();
-            services.AddTransient<IUserRepository, UserRepository>();
-            services.AddSingleton<IJwtProvider, JwtProvider>();
-            services.AddSingleton<IPasswordService, PasswordService>();
-            services.AddSingleton<IPasswordHasher<IPasswordService>, PasswordHasher<IPasswordService>>();
-            services.AddTransient<IIdentityService, IdentityService>();
-            services.AddTransient<IRefreshTokenService, RefreshTokenService>();
-            services.AddSingleton<IRng, Rng>();
-            services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>();
-            services.AddTransient<IUserRepository, UserRepository>();
-            services.AddTransient<IGrpcPhotoService, GrpcPhotoService>();
-            services.AddTransient<IGoogleAuthenticator, GoogleAuthenticator>();
-            services.AddTransient<IGrpcPhotoService, GrpcPhotoService>();
-            services.AddTransient<IGrpcPetService, GrpcPetService>();
-            services.AddTransient<IShelterOwnerApplicationRepository, ShelterOwnerApplicationRepository>();
-
+            
             FacebookAuthSettings facebookOptions = new FacebookAuthSettings();
             configuration.GetSection("FacebookAuthSettings").Bind(facebookOptions);
             services.AddSingleton(facebookOptions);
@@ -104,10 +83,29 @@ namespace Lapka.Identity.Infrastructure
             PetsMicroserviceOptions petsMicroserviceOptions = new PetsMicroserviceOptions();
             configuration.GetSection("petsMicroservice").Bind(petsMicroserviceOptions);
             services.AddSingleton(petsMicroserviceOptions);
-            
-            services.AddHttpClient();
+
             services.AddSingleton<IFacebookAuthenticator, FacebookAuthenticator>();
-            services.AddSingleton<IMongoDbSeeder, MongoDbSeeder>();
+            services.AddSingleton<IJwtProvider, JwtProvider>();
+            services.AddSingleton<IPasswordService, PasswordService>();
+            services.AddSingleton<IPasswordHasher<IPasswordService>, PasswordHasher<IPasswordService>>();
+            services.AddSingleton<IRng, Rng>();
+            services.AddSingleton<IExceptionToResponseMapper, ExceptionToResponseMapper>();
+            services.AddSingleton<IDomainToIntegrationEventMapper, DomainToIntegrationEventMapper>();
+
+            services.AddTransient<IMongoDbSeeder, MongoDbSeeder>();
+            services.AddTransient<IEventProcessor, EventProcessor>();
+            services.AddTransient<IMessageBroker, DummyMessageBroker>();
+            services.AddTransient<IShelterRepository, ShelterRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IIdentityService, IdentityService>();
+            services.AddTransient<IRefreshTokenService, RefreshTokenService>();
+            services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IGrpcPhotoService, GrpcPhotoService>();
+            services.AddTransient<IGoogleAuthenticator, GoogleAuthenticator>();
+            services.AddTransient<IGrpcPhotoService, GrpcPhotoService>();
+            services.AddTransient<IGrpcPetService, GrpcPetService>();
+            services.AddTransient<IShelterOwnerApplicationRepository, ShelterOwnerApplicationRepository>();
             
             services.AddGrpcClient<PhotoProto.PhotoProtoClient>(o =>
             {
