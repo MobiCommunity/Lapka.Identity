@@ -57,7 +57,7 @@ namespace Lapka.Identity.Api.Controllers
         }
 
         [HttpPatch("password")]
-        public async Task<IActionResult> UpdatePassword([FromBody] UpdateUserPasswordRequest request)
+        public async Task<IActionResult> UpdatePassword(UpdateUserPasswordRequest request)
         {
             Guid userId = await HttpContext.AuthenticateUsingJwtGetUserIdAsync();
             if (userId == Guid.Empty) return Unauthorized();
@@ -68,7 +68,7 @@ namespace Lapka.Identity.Api.Controllers
         }
 
         [HttpPatch("email")]
-        public async Task<IActionResult> UpdateEmail([FromForm] UpdateUserEmailRequest photoRequest)
+        public async Task<IActionResult> UpdateEmail(UpdateUserEmailRequest photoRequest)
         {
             Guid userId = await HttpContext.AuthenticateUsingJwtGetUserIdAsync();
             if (userId == Guid.Empty) return Unauthorized();
@@ -79,7 +79,7 @@ namespace Lapka.Identity.Api.Controllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> Update([FromForm] UpdateUserRequest user)
+        public async Task<IActionResult> Update(UpdateUserRequest user)
         {
             Guid userId = await HttpContext.AuthenticateUsingJwtGetUserIdAsync();
             if (userId == Guid.Empty) return Unauthorized();

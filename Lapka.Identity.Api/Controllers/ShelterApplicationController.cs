@@ -27,7 +27,7 @@ namespace Lapka.Identity.Api.Controllers
         
         
         [HttpPost]
-        public async Task<IActionResult> Add([FromForm] AddApplicationRequest request)
+        public async Task<IActionResult> Add(AddApplicationRequest request)
         {
             Guid userId = await HttpContext.AuthenticateUsingJwtGetUserIdAsync();
             if (Guid.Empty == userId)

@@ -70,7 +70,7 @@ namespace Lapka.Identity.Api.Controllers
         }
 
         [HttpPost("signup")]
-        public async Task<IActionResult> SingUp([FromBody] SignUpRequest user)
+        public async Task<IActionResult> SingUp(SignUpRequest user)
         {
             Guid id = Guid.NewGuid();
             DateTime createdAt = DateTime.Now;
