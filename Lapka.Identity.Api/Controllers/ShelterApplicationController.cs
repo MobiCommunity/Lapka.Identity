@@ -69,20 +69,6 @@ namespace Lapka.Identity.Api.Controllers
 
             return NoContent();
         }
-        
-        [HttpPatch("{userId:guid}/shelter/{shelterId:Guid}/Remove")]
-        public async Task<IActionResult> Remove(Guid userId, Guid shelterId)
-        {
-            string userRole = await HttpContext.AuthenticateUsingJwtGetUserRoleAsync();
-            if (userRole != "admin")
-            {
-                return Unauthorized();
-            }
-            
-            await _commandDispatcher.SendAsync(new RemoveUserFromShelterOwners(userId, shelterId));
-
-            return NoContent();
-        }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ShelterDto>>> GetApplications()

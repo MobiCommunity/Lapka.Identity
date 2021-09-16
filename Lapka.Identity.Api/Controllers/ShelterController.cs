@@ -5,6 +5,7 @@ using Convey.CQRS.Commands;
 using Convey.CQRS.Queries;
 using Lapka.Identity.Api.Models;
 using Lapka.Identity.Api.Models.Request;
+using Lapka.Identity.Application.Commands.ShelterOwnership;
 using Lapka.Identity.Application.Commands.Shelters;
 using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Queries;
@@ -116,6 +117,20 @@ namespace Lapka.Identity.Api.Controllers
             }
             
             await _commandDispatcher.SendAsync(new DeleteShelter(id, userAuth));
+
+            return NoContent();
+        }
+        
+        [HttpPatch("{shelterId:guid}/owners/{userId:guid}/Remove")]
+        public async Task<IActionResult> Remove(Guid userId, Guid shelterId)
+        {
+            string userRole = await HttpContext.AuthenticateUsingJwtGetUserRoleAsync();
+            if (userRole != "admin")
+            {
+                return Unauthorized();
+            }
+            
+            await _commandDispatcher.SendAsync(new RemoveUserFromShelterOwners(userId, shelterId));
 
             return NoContent();
         }
