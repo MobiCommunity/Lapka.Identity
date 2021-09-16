@@ -22,6 +22,7 @@
         <PackageReference Include="Google.Apis.Auth.AspNetCore3" Version="1.54.0" />
         <PackageReference Include="Grpc.AspNetCore" Version="2.39.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.1.18" />
+        <PackageReference Include="NEST" Version="7.14.1" />
         <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
 
     </ItemGroup>
@@ -32,8 +33,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Protobuf Include="gRPC\Protos\photo.proto" GrpcServices="Client" />
-        <Protobuf Include="gRPC\Protos\pet.proto" GrpcServices="Client" />
+        <Protobuf Include="Grpc\Protos\photo.proto" GrpcServices="Client" />
+        <Protobuf Include="Grpc\Protos\pet.proto" GrpcServices="Client" />
     </ItemGroup>
 
 </Project>

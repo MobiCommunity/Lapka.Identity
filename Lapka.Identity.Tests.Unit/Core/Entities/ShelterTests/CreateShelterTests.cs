@@ -6,6 +6,7 @@ using Lapka.Identity.Application.Commands;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.Events.Abstract;
 using Lapka.Identity.Core.Events.Concrete;
+using Lapka.Identity.Core.Events.Concrete.Shelters;
 using Lapka.Identity.Core.Exceptions;
 using Lapka.Identity.Core.Exceptions.Location;
 using Lapka.Identity.Core.ValueObjects;

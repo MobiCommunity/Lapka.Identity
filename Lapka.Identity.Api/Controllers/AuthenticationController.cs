@@ -6,6 +6,7 @@ using Lapka.Identity.Api.Models.Request.Auth;
 using Lapka.Identity.Application.Commands;
 using Lapka.Identity.Application.Commands.Auth;
 using Lapka.Identity.Application.Dto;
+using Lapka.Identity.Application.Dto.Auths;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Auth;
 using Microsoft.AspNetCore.Mvc;

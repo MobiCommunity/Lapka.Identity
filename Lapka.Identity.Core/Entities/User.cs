@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Lapka.Identity.Core.Events.Concrete;
+using Lapka.Identity.Core.Events.Concrete.Users;
 using Lapka.Identity.Core.Exceptions;
 using Lapka.Identity.Core.Exceptions.User;
 using Lapka.Identity.Core.ValueObjects;
@@ -81,8 +82,6 @@ namespace Lapka.Identity.Core.Entities
         {
             ValidatePassword(password);
             Password = password;
-
-            AddEvent(new UserUpdated(this));
         }
 
         public void UpdateEmail(string email)

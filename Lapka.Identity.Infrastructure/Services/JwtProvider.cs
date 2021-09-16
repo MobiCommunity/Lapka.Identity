@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Convey.Auth;
 using Lapka.Identity.Application.Dto;
+using Lapka.Identity.Application.Dto.Auths;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Auth;
 

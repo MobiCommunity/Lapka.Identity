@@ -4,8 +4,11 @@ using Convey.CQRS.Commands;
 using Convey.CQRS.Queries;
 using Grpc.Core;
 using Lapka.Identity.Application.Dto;
+using Lapka.Identity.Application.Dto.Shelters;
 using Lapka.Identity.Application.Exceptions;
+using Lapka.Identity.Application.Exceptions.Shelters;
 using Lapka.Identity.Application.Queries;
+using Lapka.Identity.Application.Queries.Shelters;
 
 namespace Lapka.Identity.Api.Grpc.Controllers
 {

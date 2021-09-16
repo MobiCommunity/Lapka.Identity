@@ -7,6 +7,7 @@ using Lapka.Identity.Api.Models.Request;
 using Lapka.Identity.Api.Models.Request.User;
 using Lapka.Identity.Application.Commands.Users;
 using Lapka.Identity.Application.Queries;
+using Lapka.Identity.Application.Queries.Users;
 using Lapka.Identity.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 

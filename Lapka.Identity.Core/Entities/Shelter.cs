@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Lapka.Identity.Core.Events.Abstract;
 using Lapka.Identity.Core.Events.Concrete;
+using Lapka.Identity.Core.Events.Concrete.Shelters;
 using Lapka.Identity.Core.Exceptions;
 using Lapka.Identity.Core.ValueObjects;
 
@@ -60,7 +61,7 @@ namespace Lapka.Identity.Core.Entities
         {
             PhotoId = photoId;
 
-            AddEvent(new ShelterPhotoUpdated(this));
+            AddEvent(new ShelterUpdated(this));
         }
 
         public void AddOwner(Guid ownerId)

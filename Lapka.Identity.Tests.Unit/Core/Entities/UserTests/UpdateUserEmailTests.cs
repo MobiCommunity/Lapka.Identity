@@ -3,6 +3,7 @@ using System.Linq;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.Events.Abstract;
 using Lapka.Identity.Core.Events.Concrete;
+using Lapka.Identity.Core.Events.Concrete.Users;
 using Lapka.Identity.Core.Exceptions;
 using Shouldly;
 using Xunit;

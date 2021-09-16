@@ -1,4 +1,5 @@
 ﻿using System;
+using Lapka.Identity.Application.Dto.Shelters;
 using Lapka.Identity.Core.ValueObjects;
 
 namespace Lapka.Identity.Application.Dto

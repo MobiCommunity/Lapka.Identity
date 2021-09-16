@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Lapka.Identity.Application.Events.Abstract;
 using Lapka.Identity.Core.Events.Concrete;
+using Lapka.Identity.Core.Events.Concrete.Shelters;
 
 namespace Lapka.Identity.Application.Events.Concrete
 {

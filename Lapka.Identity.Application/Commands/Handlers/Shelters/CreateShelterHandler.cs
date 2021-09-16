@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 using Convey.CQRS.Commands;
 using Lapka.Identity.Application.Commands.Shelters;
 using Lapka.Identity.Application.Services;
-using Lapka.Identity.Application.Services.Shelter;
+using Lapka.Identity.Application.Services.Grpc;
+using Lapka.Identity.Application.Services.Repositories;
 using Lapka.Identity.Core.ValueObjects;
 using Microsoft.Extensions.Logging;
 

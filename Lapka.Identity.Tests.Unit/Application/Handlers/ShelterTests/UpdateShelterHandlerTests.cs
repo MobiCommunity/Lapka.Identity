@@ -3,7 +3,7 @@ using Lapka.Identity.Api.Models;
 using Lapka.Identity.Application.Commands.Handlers.Shelters;
 using Lapka.Identity.Application.Commands.Shelters;
 using Lapka.Identity.Application.Services;
-using Lapka.Identity.Application.Services.Shelter;
+using Lapka.Identity.Application.Services.Repositories;
 using Lapka.Identity.Core.Entities;
 using NSubstitute;
 using Xunit;
