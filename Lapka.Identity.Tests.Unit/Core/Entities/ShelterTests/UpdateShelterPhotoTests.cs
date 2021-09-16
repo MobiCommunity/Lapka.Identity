@@ -23,7 +23,7 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.ShelterTests
             shelter.PhotoId.ShouldBe(photoToUpdate);
             shelter.Events.Count().ShouldBe(1);
             IDomainEvent @event = shelter.Events.Single();
-            @event.ShouldBeOfType<ShelterPhotoUpdated>();
+            @event.ShouldBeOfType<ShelterUpdated>();
         }
 
     }
