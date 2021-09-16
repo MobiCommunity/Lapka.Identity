@@ -2,6 +2,8 @@ using Convey.WebApi.Exceptions;
 using System;
 using System.Net;
 using Lapka.Identity.Application.Exceptions;
+using Lapka.Identity.Application.Exceptions.Shelters;
+using Lapka.Identity.Application.Exceptions.Users;
 using Lapka.Identity.Core.Exceptions;
 using Lapka.Identity.Core.Exceptions.Abstract;
 
@@ -36,12 +38,6 @@ namespace Lapka.Identity.Infrastructure.Exceptions
                         {
                             code = userNotFoundException.Code,
                             reason = userNotFoundException.Message
-                        }, HttpStatusCode.NotFound),
-                    ValueNotFoundException valueNotFoundException =>
-                        new ExceptionResponse(new
-                        {
-                            code = valueNotFoundException.Code,
-                            reason = valueNotFoundException.Message
                         }, HttpStatusCode.NotFound),
                     _ => new ExceptionResponse(
                         new

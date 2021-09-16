@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Convey.CQRS.Commands;
 using Lapka.Identity.Application.Commands.Users;
 using Lapka.Identity.Application.Services;
-using Lapka.Identity.Application.Services.User;
+using Lapka.Identity.Application.Services.Repositories;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.Exceptions.Identity;
 

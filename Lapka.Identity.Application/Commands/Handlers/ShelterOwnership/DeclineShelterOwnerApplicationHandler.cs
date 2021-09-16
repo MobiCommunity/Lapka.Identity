@@ -2,7 +2,11 @@
 using Convey.CQRS.Commands;
 using Lapka.Identity.Application.Commands.ShelterOwnership;
 using Lapka.Identity.Application.Exceptions;
+using Lapka.Identity.Application.Exceptions.Ownership;
+using Lapka.Identity.Application.Exceptions.Shelters;
 using Lapka.Identity.Application.Services;
+using Lapka.Identity.Application.Services.Repositories;
+using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.ValueObjects;
 
 namespace Lapka.Identity.Application.Commands.Handlers.ShelterOwnership

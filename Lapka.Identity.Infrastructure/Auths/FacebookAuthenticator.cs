@@ -3,8 +3,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Lapka.Identity.Application.Dto.Auths;
 using Lapka.Identity.Application.Services;
+using Lapka.Identity.Application.Services.Auth;
 using Lapka.Identity.Core.Exceptions;
-using Lapka.Identity.Infrastructure.Documents;
+using Lapka.Identity.Infrastructure.Mongo.Documents;
 using Newtonsoft.Json;
 
 namespace Lapka.Identity.Infrastructure.Auths

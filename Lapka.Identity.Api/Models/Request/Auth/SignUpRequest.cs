@@ -1,4 +1,3 @@
-#nullable enable
 using System.ComponentModel.DataAnnotations;
 
 namespace Lapka.Identity.Api.Models.Request.Auth

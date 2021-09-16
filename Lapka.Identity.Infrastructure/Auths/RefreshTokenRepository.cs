@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Convey.Persistence.MongoDB;
 using Lapka.Identity.Application.Services.Auth;
 using Lapka.Identity.Core.Entities;
-using Lapka.Identity.Infrastructure.Documents;
+using Lapka.Identity.Infrastructure.Mongo.Documents;
 
 namespace Lapka.Identity.Infrastructure.Auths
 {

@@ -17,11 +17,18 @@ using Lapka.Identity.Api.Models;
 using Lapka.Identity.Application.Events.Abstract;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Auth;
-using Lapka.Identity.Application.Services.Shelter;
-using Lapka.Identity.Application.Services.User;
+using Lapka.Identity.Application.Services.Elastic;
+using Lapka.Identity.Application.Services.Grpc;
+using Lapka.Identity.Application.Services.Repositories;
 using Lapka.Identity.Infrastructure.Auths;
-using Lapka.Identity.Infrastructure.Documents;
+using Lapka.Identity.Infrastructure.Elastic;
+using Lapka.Identity.Infrastructure.Elastic.Options;
+using Lapka.Identity.Infrastructure.Elastic.Services;
 using Lapka.Identity.Infrastructure.Exceptions;
+using Lapka.Identity.Infrastructure.Grpc;
+using Lapka.Identity.Infrastructure.Mongo;
+using Lapka.Identity.Infrastructure.Mongo.Documents;
+using Lapka.Identity.Infrastructure.Mongo.Repositories;
 using Lapka.Identity.Infrastructure.Options;
 using Lapka.Identity.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -29,6 +36,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Nest;
 
 
 namespace Lapka.Identity.Infrastructure
@@ -71,18 +79,23 @@ namespace Lapka.Identity.Infrastructure
             GoogleAuthSettings googleAuthSettings = new GoogleAuthSettings();
             configuration.GetSection("google").Bind(googleAuthSettings);
             services.AddSingleton(googleAuthSettings);
-            
+
             FacebookAuthSettings facebookOptions = new FacebookAuthSettings();
             configuration.GetSection("FacebookAuthSettings").Bind(facebookOptions);
             services.AddSingleton(facebookOptions);
-            
+
             FilesMicroserviceOptions filesMicroserviceOptions = new FilesMicroserviceOptions();
             configuration.GetSection("filesMicroservice").Bind(filesMicroserviceOptions);
             services.AddSingleton(filesMicroserviceOptions);
-            
+
             PetsMicroserviceOptions petsMicroserviceOptions = new PetsMicroserviceOptions();
             configuration.GetSection("petsMicroservice").Bind(petsMicroserviceOptions);
             services.AddSingleton(petsMicroserviceOptions);
+
+            ElasticSearchOptions elasticSearchOptions = new ElasticSearchOptions();
+            configuration.GetSection("elasticSearch").Bind(elasticSearchOptions);
+            services.AddSingleton(elasticSearchOptions);
+            ConnectionSettings elasticConnectionSettings = new ConnectionSettings(new Uri(elasticSearchOptions.Url));
 
             services.AddSingleton<IFacebookAuthenticator, FacebookAuthenticator>();
             services.AddSingleton<IJwtProvider, JwtProvider>();
@@ -91,7 +104,12 @@ namespace Lapka.Identity.Infrastructure
             services.AddSingleton<IRng, Rng>();
             services.AddSingleton<IExceptionToResponseMapper, ExceptionToResponseMapper>();
             services.AddSingleton<IDomainToIntegrationEventMapper, DomainToIntegrationEventMapper>();
+            services.AddSingleton<IElasticClient>(new ElasticClient(elasticConnectionSettings));
 
+            services.AddTransient<IUserElasticsearchUpdater, UserElasticsearchUpdater>();
+            services.AddTransient<IShelterElasticsearchUpdater, ShelterElasticsearchUpdater>();
+            services.AddTransient<IShelterOwnerApplicationElasticSearchUpdater,
+                ShelterOwnerApplicationElasticSearchUpdater>();
             services.AddTransient<IMongoDbSeeder, MongoDbSeeder>();
             services.AddTransient<IEventProcessor, EventProcessor>();
             services.AddTransient<IMessageBroker, DummyMessageBroker>();
@@ -106,12 +124,14 @@ namespace Lapka.Identity.Infrastructure
             services.AddTransient<IGrpcPhotoService, GrpcPhotoService>();
             services.AddTransient<IGrpcPetService, GrpcPetService>();
             services.AddTransient<IShelterOwnerApplicationRepository, ShelterOwnerApplicationRepository>();
-            
+
+            services.AddHostedService<ElasticSearchSeeder>();
+
             services.AddGrpcClient<PhotoProto.PhotoProtoClient>(o =>
             {
                 o.Address = new Uri(filesMicroserviceOptions.UrlHttp2);
             });
-            
+
             services.AddGrpcClient<PetProto.PetProtoClient>(o =>
             {
                 o.Address = new Uri(petsMicroserviceOptions.UrlHttp2);
@@ -141,13 +161,12 @@ namespace Lapka.Identity.Infrastructure
         {
             AuthenticateResult authentication = await context.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme);
             if (!authentication.Succeeded) return null;
-            
+
             UserAuth userAuth = new UserAuth(
                 authentication.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value,
                 Guid.Parse(authentication.Principal.Identity.Name));
 
             return userAuth;
-
         }
 
         public static async Task<Guid> AuthenticateUsingJwtGetUserIdAsync(this HttpContext context)

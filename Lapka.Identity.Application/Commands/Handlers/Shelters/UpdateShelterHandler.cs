@@ -3,8 +3,9 @@ using System.Threading.Tasks;
 using Convey.CQRS.Commands;
 using Lapka.Identity.Application.Commands.Shelters;
 using Lapka.Identity.Application.Exceptions;
+using Lapka.Identity.Application.Exceptions.Shelters;
 using Lapka.Identity.Application.Services;
-using Lapka.Identity.Application.Services.Shelter;
+using Lapka.Identity.Application.Services.Repositories;
 
 namespace Lapka.Identity.Application.Commands.Handlers.Shelters
 {

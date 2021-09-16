@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Security.Cryptography;
-using Lapka.Identity.Application.Services.User;
+using Lapka.Identity.Application.Services.Auth;
 
 namespace Lapka.Identity.Infrastructure.Auths
 {

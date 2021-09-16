@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using Lapka.Identity.Api.Models.Request;
 using Lapka.Identity.Application.Commands.ShelterOwnership;
 using Lapka.Identity.Application.Dto;
+using Lapka.Identity.Application.Dto.Shelters;
 using Lapka.Identity.Application.Queries;
+using Lapka.Identity.Application.Queries.Shelters;
 using Lapka.Identity.Infrastructure;
 
 namespace Lapka.Identity.Api.Controllers
