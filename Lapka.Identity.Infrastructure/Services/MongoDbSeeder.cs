@@ -21,7 +21,7 @@ namespace Lapka.Identity.Infrastructure.Services
                 LastName = "admin",
                 Email = "admin@admin.com",
                 Password = "AQAAAAEAACcQAAAAEFMWjVmxMPfX0qlQHDPRGQn1TanD8xL7u7p+iBjTdn4pOfOeaXZmuwYVRE+/mfrmZw==", //admin
-                CreatedAt = DateTime.Now,
+                CreatedAt = DateTime.UtcNow,
                 Role = "admin"
             };
             await collection.InsertOneAsync(user);

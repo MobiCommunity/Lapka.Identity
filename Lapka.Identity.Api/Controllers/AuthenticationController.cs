@@ -73,7 +73,7 @@ namespace Lapka.Identity.Api.Controllers
         public async Task<IActionResult> SingUp(SignUpRequest user)
         {
             Guid id = Guid.NewGuid();
-            DateTime createdAt = DateTime.Now;
+            DateTime createdAt = DateTime.UtcNow;
             const string basicUserRole = "user";
 
             await _identityService.SignUpAsync(new SignUp(id, user.Username, user.FirstName, user.LastName, user.Email,

@@ -21,7 +21,7 @@ namespace Lapka.Identity.Tests.Unit
             string validEmail = email ?? "Skronowski@email.com";
             string validPassword = password ?? "Secretpassword";
             string validRole = role ?? "user";
-            DateTime validCreatedAt = DateTime.Now;
+            DateTime validCreatedAt = DateTime.UtcNow;
             if (createdAt != default)
             {
                 validCreatedAt = createdAt;

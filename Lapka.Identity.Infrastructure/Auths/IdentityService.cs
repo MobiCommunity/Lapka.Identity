@@ -67,7 +67,7 @@ namespace Lapka.Identity.Infrastructure.Auths
             if (user is null)
             {
                 await SignUpAsync(new SignUp(Guid.NewGuid(), googleUser.Email, googleUser.GivenName,
-                    googleUser.FamilyName ?? "", googleUser.Email, Guid.NewGuid().ToString(), DateTime.Now, BasicRole));
+                    googleUser.FamilyName ?? "", googleUser.Email, Guid.NewGuid().ToString(), DateTime.UtcNow, BasicRole));
                 user = await _userRepository.GetAsync(googleUser.Email);
             }
             else
@@ -122,7 +122,7 @@ namespace Lapka.Identity.Infrastructure.Auths
             if (user is null)
             {
                 await SignUpAsync(new SignUp(Guid.NewGuid(), userInfo.Email, userInfo.FirstName,
-                    userInfo.LastName, userInfo.Email, Guid.NewGuid().ToString(), DateTime.Now, BasicRole));
+                    userInfo.LastName, userInfo.Email, Guid.NewGuid().ToString(), DateTime.UtcNow, BasicRole));
                 user = await _userRepository.GetAsync(userInfo.Email);
             }
             else

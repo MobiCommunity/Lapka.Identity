@@ -33,7 +33,7 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.AuthTests
         public async Task given_valid_user_should_sign_up()
         {
             Guid id = Guid.NewGuid();
-            DateTime createdAt = DateTime.Now;
+            DateTime createdAt = DateTime.UtcNow;
             User arrangeUser = Extensions.ArrangeUser();
             UserAuth userAuth = Extensions.ArrangeUserAuth();
             

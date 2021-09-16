@@ -13,18 +13,31 @@ namespace Lapka.Identity.Infrastructure.Queries.Handlers.Shelters
     public class GetShelterOwnerApplicationsHandler : IQueryHandler<GetShelterOwnerApplications,
         IEnumerable<ShelterOwnerApplicationDto>>
     {
-        private readonly IMongoRepository<ShelterOwnerApplicationDocument, Guid> _repository;
+        private readonly IMongoRepository<ShelterOwnerApplicationDocument, Guid> _applicationRepository;
+        private readonly IMongoRepository<ShelterDocument, Guid> _shelterRepository;
+        private readonly IMongoRepository<UserDocument, Guid> _userRepository;
 
-        public GetShelterOwnerApplicationsHandler(IMongoRepository<ShelterOwnerApplicationDocument, Guid> repository)
+        public GetShelterOwnerApplicationsHandler(IMongoRepository<ShelterOwnerApplicationDocument, Guid> applicationRepository,
+            IMongoRepository<ShelterDocument, Guid> shelterRepository, IMongoRepository<UserDocument, Guid> userRepository)
         {
-            _repository = repository;
+            _applicationRepository = applicationRepository;
+            _shelterRepository = shelterRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<IEnumerable<ShelterOwnerApplicationDto>> HandleAsync(GetShelterOwnerApplications query)
         {
-            IReadOnlyList<ShelterOwnerApplicationDocument> applications = await _repository.FindAsync(_ => true);
+            List<ShelterOwnerApplicationDto> applicationDto = new List<ShelterOwnerApplicationDto>();
+            
+            IReadOnlyList<ShelterOwnerApplicationDocument> applications = await _applicationRepository.FindAsync(_ => true);
+            foreach (ShelterOwnerApplicationDocument application in applications)
+            {
+                ShelterDocument shelter = await _shelterRepository.GetAsync(application.ShelterId);
+                UserDocument user = await _userRepository.GetAsync(application.UserId);
+                applicationDto.Add(application.AsDto(shelter.AsDto(), user.AsDto()));
+            }
 
-            return applications.Select(x => x.AsDto());
+            return applicationDto;
         }
     }
 }

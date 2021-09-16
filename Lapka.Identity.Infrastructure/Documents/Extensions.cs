@@ -49,7 +49,7 @@ namespace Lapka.Identity.Infrastructure.Documents
             return new Shelter(shelter.Id, shelter.Name, shelter.Address.AsBusiness(), shelter.GeoLocation.AsBusiness(),
                 shelter.PhotoId, shelter.PhoneNumber, shelter.Email, shelter.BankNumber, shelter.Owners);
         }
-        
+
         public static ShelterBasicDto AsDto(this ShelterDocument shelter)
         {
             return new ShelterBasicDto
@@ -60,7 +60,7 @@ namespace Lapka.Identity.Infrastructure.Documents
                 Name = shelter.Name
             };
         }
-        
+
         public static ShelterDto AsDto(this ShelterDocument shelter, string latitude, string longitude)
         {
             double? distance = null;
@@ -138,7 +138,7 @@ namespace Lapka.Identity.Infrastructure.Documents
             return new User(user.Id, user.Username, user.FirstName, user.LastName, user.Email, user.Password,
                 user.PhoneNumber, user.PhotoId, user.CreatedAt, user.Role);
         }
-        
+
         public static UserDto AsDto(this UserDocument user)
         {
             return new UserDto
@@ -166,18 +166,20 @@ namespace Lapka.Identity.Infrastructure.Documents
                 CreationDate = application.CreationDate
             };
         }
-        
-        public static ShelterOwnerApplicationDto AsDto(this ShelterOwnerApplicationDocument application)
+
+        public static ShelterOwnerApplicationDto AsDto(this ShelterOwnerApplicationDocument application,
+            ShelterBasicDto shelter, UserDto user)
         {
             return new ShelterOwnerApplicationDto
             {
                 Id = application.Id,
-                ShelterId = application.ShelterId,
-                UserId = application.UserId,
+                Shelter = shelter,
+                User = user,
                 Status = application.Status,
                 CreationDate = application.CreationDate
             };
         }
+
         public static ShelterOwnerApplication AsBusiness(this ShelterOwnerApplicationDocument application)
         {
             return new ShelterOwnerApplication(application.Id, application.ShelterId, application.UserId,

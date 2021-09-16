@@ -43,7 +43,7 @@ namespace Lapka.Identity.Application.Commands.Handlers.ShelterOwnership
                     shelter.Id.Value.ToString());
 
             application = new ShelterOwnerApplication(command.Id, command.ShelterId, command.UserId,
-                OwnerApplicationStatus.Pending, DateTime.Now);
+                OwnerApplicationStatus.Pending, DateTime.UtcNow);
 
             await _shelterOwnerApplicationRepository.AddApplicationAsync(application);
             await _eventProcessor.ProcessAsync(shelter.Events);
