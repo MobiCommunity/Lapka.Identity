@@ -2,15 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Convey.CQRS.Queries;
-using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Dto.Shelters;
-using Lapka.Identity.Application.Queries;
 using Lapka.Identity.Application.Queries.Shelters;
 using Lapka.Identity.Infrastructure.Elastic.Options;
 using Lapka.Identity.Infrastructure.Mongo.Documents;
 using Nest;
 
-namespace Lapka.Identity.Infrastructure.Mongo.Queries.Handlers.Shelters
+namespace Lapka.Identity.Infrastructure.Elastic.Queries.Handlers.Shelters
 {
     public class GetUserSheltersHandler : IQueryHandler<GetUserShelters, IEnumerable<ShelterBasicDto>>
     {

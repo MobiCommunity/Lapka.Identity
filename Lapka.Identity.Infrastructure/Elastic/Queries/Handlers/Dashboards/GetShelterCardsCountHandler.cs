@@ -2,18 +2,15 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Convey.CQRS.Queries;
-using Lapka.Identity.Application.Exceptions;
 using Lapka.Identity.Application.Exceptions.Grpc;
 using Lapka.Identity.Application.Exceptions.Shelters;
-using Lapka.Identity.Application.Queries;
 using Lapka.Identity.Application.Queries.Shelters;
-using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Grpc;
 using Lapka.Identity.Infrastructure.Elastic.Options;
 using Lapka.Identity.Infrastructure.Mongo.Documents;
 using Nest;
 
-namespace Lapka.Identity.Infrastructure.Mongo.Queries.Handlers.Dashboards
+namespace Lapka.Identity.Infrastructure.Elastic.Queries.Handlers.Dashboards
 {
     public class GetShelterCardsCountHandler : IQueryHandler<GetShelterCardsCount, int>
     {

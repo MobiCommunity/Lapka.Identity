@@ -1,15 +1,13 @@
 using System.Threading.Tasks;
 using Convey.CQRS.Queries;
 using Lapka.Identity.Application.Dto;
-using Lapka.Identity.Application.Exceptions;
 using Lapka.Identity.Application.Exceptions.Users;
-using Lapka.Identity.Application.Queries;
 using Lapka.Identity.Application.Queries.Users;
 using Lapka.Identity.Infrastructure.Elastic.Options;
 using Lapka.Identity.Infrastructure.Mongo.Documents;
 using Nest;
 
-namespace Lapka.Identity.Infrastructure.Mongo.Queries.Handlers.Users
+namespace Lapka.Identity.Infrastructure.Elastic.Queries.Handlers.Users
 {
     public class GetUserHandler : IQueryHandler<GetUser, UserDto>
     {
