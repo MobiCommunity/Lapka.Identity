@@ -48,6 +48,7 @@ namespace Lapka.Identity.Application.Commands.Handlers.ShelterOwnership
             await _shelterOwnerApplicationRepository.UpdateAsync(application);
             await _shelterRepository.UpdateAsync(shelter);
             await _eventProcessor.ProcessAsync(shelter.Events);
+            await _eventProcessor.ProcessAsync(application.Events);
         }
     }
 }

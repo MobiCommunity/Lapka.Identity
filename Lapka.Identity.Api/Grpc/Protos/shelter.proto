@@ -1,9 +1,14 @@
 syntax = "proto3";
 
-service IdentityProto{
+service ShelterProto{
   rpc GetClosestShelter (GetClosestShelterRequest) returns (GetClosestShelterReply);
+  rpc GetShelterLocation (GetShelterLocationRequest) returns (GetShelterLocationReply);
   rpc IsUserOwnerOfShelter (IsUserOwnerOfShelterRequest) returns (IsUserOwnerOfShelterReply);
   rpc DoesShelterExists (DoesShelterExistsRequest) returns (DoesShelterExistsReply);
+}
+
+message GetShelterLocationRequest{
+  string shelterId = 1;
 }
 
 message GetClosestShelterRequest{
@@ -22,6 +27,11 @@ message DoesShelterExistsRequest{
 
 message GetClosestShelterReply{
   string shelterId = 1;
+}
+
+message GetShelterLocationReply{
+  string longitude = 1;
+  string latitude = 2;
 }
 
 message IsUserOwnerOfShelterReply{

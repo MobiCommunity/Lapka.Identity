@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using Convey.CQRS.Commands;
 using Lapka.Identity.Api.Models;
 using Lapka.Identity.Core.ValueObjects;

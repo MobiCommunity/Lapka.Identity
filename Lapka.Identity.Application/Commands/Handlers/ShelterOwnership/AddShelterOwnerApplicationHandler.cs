@@ -36,7 +36,6 @@ namespace Lapka.Identity.Application.Commands.Handlers.ShelterOwnership
             ShelterOwnerApplication application = await CreateShelterOwnerApplicationAsync(command, user, shelter);
 
             await _shelterOwnerApplicationRepository.AddApplicationAsync(application);
-            await _eventProcessor.ProcessAsync(shelter.Events);
             await _eventProcessor.ProcessAsync(application.Events);
         }
 
@@ -46,7 +45,7 @@ namespace Lapka.Identity.Application.Commands.Handlers.ShelterOwnership
             ShelterOwnerApplication application =
                 await _shelterOwnerApplicationRepository.GetAsync(command.UserId, command.ShelterId);
 
-            if (application is { } && application.Status == OwnerApplicationStatus.Pending)
+            if (application is {Status: OwnerApplicationStatus.Pending})
             {
                 throw new ApplicationForShelterOwnerIsAlreadyMadeException(user.Id.Value.ToString(),
                     shelter.Id.Value.ToString());

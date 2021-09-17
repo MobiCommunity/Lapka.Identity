@@ -174,7 +174,7 @@ namespace Lapka.Identity.Infrastructure.Mongo.Documents
         {
             return new ShelterOwnerApplicationDocument
             {
-                Id = application.Id,
+                Id = application.Id.Value,
                 ShelterId = application.ShelterId,
                 UserId = application.UserId,
                 Status = application.Status,

@@ -12,11 +12,11 @@ using Lapka.Identity.Application.Queries.Shelters;
 
 namespace Lapka.Identity.Api.Grpc.Controllers
 {
-    public class GrpcIdentityController : IdentityProto.IdentityProtoBase
+    public class GrpcShelterController : ShelterProto.ShelterProtoBase
     {
         private readonly IQueryDispatcher _queryDispatcher;
 
-        public GrpcIdentityController(IQueryDispatcher queryDispatcher)
+        public GrpcShelterController(IQueryDispatcher queryDispatcher)
         {
             _queryDispatcher = queryDispatcher;
         }
@@ -32,6 +32,25 @@ namespace Lapka.Identity.Api.Grpc.Controllers
             return new GetClosestShelterReply
             {
                 ShelterId = shelter.Id.ToString()
+            };
+        }
+
+        public override async Task<GetShelterLocationReply> GetShelterLocation(GetShelterLocationRequest request, ServerCallContext context)
+        {
+            if(!Guid.TryParse(request.ShelterId, out Guid shelterId))
+            {
+                throw new InvalidShelterIdException(request.ShelterId);
+            }
+            
+            ShelterDto shelter = await _queryDispatcher.QueryAsync(new GetShelter
+            {
+                Id = shelterId
+            });
+
+            return new GetShelterLocationReply
+            {
+                Longitude = shelter.GeoLocation.Longitude.ToString(),
+                Latitude = shelter.GeoLocation.Latitude.ToString()
             };
         }
 

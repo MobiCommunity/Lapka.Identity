@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Convey.CQRS.Commands;
+using Convey.CQRS.Events;
 using Lapka.Identity.Application.Commands.Shelters;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Grpc;
@@ -17,14 +19,19 @@ namespace Lapka.Identity.Application.Commands.Handlers.Shelters
         private readonly IShelterRepository _shelterRepository;
         private readonly IGrpcPhotoService _grpcPhotoService;
         private readonly IEventProcessor _eventProcessor;
+        private readonly IMessageBroker _messageBroker;
+        private readonly IDomainToIntegrationEventMapper _eventMapper;
 
         public CreateShelterHandler(ILogger<CreateShelterHandler> logger, IShelterRepository shelterRepository,
-            IGrpcPhotoService grpcPhotoService, IEventProcessor eventProcessor)
+            IGrpcPhotoService grpcPhotoService, IEventProcessor eventProcessor, IMessageBroker messageBroker,
+            IDomainToIntegrationEventMapper eventMapper)
         {
             _logger = logger;
             _shelterRepository = shelterRepository;
             _grpcPhotoService = grpcPhotoService;
             _eventProcessor = eventProcessor;
+            _messageBroker = messageBroker;
+            _eventMapper = eventMapper;
         }
 
         public async Task HandleAsync(CreateShelter command)
@@ -42,6 +49,8 @@ namespace Lapka.Identity.Application.Commands.Handlers.Shelters
             await AddPhotoAsync(command, created);
 
             await _eventProcessor.ProcessAsync(created.Events);
+            IEnumerable<IEvent> events = _eventMapper.MapAll(created.Events);
+            await _messageBroker.PublishAsync(events.ToArray());
         }
 
         private async Task AddPhotoAsync(CreateShelter command, Core.Entities.Shelter created)

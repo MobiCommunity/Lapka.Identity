@@ -29,6 +29,8 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
         private readonly CreateShelterHandler _handler;
         private readonly ILogger<CreateShelterHandler> _logger;
         private readonly IShelterRepository _shelterRepository;
+        private readonly IMessageBroker _messageBroker;
+        private readonly IDomainToIntegrationEventMapper _domainToIntegrationEventMapper;
 
         public CreatePetHandlerTests()
         {
@@ -36,7 +38,10 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
             _grpcPhotoService = Substitute.For<IGrpcPhotoService>();
             _eventProcessor = Substitute.For<IEventProcessor>();
             _logger = Substitute.For<ILogger<CreateShelterHandler>>();
-            _handler = new CreateShelterHandler(_logger, _shelterRepository, _grpcPhotoService, _eventProcessor);
+            _messageBroker = Substitute.For<IMessageBroker>();
+            _domainToIntegrationEventMapper = Substitute.For<IDomainToIntegrationEventMapper>();
+            _handler = new CreateShelterHandler(_logger, _shelterRepository, _grpcPhotoService, _eventProcessor,
+                _messageBroker, _domainToIntegrationEventMapper);
         }
 
         private Task Act(CreateShelter command)

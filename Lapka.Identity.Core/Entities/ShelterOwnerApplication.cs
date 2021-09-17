@@ -6,7 +6,6 @@ namespace Lapka.Identity.Core.Entities
 {
     public class ShelterOwnerApplication : AggregateRoot
     {
-        public Guid Id { get; }
         public Guid ShelterId { get; }
         public Guid UserId { get; }
         public OwnerApplicationStatus Status { get; private set; }
@@ -15,7 +14,7 @@ namespace Lapka.Identity.Core.Entities
         public ShelterOwnerApplication(Guid id, Guid shelterId, Guid userId, OwnerApplicationStatus status,
             DateTime creationDate)
         {
-            Id = id;
+            Id = new AggregateId(id);
             ShelterId = shelterId;
             UserId = userId;
             Status = status;

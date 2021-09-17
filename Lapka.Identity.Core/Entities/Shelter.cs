@@ -68,14 +68,14 @@ namespace Lapka.Identity.Core.Entities
         {
             Owners.Add(ownerId);
 
-            AddEvent(new ShelterUpdated(this));
+            AddEvent(new ShelterOwnerAdded(this, ownerId));
         }
 
         public void RemoveOwner(Guid ownerId)
         {
             Owners.Remove(ownerId);
 
-            AddEvent(new ShelterUpdated(this));
+            AddEvent(new ShelterOwnerRemoved(this, ownerId));
         }
 
         public static Shelter Create(Guid id, string name, Address address, Location location, Guid photoId,
