@@ -110,7 +110,8 @@ namespace Lapka.Identity.Api
                         .UseEndpoints(e =>
                         {
                             e.MapControllers();
-                            e.MapGrpcService<GrpcIdentityController>();
+                            e.MapGrpcService<GrpcShelterController>();
+                            e.MapGrpcService<GrpcIdentityPhotoController>();
                             e.Map("ping", async ctx => { await ctx.Response.WriteAsync("Alive"); });
                         });
                 })

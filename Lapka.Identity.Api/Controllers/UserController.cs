@@ -49,10 +49,8 @@ namespace Lapka.Identity.Api.Controllers
         {
             Guid userId = await HttpContext.AuthenticateUsingJwtGetUserIdAsync();
             if (userId == Guid.Empty) return Unauthorized();
-
-            Guid photoId = Guid.NewGuid();
-
-            await _commandDispatcher.SendAsync(new UpdateUserPhoto(userId, photoRequest.Photo.AsValueObject(photoId)));
+            
+            await _commandDispatcher.SendAsync(new UpdateUserPhoto(userId, photoRequest.Photo.AsValueObject()));
 
             return NoContent();
         }
@@ -72,9 +70,12 @@ namespace Lapka.Identity.Api.Controllers
         public async Task<IActionResult> UpdateEmail(UpdateUserEmailRequest photoRequest)
         {
             Guid userId = await HttpContext.AuthenticateUsingJwtGetUserIdAsync();
-            if (userId == Guid.Empty) return Unauthorized();
+            if (userId == Guid.Empty)
+            {
+                return Unauthorized();
+            }
 
-            await _commandDispatcher.SendAsync(new UpdateUserEmail(userId, photoRequest.Email));
+            await _commandDispatcher.SendAsync(new UpdateUserEmail(userId, photoRequest.Email.AsValueObject()));
 
             return NoContent();
         }
@@ -86,7 +87,7 @@ namespace Lapka.Identity.Api.Controllers
             if (userId == Guid.Empty) return Unauthorized();
 
             await _commandDispatcher.SendAsync(new UpdateUser(userId, user.Username, user.FirstName, user.LastName,
-                user.PhoneNumber));
+                user.PhoneNumber.AsValueObject()));
 
             return NoContent();
         }

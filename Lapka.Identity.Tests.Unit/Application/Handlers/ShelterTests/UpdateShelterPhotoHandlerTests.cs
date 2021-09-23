@@ -42,12 +42,13 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
         {
             Guid photoId = Guid.NewGuid();
             Shelter shelterArrange = Extensions.ArrangeShelter();
-            Guid oldPhotoId = shelterArrange.PhotoId;
-            PhotoFile file = Extensions.ArrangePhotoFile(photoId);
+            string oldPhotoId = shelterArrange.PhotoPath;
+            File file = Extensions.ArrangePhotoFile(photoId);
             UserAuth userAuth = Extensions.ArrangeUserAuth();
 
             Shelter shelter = Shelter.Create(shelterArrange.Id.Value, shelterArrange.Name, shelterArrange.Address,
-                shelterArrange.GeoLocation, shelterArrange.PhotoId, shelterArrange.PhoneNumber, shelterArrange.Email, shelterArrange.BankNumber, shelterArrange.Owners);
+                shelterArrange.GeoLocation, shelterArrange.PhoneNumber, shelterArrange.Email, shelterArrange.BankNumber,
+                shelterArrange.PhotoPath, shelterArrange.Owners);
 
             UpdateShelterPhoto command = new UpdateShelterPhoto(shelter.Id.Value, userAuth, file);
 
@@ -56,8 +57,8 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
             await Act(command);
 
             await _shelterRepository.Received().UpdateAsync(shelter);
-            await _photoService.DeleteAsync(oldPhotoId, BucketName.PetPhotos);
-            await _photoService.AddAsync(file.Id, file.Name, file.Content, BucketName.PetPhotos);
+            await _photoService.DeleteAsync(oldPhotoId, userAuth.UserId, BucketName.PetPhotos);
+            await _photoService.AddAsync(file.Name, userAuth.UserId, true, file.Content, BucketName.PetPhotos);
             await _eventProcessor.Received().ProcessAsync(shelter.Events);
         }
     }

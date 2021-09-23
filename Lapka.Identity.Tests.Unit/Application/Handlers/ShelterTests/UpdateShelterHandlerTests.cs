@@ -35,12 +35,11 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
             UserAuth userAuth = Extensions.ArrangeUserAuth();
 
             Shelter shelter = Shelter.Create(shelterArrange.Id.Value, shelterArrange.Name, shelterArrange.Address,
-                shelterArrange.GeoLocation, shelterArrange.PhotoId, shelterArrange.PhoneNumber, shelterArrange.Email,
-                shelterArrange.BankNumber, shelterArrange.Owners);
+                shelterArrange.GeoLocation, shelterArrange.PhoneNumber, shelterArrange.Email,
+                shelterArrange.BankNumber, shelterArrange.PhotoPath, shelterArrange.Owners);
 
             UpdateShelter command = new UpdateShelter(shelter.Id.Value, userAuth, "new name", "111222333",
-                "newemail@laapka.com", Extensions.ArrangeAddress("rzeszowska 101", "33-333 Rzeszów",
-                    "Nowe City"), Extensions.ArrangeLocation(latitude: "5", longitude: "50"), "32483283284238");
+                "newemail@laapka.com", "32483283284238");
 
             _shelterRepository.GetByIdAsync(command.Id).Returns(shelter);
 

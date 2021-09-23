@@ -16,45 +16,50 @@ namespace Lapka.Identity.Core.Entities
         public string Username { get; private set; }
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
-        public string Email { get; private set; }
+        public EmailAddress Email { get; private set; }
         public string Password { get; private set; }
-        public string PhoneNumber { get; private set; }
-        public Guid PhotoId { get; private set; }
+        public PhoneNumber? PhoneNumber { get; private set; }
+        public string? PhotoPath { get; private set; }
         public DateTime CreatedAt { get; }
         public string Role { get; private set; }
 
-        public User(Guid id, string username, string firstName, string lastName, string email, string password,
-            string phoneNumber, Guid photoId, DateTime createdAt, string role)
+        public User(Guid id, string username, string firstName, string lastName, EmailAddress email, string password,
+            DateTime createdAt, string role, string? photoPath = null)
         {
-            Validate(username, firstName, lastName, phoneNumber);
-            ValidateEmail(email);
+            Validate(username, firstName, lastName);
             ValidatePassword(password);
-            
+
             Id = new AggregateId(id);
             Username = username;
             FirstName = firstName;
             LastName = lastName;
             Email = email;
             Password = password;
-            PhoneNumber = phoneNumber;
-            PhotoId = photoId;
+            PhotoPath = photoPath;
             CreatedAt = createdAt;
             Role = role;
         }
 
-        public static User Create(Guid id, string username, string firstName, string lastName, string email,
-            string password, DateTime createdAt, string role)
+        public User(Guid id, string username, string firstName, string lastName, EmailAddress email, string password,
+            DateTime createdAt, string role, PhoneNumber phoneNumber, string? photoPath = null) : this(id, username,
+            firstName, lastName, email, password, createdAt, role, photoPath)
         {
-            User user = new User(id, username, firstName, lastName, email, password, phoneNumber: string.Empty, photoId: Guid.Empty, 
-                createdAt, role);
+            PhoneNumber = phoneNumber;
+        }
+
+        public static User Create(Guid id, string username, string firstName, string lastName, EmailAddress email,
+            string password, DateTime createdAt, string role, PhoneNumber phoneNumber = null!, string? photoPath = null)
+        {
+            User user = new User(id, username, firstName, lastName, email, password, createdAt, role, phoneNumber,
+                photoPath);
 
             user.AddEvent(new UserCreated(user));
             return user;
         }
 
-        public void Update(string username, string firstName, string lastName, string phoneNumber)
+        public void Update(string username, string firstName, string lastName, PhoneNumber? phoneNumber)
         {
-            Validate(username, firstName, lastName, phoneNumber);
+            Validate(username, firstName, lastName);
 
             Username = username;
             FirstName = firstName;
@@ -63,19 +68,19 @@ namespace Lapka.Identity.Core.Entities
 
             AddEvent(new UserUpdated(this));
         }
-        
+
         public void ChangeRole(string role)
         {
             Role = role;
 
             AddEvent(new UserUpdated(this));
         }
-        
-        public void UpdatePhoto(Guid photoId)
+
+        public void UpdatePhoto(string photoPath, string oldPhotoPath)
         {
-            PhotoId = photoId;
-            
-            AddEvent(new UserUpdated(this));
+            PhotoPath = photoPath;
+
+            AddEvent(new UserPhotoUpdated(this, oldPhotoPath));
         }
 
         public void UpdatePassword(string password)
@@ -84,9 +89,8 @@ namespace Lapka.Identity.Core.Entities
             Password = password;
         }
 
-        public void UpdateEmail(string email)
+        public void UpdateEmail(EmailAddress email)
         {
-            ValidateEmail(email);
             Email = email;
 
             AddEvent(new UserUpdated(this));
@@ -97,32 +101,13 @@ namespace Lapka.Identity.Core.Entities
             AddEvent(new UserDeleted(this));
         }
 
-        private static void Validate(string username, string firstName, string lastName, string phoneNumber)
+        private static void Validate(string username, string firstName, string lastName)
         {
             ValidateUsername(username);
             ValidateFirstName(firstName);
             ValidateLastName(lastName);
-            ValidatePhoneNumber(phoneNumber);
         }
 
-        private static void ValidatePhoneNumber(string phoneNumber)
-        {
-            if (string.IsNullOrWhiteSpace(phoneNumber)) return;
-
-            if (!PhoneNumberRegex.IsMatch(phoneNumber))
-            {
-                throw new InvalidPhoneNumberException(phoneNumber);
-            }
-        }
-
-        private static void ValidateEmail(string email)
-        {
-            if (!EmailRegex.IsMatch(email))
-            {
-                throw new InvalidEmailValueException(email);
-            }
-        }
-        
         private static void ValidatePassword(string password)
         {
             if (password.Length < MinimumPasswordLength)
@@ -172,7 +157,7 @@ namespace Lapka.Identity.Core.Entities
             {
                 throw new UsernameTooShortException(username);
             }
-            
+
             if (username.Length > MaximumUsernameLength)
             {
                 throw new UsernameTooLongException(username);
@@ -186,14 +171,5 @@ namespace Lapka.Identity.Core.Entities
         private const int MaximumUsernameLength = 20;
         private const int MaximumFirstNameLength = 20;
         private const int MaximumLastNameLength = 20;
-
-        private static readonly Regex EmailRegex = new Regex(
-            @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
-            @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$",
-            RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
-
-        private static readonly Regex PhoneNumberRegex =
-            new Regex(@"(?<!\w)(\(?(\+|00)?48\)?)?[ -]?\d{3}[ -]?\d{3}[ -]?\d{3}(?!\w)",
-                RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
     }
 }

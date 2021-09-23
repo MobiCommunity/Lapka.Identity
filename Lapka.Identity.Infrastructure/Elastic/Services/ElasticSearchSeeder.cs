@@ -48,6 +48,8 @@ namespace Lapka.Identity.Infrastructure.Elastic.Services
         {
             IReadOnlyList<UserDocument> userDocuments = await _userRepository.FindAsync(_ => true);
 
+            await _client.Indices.DeleteAsync(_elasticOptions.Aliases.Users);
+
             BulkAllObservable<UserDto> bulkUsers =
                 _client.BulkAll(userDocuments.Select(x => x.AsDto()), b => b.Index(_elasticOptions.Aliases.Users));
 
@@ -57,6 +59,8 @@ namespace Lapka.Identity.Infrastructure.Elastic.Services
         private async Task SeedSheltersAsync()
         {
             IReadOnlyList<ShelterDocument> shelterDocuments = await _shelterRepository.FindAsync(_ => true);
+
+            await _client.Indices.DeleteAsync(_elasticOptions.Aliases.Shelters);
 
             BulkAllObservable<ShelterDocument> shelters = _client.BulkAll(shelterDocuments,
                 b => b.Index(_elasticOptions.Aliases.Shelters));
@@ -68,6 +72,8 @@ namespace Lapka.Identity.Infrastructure.Elastic.Services
         {
             IReadOnlyList<ShelterOwnerApplicationDocument> shelterOwnerApplicationDocuments =
                 await _shelterOwnerApplicationRepository.FindAsync(_ => true);
+
+            await _client.Indices.DeleteAsync(_elasticOptions.Aliases.ShelterOwnerApplications);
 
             BulkAllObservable<ShelterOwnerApplicationDocument> shelterOwnerApplications =
                 _client.BulkAll(shelterOwnerApplicationDocuments,

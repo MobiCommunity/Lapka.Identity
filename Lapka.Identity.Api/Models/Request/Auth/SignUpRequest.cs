@@ -11,7 +11,7 @@ namespace Lapka.Identity.Api.Models.Request.Auth
         [Required]
         public string LastName{ get; set; }
         [Required]
-        public string Email { get; set; }
+        public EmailAddressModel Email { get; set; }
         [Required]
         public string Password { get; set; }
     }

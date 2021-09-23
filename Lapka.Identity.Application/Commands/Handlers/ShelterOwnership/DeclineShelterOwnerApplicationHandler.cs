@@ -25,15 +25,28 @@ namespace Lapka.Identity.Application.Commands.Handlers.ShelterOwnership
 
         public async Task HandleAsync(DeclineShelterOwnerApplication command)
         {
-            ShelterOwnerApplication application = await _shelterOwnerApplicationRepository.GetAsync(command.Id);
-            if (application is null) throw new ShelterOwnerApplicationNotFoundException(command.Id.ToString());
-            
+            ShelterOwnerApplication application = await GetShelterOwnerApplicationAsync(command);
+
             if (application.Status != OwnerApplicationStatus.Pending)
+            {
                 throw new OwnerApplicationStatusHasToBePendingException(application.Id.ToString(), application.Status);
+            }
 
             application.DeclineApplication();
 
             await _shelterOwnerApplicationRepository.UpdateAsync(application);
+            await _eventProcessor.ProcessAsync(application.Events);
+        }
+
+        private async Task<ShelterOwnerApplication> GetShelterOwnerApplicationAsync(DeclineShelterOwnerApplication command)
+        {
+            ShelterOwnerApplication application = await _shelterOwnerApplicationRepository.GetAsync(command.Id);
+            if (application is null)
+            {
+                throw new ShelterOwnerApplicationNotFoundException(command.Id.ToString());
+            }
+
+            return application;
         }
     }
 }

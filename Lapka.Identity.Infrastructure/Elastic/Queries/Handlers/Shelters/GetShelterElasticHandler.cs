@@ -9,25 +9,25 @@ using Nest;
 
 namespace Lapka.Identity.Infrastructure.Elastic.Queries.Handlers.Shelters
 {
-    public class GetShelterHandler : IQueryHandler<GetShelter, ShelterDto>
+    public class GetShelterElasticHandler : IQueryHandler<GetShelterElastic, ShelterDto>
     {
         private readonly IElasticClient _elasticClient;
         private readonly ElasticSearchOptions _elasticSearchOptions;
 
-        public GetShelterHandler(IElasticClient elasticClient, ElasticSearchOptions elasticSearchOptions)
+        public GetShelterElasticHandler(IElasticClient elasticClient, ElasticSearchOptions elasticSearchOptions)
         {
             _elasticClient = elasticClient;
             _elasticSearchOptions = elasticSearchOptions;
         }
         
-        public async Task<ShelterDto> HandleAsync(GetShelter query)
+        public async Task<ShelterDto> HandleAsync(GetShelterElastic query)
         {
             ShelterDocument shelter = await GetShelterAsync(query);
             
             return shelter.AsDto(query.Latitude, query.Longitude);
         }
 
-        private async Task<ShelterDocument> GetShelterAsync(GetShelter query)
+        private async Task<ShelterDocument> GetShelterAsync(GetShelterElastic query)
         {
             GetResponse<ShelterDocument> response = await _elasticClient.GetAsync(
                 new DocumentPath<ShelterDocument>(new Id(query.Id.ToString())),
@@ -38,6 +38,8 @@ namespace Lapka.Identity.Infrastructure.Elastic.Queries.Handlers.Shelters
             {
                 throw new ShelterNotFoundException(query.Id.ToString());
             }
+            
+            
             return shelter;
         }
     }

@@ -12,20 +12,27 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Convey.Auth;
+using Convey.MessageBrokers.CQRS;
+using Convey.MessageBrokers.Outbox;
 using Convey.Persistence.MongoDB;
 using Lapka.Identity.Api.Models;
+using Lapka.Identity.Application.Commands.ShelterOwnership;
+using Lapka.Identity.Application.Commands.Shelters;
+using Lapka.Identity.Application.Commands.Users;
 using Lapka.Identity.Application.Events.Abstract;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Auth;
 using Lapka.Identity.Application.Services.Elastic;
 using Lapka.Identity.Application.Services.Grpc;
 using Lapka.Identity.Application.Services.Repositories;
+using Lapka.Identity.Core.Events.Concrete.Shelters;
 using Lapka.Identity.Infrastructure.Auths;
 using Lapka.Identity.Infrastructure.Elastic;
 using Lapka.Identity.Infrastructure.Elastic.Options;
 using Lapka.Identity.Infrastructure.Elastic.Services;
 using Lapka.Identity.Infrastructure.Exceptions;
 using Lapka.Identity.Infrastructure.Grpc;
+using Lapka.Identity.Infrastructure.Grpc.Options;
 using Lapka.Identity.Infrastructure.Mongo;
 using Lapka.Identity.Infrastructure.Mongo.Documents;
 using Lapka.Identity.Infrastructure.Mongo.Repositories;
@@ -51,13 +58,14 @@ namespace Lapka.Identity.Infrastructure
                 .AddHttpClient()
                 .AddErrorHandler<ExceptionToResponseMapper>()
                 .AddExceptionToMessageMapper<ExceptionToMessageMapper>()
-                // .AddRabbitMq()
-                .AddJwt()
+                .AddMongoRepository<ShelterDocument, Guid>("shelters")
+                .AddMongoRepository<UserDocument, Guid>("users")
+                .AddMongoRepository<JsonWebTokenDocument, Guid>("refreshTokens")
+                .AddMongoRepository<ShelterOwnerApplicationDocument, Guid>("shelterOwnerApplications")
                 .AddMongo()
-                .AddMongoRepository<ShelterDocument, Guid>("Shelters")
-                .AddMongoRepository<UserDocument, Guid>("Users")
-                .AddMongoRepository<JsonWebTokenDocument, Guid>("RefreshTokens")
-                .AddMongoRepository<ShelterOwnerApplicationDocument, Guid>("ShelterOwnerApplications")
+                .AddJwt()
+                .AddRabbitMq()
+                .AddMessageOutbox()
                 // .AddConsul()
                 // .AddFabio()
                 // .AddMessageOutbox()
@@ -112,7 +120,7 @@ namespace Lapka.Identity.Infrastructure
                 ShelterOwnerApplicationElasticSearchUpdater>();
             services.AddTransient<IMongoDbSeeder, MongoDbSeeder>();
             services.AddTransient<IEventProcessor, EventProcessor>();
-            services.AddTransient<IMessageBroker, DummyMessageBroker>();
+            services.AddTransient<IMessageBroker, MessageBroker>();
             services.AddTransient<IShelterRepository, ShelterRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IIdentityService, IdentityService>();
@@ -141,6 +149,8 @@ namespace Lapka.Identity.Infrastructure
                 .AddClasses(c => c.AssignableTo(typeof(IDomainEventHandler<>)))
                 .AsImplementedInterfaces().WithTransientLifetime());
 
+            builder.Build();
+            
             return builder;
         }
 
@@ -150,8 +160,15 @@ namespace Lapka.Identity.Infrastructure
                 .UseErrorHandler()
                 .UseConvey()
                 .UseAuthentication()
+                .UseRabbitMq()
+                .SubscribeCommand<CreateShelter>()
+                .SubscribeCommand<DeleteShelter>()
+                .SubscribeCommand<UpdateShelter>()
+                .SubscribeCommand<UpdateUserPhoto>()
+                .SubscribeCommand<UpdateShelterPhoto>()
+                .SubscribeCommand<AcceptShelterOwnerApplication>()
+                .SubscribeCommand<RemoveUserFromShelterOwners>()
                 //.UseMetrics()
-                //.UseRabbitMq()
                 ;
 
             return app;

@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using Lapka.Identity.Core.Events.Abstract;
-using Lapka.Identity.Core.Events.Concrete;
+using System.Linq;
 using Lapka.Identity.Core.Events.Concrete.Shelters;
 using Lapka.Identity.Core.Exceptions;
 using Lapka.Identity.Core.ValueObjects;
@@ -11,124 +9,102 @@ namespace Lapka.Identity.Core.Entities
 {
     public class Shelter : AggregateRoot
     {
-        private const int BankNumberMinimumLetters = 5;
+        private ISet<Guid> _owners = new HashSet<Guid>();
         public string Name { get; private set; }
-        public Address Address { get; private set; }
-        public Location GeoLocation { get; private set; }
-        public Guid PhotoId { get; private set; }
-        public string PhoneNumber { get; private set; }
-        public string Email { get; private set; }
-        public string BankNumber { get; private set; }
-        public List<Guid> Owners { get; private set; }
+        public Address Address { get; }
+        public Location GeoLocation { get; }
+        public string PhotoPath { get; private set; }
+        public PhoneNumber PhoneNumber { get; private set; }
+        public EmailAddress Email { get; private set; }
+        public BankNumber BankNumber { get; private set; }
+        public bool IsDeleted { get; private set; }
 
-        public Shelter(Guid id, string name, Address address, Location location, Guid photoId, string phoneNumber,
-            string email, string bankNumber, List<Guid> owners)
+        public IEnumerable<Guid> Owners
         {
-            ValidShelter(name, phoneNumber, email, bankNumber);
+            get => _owners;
+            private set => _owners = new HashSet<Guid>(value);
+        }
+
+        public Shelter(Guid id, string name, Address address, Location location, PhoneNumber phoneNumber,
+            EmailAddress email, BankNumber bankNumber, string photoPath = null, bool isDeleted = false,
+            IEnumerable<Guid> owners = null)
+        {
+            ValidShelter(name, phoneNumber);
 
             Id = new AggregateId(id);
             Name = name;
             Address = address;
             GeoLocation = location;
-            PhotoId = photoId;
+            PhotoPath = photoPath;
             PhoneNumber = phoneNumber;
             Email = email;
             BankNumber = bankNumber;
-            Owners = owners;
+            Owners = owners ?? Enumerable.Empty<Guid>();
+            IsDeleted = isDeleted;
         }
 
-        public void Delete()
+        public static Shelter Create(Guid id, string name, Address address, Location location, PhoneNumber phoneNumber,
+            EmailAddress email, BankNumber bankNumber, string photoPath = null, IEnumerable<Guid> owners = null)
         {
-            AddEvent(new ShelterDeleted(this));
-        }
+            Shelter shelter = new Shelter(id, name, address, location, phoneNumber, email, bankNumber, photoPath, false,
+                owners);
 
-        public void Update(string name, Address address, Location location, string phoneNumber, string email,
-            string bankNumber)
-        {
-            ValidShelter(name, phoneNumber, email, bankNumber);
-
-            Name = name;
-            Address = address;
-            GeoLocation = location;
-            PhoneNumber = phoneNumber;
-            Email = email;
-            BankNumber = bankNumber;
-
-            AddEvent(new ShelterUpdated(this));
-        }
-
-        public void UpdatePhoto(Guid photoId)
-        {
-            PhotoId = photoId;
-
-            AddEvent(new ShelterUpdated(this));
-        }
-
-        public void AddOwner(Guid ownerId)
-        {
-            Owners.Add(ownerId);
-
-            AddEvent(new ShelterUpdated(this));
-        }
-
-        public void RemoveOwner(Guid ownerId)
-        {
-            Owners.Remove(ownerId);
-
-            AddEvent(new ShelterUpdated(this));
-        }
-
-        public static Shelter Create(Guid id, string name, Address address, Location location, Guid photoId,
-            string phoneNumber, string email, string bankNumber, List<Guid> owners)
-        {
-            Shelter shelter = new Shelter(id, name, address, location, photoId, phoneNumber, email, bankNumber,
-                owners ?? new List<Guid>());
-            
             shelter.AddEvent(new ShelterCreated(shelter));
             return shelter;
         }
 
-        private static void ValidShelter(string name, string phoneNumber, string email, string bankNumber)
+        public void Delete()
+        {
+            IsDeleted = true;
+
+            AddEvent(new ShelterDeleted(this));
+        }
+
+        public void Update(string name, PhoneNumber phoneNumber, EmailAddress email, BankNumber bankNumber)
+        {
+            ValidShelter(name, phoneNumber);
+
+            Name = name;
+            PhoneNumber = phoneNumber;
+            Email = email;
+            BankNumber = bankNumber;
+
+            AddEvent(new ShelterUpdated(this));
+        }
+
+        public void UpdatePhoto(string photoPath, string oldPhotoPath)
+        {
+            PhotoPath = photoPath;
+
+            AddEvent(new ShelterPhotoUpdated(this, oldPhotoPath));
+        }
+
+        public void AddOwner(Guid ownerId)
+        {
+            _owners.Add(ownerId);
+
+            AddEvent(new ShelterOwnerAdded(this, ownerId));
+        }
+
+        public void RemoveOwner(Guid ownerId)
+        {
+            _owners.Remove(ownerId);
+
+            AddEvent(new ShelterOwnerRemoved(this, ownerId));
+        }
+
+        private static void ValidShelter(string name, PhoneNumber phoneNumber)
         {
             if (IsNameInvalid(name))
                 throw new InvalidShelterNameException(name);
 
             if (IsPhoneNumberInvalid(phoneNumber))
-                throw new InvalidPhoneNumberException(phoneNumber);
-
-            if (IsEmailInvalid(email))
-                throw new InvalidEmailValueException(email);
-
-            if (IsBankNumberInvalid(bankNumber))
-                throw new InvalidBankNumberException(bankNumber);
+                throw new InvalidPhoneNumberException(phoneNumber?.Value);
         }
 
-        private static bool IsEmailInvalid(string email) => string.IsNullOrWhiteSpace(email);
-
-        private static bool IsPhoneNumberInvalid(string phoneNumber)
-        {
-            if (PhoneNumberRegex.IsMatch(phoneNumber))
-            {
-                return false;
-            }
-
-            return true;
-        }
+        private static bool IsPhoneNumberInvalid(PhoneNumber phoneNumber) =>
+            string.IsNullOrWhiteSpace(phoneNumber.Value);
 
         private static bool IsNameInvalid(string name) => string.IsNullOrWhiteSpace(name);
-
-        private static bool IsBankNumberInvalid(string bankNumber)
-        {
-            if (!string.IsNullOrEmpty(bankNumber))
-            {
-                return bankNumber.Length < BankNumberMinimumLetters;
-            }
-
-            return false;
-        }
-
-        private static readonly Regex PhoneNumberRegex =
-            new Regex(@"(?<!\w)(\(?(\+|00)?48\)?)?[ -]?\d{3}[ -]?\d{3}[ -]?\d{3}(?!\w)",
-                RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
     }
 }

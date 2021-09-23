@@ -15,7 +15,7 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.UserTests
 {
     public class CreateUserTests
     {
-        private User Act(AggregateId id, string username, string firstName, string lastName, string email,
+        private User Act(AggregateId id, string username, string firstName, string lastName, EmailAddress email,
             string password, DateTime createdAt, string role) => User.Create(id.Value, username, firstName, lastName,
             email, password, createdAt, role);
 
@@ -27,7 +27,7 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.UserTests
             string password)
         {
             User arrangeUser = Extensions.ArrangeUser(username: username, firstName: firstName, lastName: lastName,
-                email: email, password: password);
+                email: new EmailAddress(email), password: password);
 
             User user = Act(arrangeUser.Id, arrangeUser.Username, arrangeUser.FirstName, arrangeUser.LastName,
                 arrangeUser.Email, arrangeUser.Password, arrangeUser.CreatedAt, arrangeUser.Role);
@@ -54,7 +54,7 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.UserTests
         [InlineData(" ")]
         public void given_invalid_user_email_should_throw_an_exception(string invalidEmail)
         {
-            Exception exception = Record.Exception(() => Extensions.ArrangeUser(email: invalidEmail));
+            Exception exception = Record.Exception(() => Extensions.ArrangeUser(email: new EmailAddress(invalidEmail)));
 
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<InvalidEmailValueException>();

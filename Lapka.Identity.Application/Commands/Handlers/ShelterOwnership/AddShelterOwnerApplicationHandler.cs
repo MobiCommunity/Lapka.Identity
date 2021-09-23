@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Convey.CQRS.Commands;
 using Lapka.Identity.Application.Commands.ShelterOwnership;
@@ -33,28 +35,36 @@ namespace Lapka.Identity.Application.Commands.Handlers.ShelterOwnership
         {
             User user = await GetUserAsync(command);
             Shelter shelter = await GetShelterAsync(command);
-            ShelterOwnerApplication application = await CreateShelterOwnerApplicationAsync(command, user, shelter);
+
+            await ValidifUserHasNoPendingApplication(command, user, shelter);
+            ValidIfUserIsNotOwnerOfShelter(shelter, user);
+
+            ShelterOwnerApplication application = ShelterOwnerApplication.Create(command.Id, command.ShelterId,
+                command.UserId, OwnerApplicationStatus.Pending, DateTime.UtcNow);
 
             await _shelterOwnerApplicationRepository.AddApplicationAsync(application);
-            await _eventProcessor.ProcessAsync(shelter.Events);
             await _eventProcessor.ProcessAsync(application.Events);
         }
 
-        private async Task<ShelterOwnerApplication> CreateShelterOwnerApplicationAsync(
-            AddShelterOwnerApplication command, User user, Shelter shelter)
+        private static void ValidIfUserIsNotOwnerOfShelter(Shelter shelter, User user)
         {
-            ShelterOwnerApplication application =
-                await _shelterOwnerApplicationRepository.GetAsync(command.UserId, command.ShelterId);
+            if (shelter.Owners.Any(x => x == user.Id.Value))
+            {
+                throw new UserAlreadyIsOwnerOfShelterException(shelter.Id.Value, user.Id.Value);
+            }
+        }
 
-            if (application is { } && application.Status == OwnerApplicationStatus.Pending)
+        private async Task ValidifUserHasNoPendingApplication(AddShelterOwnerApplication command, User user,
+            Shelter shelter)
+        {
+            IEnumerable<ShelterOwnerApplication> applications =
+                await _shelterOwnerApplicationRepository.GetAllAsync(command.UserId, command.ShelterId);
+
+            if (applications.Any(x => x.Status == OwnerApplicationStatus.Pending))
             {
                 throw new ApplicationForShelterOwnerIsAlreadyMadeException(user.Id.Value.ToString(),
                     shelter.Id.Value.ToString());
             }
-
-            application = ShelterOwnerApplication.Create(command.Id, command.ShelterId, command.UserId,
-                OwnerApplicationStatus.Pending, DateTime.UtcNow);
-            return application;
         }
 
         private async Task<Shelter> GetShelterAsync(AddShelterOwnerApplication command)

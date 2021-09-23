@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Convey.CQRS.Commands;
 using Convey.CQRS.Queries;
 using Lapka.Identity.Api.Models;
+using Lapka.Identity.Application.Commands.Dashboards;
 using Lapka.Identity.Application.Queries;
 using Lapka.Identity.Application.Queries.Shelters;
 using Lapka.Identity.Infrastructure;
@@ -20,21 +21,20 @@ namespace Lapka.Identity.Api.Controllers
         {
             _queryDispatcher = queryDispatcher;
         }
-        
-        [HttpGet("cards/count")]
-        public async Task<IActionResult> GetById(Guid id)
-        {
-            UserAuth userAuth = await HttpContext.AuthenticateUsingJwtGetUserAuthAsync();
-            if (userAuth is null)
-            {
-                return Unauthorized();
-            }
-            
-            return Ok(await _queryDispatcher.QueryAsync(new GetShelterCardsCount
-            {
-                Auth = userAuth,
-                ShelterId = id
-            }));
-        }
+
+        // [HttpPatch("view/count")]
+        // public async Task<IActionResult> IncrementShelterViews(Guid shelterId)
+        // {
+        //     UserAuth userAuth = await HttpContext.AuthenticateUsingJwtGetUserAuthAsync();
+        //     if (userAuth is null)
+        //     {
+        //         return Unauthorized();
+        //     }
+        //     
+        //     return Ok(await _queryDispatcher.QueryAsync(new IncrementShelterViews
+        //     {
+        //         
+        //     }));
+        // }
     }
 }

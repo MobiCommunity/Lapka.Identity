@@ -17,9 +17,9 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.ShelterTests
 {
     public class CreateShelterTests
     {
-        private Shelter Act(AggregateId id, string name, Address address, Location location, Guid photoPath,
-            string phoneNumber, string email, string bankNumber) =>
-            Shelter.Create(id.Value, name, address, location, photoPath, phoneNumber, email, bankNumber, new List<Guid>());
+        private Shelter Act(AggregateId id, string name, Address address, Location location, string photoPath,
+            PhoneNumber phoneNumber, EmailAddress email, BankNumber bankNumber) =>
+            Shelter.Create(id.Value, name, address, location, phoneNumber, email, bankNumber, photoPath);
 
         [Theory]
         [InlineData("Złote łuki", "Aleji 25", "33-123 Rzeszów", "Rzeszów", "33,53253252", "55,623623535", "123123123",
@@ -34,7 +34,8 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.ShelterTests
             Shelter arrangeShelter = Extensions.ArrangeShelter();
 
             Shelter shelter = Act(arrangeShelter.Id, name, Extensions.ArrangeAddress(street, zipCode, city),
-                Extensions.ArrangeLocation(latitude, longitude), arrangeShelter.PhotoId, phoneNumber, email, bankNumber);
+                Extensions.ArrangeLocation(latitude, longitude), arrangeShelter.PhotoPath, new PhoneNumber(phoneNumber),
+                new EmailAddress(email), new BankNumber(bankNumber));
 
             shelter.ShouldNotBeNull();
             shelter.Id.ShouldBe(arrangeShelter.Id);
@@ -44,10 +45,10 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.ShelterTests
             shelter.Address.City.ShouldBe(city);
             shelter.GeoLocation.Latitude.Value.ShouldBe(latitude);
             shelter.GeoLocation.Longitude.Value.ShouldBe(longitude);
-            shelter.PhotoId.ShouldBe(arrangeShelter.PhotoId);
-            shelter.PhoneNumber.ShouldBe(phoneNumber);
-            shelter.Email.ShouldBe(email);
-            shelter.BankNumber.ShouldBe(bankNumber);
+            shelter.PhotoPath.ShouldBe(arrangeShelter.PhotoPath);
+            shelter.PhoneNumber.Value.ShouldBe(phoneNumber);
+            shelter.Email.Value.ShouldBe(email);
+            shelter.BankNumber.Value.ShouldBe(bankNumber);
             shelter.Events.Count().ShouldBe(1);
             IDomainEvent @event = shelter.Events.Single();
             @event.ShouldBeOfType<ShelterCreated>();
@@ -61,12 +62,12 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.ShelterTests
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<InvalidShelterNameException>();
         }
-        
+
         [Fact]
         public void given_invalid_shelter_phone_number_should_throw_an_exception()
         {
-            Exception exception = Record.Exception(() => Extensions.ArrangeShelter(phoneNumber: ""));
-            
+            Exception exception = Record.Exception(() => Extensions.ArrangeShelter(phoneNumber: new PhoneNumber("")));
+
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<InvalidPhoneNumberException>();
         }
@@ -74,8 +75,8 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.ShelterTests
         [Fact]
         public void given_invalid_shelter_email_should_throw_an_exception()
         {
-            Exception exception = Record.Exception(() => Extensions.ArrangeShelter(email: ""));
-            
+            Exception exception = Record.Exception(() => Extensions.ArrangeShelter(email: new EmailAddress("")));
+
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<InvalidEmailValueException>();
         }
@@ -83,7 +84,8 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.ShelterTests
         [Fact]
         public void given_invalid_shelter_address_city_should_throw_an_exception()
         {
-            Exception exception = Record.Exception(() => Extensions.ArrangeShelter(address: Extensions.ArrangeAddress(city: "")));
+            Exception exception =
+                Record.Exception(() => Extensions.ArrangeShelter(address: Extensions.ArrangeAddress(city: "")));
 
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<InvalidCityValueException>();
@@ -92,7 +94,8 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.ShelterTests
         [Fact]
         public void given_invalid_shelter_address_name_should_throw_an_exception()
         {
-            Exception exception = Record.Exception(() => Extensions.ArrangeShelter(address: Extensions.ArrangeAddress(street: "")));
+            Exception exception = Record.Exception(() =>
+                Extensions.ArrangeShelter(address: Extensions.ArrangeAddress(street: "")));
 
 
             exception.ShouldNotBeNull();
@@ -102,7 +105,8 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.ShelterTests
         [Fact]
         public void given_invalid_shelter_address_zipcode_should_throw_an_exception()
         {
-            Exception exception = Record.Exception(() => Extensions.ArrangeShelter(address: Extensions.ArrangeAddress(zipcode: "")));
+            Exception exception = Record.Exception(() =>
+                Extensions.ArrangeShelter(address: Extensions.ArrangeAddress(zipcode: "")));
 
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<InvalidZipCodeValueException>();
@@ -112,7 +116,7 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.ShelterTests
         public void given_invalid_shelter_location_latitude_should_throw_an_exception()
         {
             Exception exception = Record.Exception(() => Extensions.ArrangeLocation(latitude: ""));
-            
+
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<InvalidLatitudeValueException>();
         }
@@ -140,7 +144,7 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.ShelterTests
         public void given_invalid_shelter_location_longitude_should_throw_an_exception()
         {
             Exception exception = Record.Exception(() => Extensions.ArrangeLocation(longitude: ""));
-            
+
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<InvalidLongitudeValueException>();
         }
@@ -158,16 +162,16 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.ShelterTests
         public void given_too_low_shelter_location_longitude_should_throw_an_exception()
         {
             Exception exception = Record.Exception(() => Extensions.ArrangeLocation(longitude: "-180"));
-            
+
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<LongitudeTooLowException>();
         }
-        
+
         [Fact]
         public void given_invalid_bank_number_should_throw_an_exception()
         {
-            Exception exception = Record.Exception(() => Extensions.ArrangeShelter(bankNumber: "1234"));
-            
+            Exception exception = Record.Exception(() => Extensions.ArrangeShelter(bankNumber: new BankNumber("1234")));
+
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<InvalidBankNumberException>();
         }

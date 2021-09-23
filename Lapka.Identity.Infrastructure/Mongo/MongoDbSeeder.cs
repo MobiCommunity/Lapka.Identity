@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Convey.Persistence.MongoDB;
 using Lapka.Identity.Infrastructure.Mongo.Documents;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 namespace Lapka.Identity.Infrastructure.Mongo
 {
@@ -11,6 +13,13 @@ namespace Lapka.Identity.Infrastructure.Mongo
         public async Task SeedAsync(IMongoDatabase database)
         {
             IMongoCollection<UserDocument> collection = database.GetCollection<UserDocument>("users");
+            IMongoQueryable<UserDocument> users = collection.AsQueryable();
+            users = users.Where(x => x.Role == "admin");
+            if (users.Any())
+            {
+                return;
+            }
+            
             UserDocument user = new UserDocument
             {
                 Id = Guid.NewGuid(),

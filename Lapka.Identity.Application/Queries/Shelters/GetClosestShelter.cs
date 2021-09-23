@@ -1,5 +1,4 @@
 ﻿using Convey.CQRS.Queries;
-using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Dto.Shelters;
 
 namespace Lapka.Identity.Application.Queries.Shelters

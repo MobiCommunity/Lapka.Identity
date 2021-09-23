@@ -9,9 +9,9 @@ namespace Lapka.Identity.Application.Commands.Shelters
     {
         public Guid Id { get; }
         public UserAuth UserAuth { get; }
-        public PhotoFile Photo { get; }
+        public File Photo { get; }
 
-        public UpdateShelterPhoto(Guid id, UserAuth userAuth, PhotoFile photo)
+        public UpdateShelterPhoto(Guid id, UserAuth userAuth, File photo)
         {
             Id = id;
             UserAuth = userAuth;

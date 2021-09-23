@@ -37,4 +37,8 @@
         <Protobuf Include="Grpc\Protos\pet.proto" GrpcServices="Client" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Elastic\Queries\Handlers\Dashboards" />
+    </ItemGroup>
+
 </Project>

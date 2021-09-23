@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+service IdentityPhotoProto{
+  rpc GetShelterPhoto (GetShelterPhotoRequest) returns (GetShelterPhotoReply);
+  rpc GetUserPhoto (GetUserPhotoRequest) returns (GetUserPhotoReply);
+}
+
+message GetShelterPhotoRequest{
+  string shelterId = 1;
+}
+
+message GetUserPhotoRequest{
+  string UserId = 1;
+}
+message GetShelterPhotoReply{
+  string path = 1;
+}
+
+message GetUserPhotoReply{
+  string path = 1;
+}

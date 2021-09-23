@@ -42,7 +42,7 @@ namespace Lapka.Identity.Infrastructure.Mongo.Repositories
         public async Task<Shelter> GetByIdAsync(Guid id)
         {
             ShelterDocument shelterFromDb = await _repository.GetAsync(id);
-            if (shelterFromDb is null)
+            if (shelterFromDb is null || shelterFromDb.IsDeleted)
             {
                 return null;
             }
