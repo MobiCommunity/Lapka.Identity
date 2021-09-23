@@ -18,6 +18,7 @@ using Convey.Persistence.MongoDB;
 using Lapka.Identity.Api.Models;
 using Lapka.Identity.Application.Commands.ShelterOwnership;
 using Lapka.Identity.Application.Commands.Shelters;
+using Lapka.Identity.Application.Commands.Users;
 using Lapka.Identity.Application.Events.Abstract;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Auth;
@@ -31,6 +32,7 @@ using Lapka.Identity.Infrastructure.Elastic.Options;
 using Lapka.Identity.Infrastructure.Elastic.Services;
 using Lapka.Identity.Infrastructure.Exceptions;
 using Lapka.Identity.Infrastructure.Grpc;
+using Lapka.Identity.Infrastructure.Grpc.Options;
 using Lapka.Identity.Infrastructure.Mongo;
 using Lapka.Identity.Infrastructure.Mongo.Documents;
 using Lapka.Identity.Infrastructure.Mongo.Repositories;
@@ -56,10 +58,10 @@ namespace Lapka.Identity.Infrastructure
                 .AddHttpClient()
                 .AddErrorHandler<ExceptionToResponseMapper>()
                 .AddExceptionToMessageMapper<ExceptionToMessageMapper>()
-                .AddMongoRepository<ShelterDocument, Guid>("Shelters")
-                .AddMongoRepository<UserDocument, Guid>("Users")
-                .AddMongoRepository<JsonWebTokenDocument, Guid>("RefreshTokens")
-                .AddMongoRepository<ShelterOwnerApplicationDocument, Guid>("ShelterOwnerApplications")
+                .AddMongoRepository<ShelterDocument, Guid>("shelters")
+                .AddMongoRepository<UserDocument, Guid>("users")
+                .AddMongoRepository<JsonWebTokenDocument, Guid>("refreshTokens")
+                .AddMongoRepository<ShelterOwnerApplicationDocument, Guid>("shelterOwnerApplications")
                 .AddMongo()
                 .AddJwt()
                 .AddRabbitMq()
@@ -160,6 +162,10 @@ namespace Lapka.Identity.Infrastructure
                 .UseAuthentication()
                 .UseRabbitMq()
                 .SubscribeCommand<CreateShelter>()
+                .SubscribeCommand<DeleteShelter>()
+                .SubscribeCommand<UpdateShelter>()
+                .SubscribeCommand<UpdateUserPhoto>()
+                .SubscribeCommand<UpdateShelterPhoto>()
                 .SubscribeCommand<AcceptShelterOwnerApplication>()
                 .SubscribeCommand<RemoveUserFromShelterOwners>()
                 //.UseMetrics()

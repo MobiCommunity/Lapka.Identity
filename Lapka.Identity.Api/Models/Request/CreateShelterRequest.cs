@@ -14,11 +14,11 @@ namespace Lapka.Identity.Api.Models.Request
         [Required]
         public LocationModel GeoLocation { get; set; }
         [Required]
-        public string Email { get; set; }
+        public EmailAddressModel Email { get; set; }
         [Required]
-        public string PhoneNumber { get; set; }
+        public ShelterPhoneNumberModel PhoneNumber { get; set; }
         [Required]
         public IFormFile Photo { get; set; }
-        public string BankNumber { get; set; }
+        public BankNumberModel BankNumber { get; set; }
     }
 }

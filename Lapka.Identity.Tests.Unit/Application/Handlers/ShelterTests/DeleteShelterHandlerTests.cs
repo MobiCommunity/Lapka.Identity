@@ -20,6 +20,8 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
         private readonly DeleteShelterHandler _handler;
         private readonly IGrpcPhotoService _photoService;
         private readonly IShelterRepository _shelterRepository;
+        private readonly IMessageBroker _messageBroker;
+        private readonly IDomainToIntegrationEventMapper _domainToIntegrationEventMapper;
 
         public DeleteShelterHandlerTests()
         {
@@ -27,7 +29,10 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
             _logger = Substitute.For<ILogger<DeleteShelterHandler>>();
             _photoService = Substitute.For<IGrpcPhotoService>();
             _eventProcessor = Substitute.For<IEventProcessor>();
-            _handler = new DeleteShelterHandler(_logger, _shelterRepository, _eventProcessor, _photoService);
+            _messageBroker = Substitute.For<IMessageBroker>();
+            _domainToIntegrationEventMapper = Substitute.For<IDomainToIntegrationEventMapper>();
+            _handler = new DeleteShelterHandler(_logger, _shelterRepository, _eventProcessor, _photoService,
+                _messageBroker, _domainToIntegrationEventMapper);
         }
 
         private Task Act(DeleteShelter command)
@@ -42,8 +47,8 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
             UserAuth userAuth = Extensions.ArrangeUserAuth();
 
             Shelter shelter = Shelter.Create(shelterArrange.Id.Value, shelterArrange.Name, shelterArrange.Address,
-                shelterArrange.GeoLocation, shelterArrange.PhotoId, shelterArrange.PhoneNumber, shelterArrange.Email,
-                shelterArrange.BankNumber, shelterArrange.Owners);
+                shelterArrange.GeoLocation,  shelterArrange.PhoneNumber, shelterArrange.Email,
+                shelterArrange.BankNumber, shelterArrange.PhotoPath, shelterArrange.Owners);
 
             DeleteShelter command = new DeleteShelter(shelter.Id.Value, userAuth);
 
@@ -51,8 +56,7 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.ShelterTests
 
             await Act(command);
 
-            await _shelterRepository.Received().DeleteAsync(shelter);
-            await _photoService.DeleteAsync(shelter.PhotoId, BucketName.PetPhotos);
+            await _shelterRepository.Received().UpdateAsync(shelter);
             await _eventProcessor.Received().ProcessAsync(shelter.Events);
         }
     }

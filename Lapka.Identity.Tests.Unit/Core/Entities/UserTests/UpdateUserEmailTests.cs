@@ -5,6 +5,7 @@ using Lapka.Identity.Core.Events.Abstract;
 using Lapka.Identity.Core.Events.Concrete;
 using Lapka.Identity.Core.Events.Concrete.Users;
 using Lapka.Identity.Core.Exceptions;
+using Lapka.Identity.Core.ValueObjects;
 using Shouldly;
 using Xunit;
 
@@ -16,7 +17,7 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.UserTests
         public void given_valid_user_email_should_be_updated()
         {
             User user = Extensions.ArrangeUser();
-            string mailToUpdate = "mynewemail@email.com";
+            EmailAddress mailToUpdate = new EmailAddress("mynewemail@email.com");
 
             user.UpdateEmail(mailToUpdate);
 
@@ -37,7 +38,7 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.UserTests
         {
             User user = Extensions.ArrangeUser();
 
-            Exception exception = Record.Exception(() => user.UpdateEmail(email));
+            Exception exception = Record.Exception(() => user.UpdateEmail(new EmailAddress(email)));
 
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<InvalidEmailValueException>();

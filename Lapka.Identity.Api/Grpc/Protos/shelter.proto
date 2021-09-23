@@ -1,31 +1,15 @@
 syntax = "proto3";
 
 service ShelterProto{
-  rpc GetClosestShelter (GetClosestShelterRequest) returns (GetClosestShelterReply);
   rpc GetShelterLocation (GetShelterLocationRequest) returns (GetShelterLocationReply);
-  rpc IsUserOwnerOfShelter (IsUserOwnerOfShelterRequest) returns (IsUserOwnerOfShelterReply);
-  rpc DoesShelterExists (DoesShelterExistsRequest) returns (DoesShelterExistsReply);
+  rpc GetShelterBasicInfo (GetShelterBasicInfoRequest) returns (GetShelterBasicInfoReply);
 }
 
 message GetShelterLocationRequest{
   string shelterId = 1;
 }
 
-message GetClosestShelterRequest{
-  string longitude = 1;
-  string latitude = 2;
-}
-
-message IsUserOwnerOfShelterRequest{
-  string userId = 1;
-  string shelterId = 2;
-}
-
-message DoesShelterExistsRequest{
-  string shelterId = 1;
-}
-
-message GetClosestShelterReply{
+message GetShelterBasicInfoRequest{
   string shelterId = 1;
 }
 
@@ -34,10 +18,11 @@ message GetShelterLocationReply{
   string latitude = 2;
 }
 
-message IsUserOwnerOfShelterReply{
-  bool isOwner = 1;
-}
-
-message DoesShelterExistsReply{
-  bool doesExists = 1;
+message GetShelterBasicInfoReply{
+  string name = 1;
+  string longitude = 2;
+  string latitude = 3;
+  string Street = 4;
+  string ZipCode = 5;
+  string City = 6;
 }

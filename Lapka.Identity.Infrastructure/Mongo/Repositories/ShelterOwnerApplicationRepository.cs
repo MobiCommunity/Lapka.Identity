@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Convey.Persistence.MongoDB;
 using Lapka.Identity.Application.Services;
@@ -29,17 +31,12 @@ namespace Lapka.Identity.Infrastructure.Mongo.Repositories
             return application.AsBusiness();
         }
 
-        public async Task<ShelterOwnerApplication> GetAsync(Guid userId, Guid shelterId)
+        public async Task<IEnumerable<ShelterOwnerApplication>> GetAllAsync(Guid userId, Guid shelterId)
         {
-            ShelterOwnerApplicationDocument application =
-                await _repository.GetAsync(x => x.UserId == userId && x.ShelterId == shelterId);
-            
-            if (application is null)
-            {
-                return null;
-            }
-            
-            return application.AsBusiness();
+            IReadOnlyList<ShelterOwnerApplicationDocument> application =
+                await _repository.FindAsync(x => x.UserId == userId && x.ShelterId == shelterId);
+
+            return application.Select(x => x.AsBusiness());
         }
 
         public async Task AddApplicationAsync(ShelterOwnerApplication application)

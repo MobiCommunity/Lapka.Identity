@@ -15,15 +15,15 @@ namespace Lapka.Identity.Tests.Unit.Core.Entities.UserTests
         public void given_valid_user_photo_id_should_be_updated()
         {
             User user = Extensions.ArrangeUser();
-            Guid photoToUpdate = Guid.NewGuid();
+            string photoToUpdate = "myphoto.jpg";
 
-            user.UpdatePhoto(photoToUpdate);
+            user.UpdatePhoto(photoToUpdate, user.PhotoPath);
 
             user.ShouldNotBeNull();
-            user.PhotoId.ShouldBe(photoToUpdate);
+            user.PhotoPath.ShouldBe(photoToUpdate);
             user.Events.Count().ShouldBe(1);
             IDomainEvent @event = user.Events.Single();
-            @event.ShouldBeOfType<UserUpdated>();
+            @event.ShouldBeOfType<UserPhotoUpdated>();
         }
 
     }

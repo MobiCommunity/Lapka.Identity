@@ -21,4 +21,8 @@
       <ProjectReference Include="..\Lapka.Identity.Core\Lapka.Identity.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Events\Concrete" />
+    </ItemGroup>
+
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace Lapka.Identity.Infrastructure.Options
+﻿namespace Lapka.Identity.Infrastructure.Grpc.Options
 {
     public class PetsMicroserviceOptions
     {

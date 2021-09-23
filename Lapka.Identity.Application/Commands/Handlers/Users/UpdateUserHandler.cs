@@ -22,13 +22,23 @@ namespace Lapka.Identity.Application.Commands.Handlers.Users
 
         public async Task HandleAsync(UpdateUser command)
         {
-            User user = await _userRepository.GetAsync(command.Id);
-            if (user is null) throw new UserNotFoundException(command.Id.ToString());
+            User user = await GetUserAsync(command);
 
             user.Update(command.Username, command.FirstName, command.LastName, command.PhoneNumber);
 
             await _userRepository.UpdateAsync(user);
             await _eventProcessor.ProcessAsync(user.Events);
+        }
+
+        private async Task<User> GetUserAsync(UpdateUser command)
+        {
+            User user = await _userRepository.GetAsync(command.Id);
+            if (user is null)
+            {
+                throw new UserNotFoundException(command.Id.ToString());
+            }
+
+            return user;
         }
     }
 }

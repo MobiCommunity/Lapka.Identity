@@ -17,11 +17,12 @@ namespace Lapka.Identity.Infrastructure.Mongo.Documents
                 Name = shelter.Name,
                 Address = shelter.Address.AsDocument(),
                 GeoLocation = shelter.GeoLocation.AsDocument(),
-                PhotoId = shelter.PhotoId,
-                Email = shelter.Email,
-                PhoneNumber = shelter.PhoneNumber,
-                BankNumber = shelter.BankNumber,
-                Owners = shelter.Owners
+                PhotoPath = shelter.PhotoPath,
+                Email = shelter.Email.Value,
+                PhoneNumber = shelter.PhoneNumber.Value,
+                BankNumber = shelter.BankNumber.Value,
+                Owners = shelter.Owners,
+                IsDeleted = shelter.IsDeleted
             };
         }
 
@@ -47,7 +48,8 @@ namespace Lapka.Identity.Infrastructure.Mongo.Documents
         public static Shelter AsBusiness(this ShelterDocument shelter)
         {
             return new Shelter(shelter.Id, shelter.Name, shelter.Address.AsBusiness(), shelter.GeoLocation.AsBusiness(),
-                shelter.PhotoId, shelter.PhoneNumber, shelter.Email, shelter.BankNumber, shelter.Owners);
+                new PhoneNumber(shelter.PhoneNumber), new EmailAddress(shelter.Email),
+                new BankNumber(shelter.BankNumber), shelter.PhotoPath, shelter.IsDeleted, shelter.Owners);
         }
 
         public static ShelterBasicDto AsDto(this ShelterDocument shelter)
@@ -56,7 +58,7 @@ namespace Lapka.Identity.Infrastructure.Mongo.Documents
             {
                 Id = shelter.Id,
                 Address = shelter.Address.AsDto(),
-                PhotoId = shelter.PhotoId,
+                PhotoPath = shelter.PhotoPath,
                 Name = shelter.Name
             };
         }
@@ -79,14 +81,14 @@ namespace Lapka.Identity.Infrastructure.Mongo.Documents
                 Address = shelter.Address.AsDto(),
                 Email = shelter.Email,
                 GeoLocation = shelter.GeoLocation.AsDto(),
-                PhotoId = shelter.PhotoId,
+                PhotoPath = shelter.PhotoPath,
                 Name = shelter.Name,
                 PhoneNumber = shelter.PhoneNumber,
                 Distance = distance,
                 BankNumber = shelter.BankNumber
             };
         }
-        
+
         public static ShelterDto AsDetailDto(this ShelterDocument shelter)
         {
             return new ShelterDto
@@ -95,7 +97,7 @@ namespace Lapka.Identity.Infrastructure.Mongo.Documents
                 Address = shelter.Address.AsDto(),
                 Email = shelter.Email,
                 GeoLocation = shelter.GeoLocation.AsDto(),
-                PhotoId = shelter.PhotoId,
+                PhotoPath = shelter.PhotoPath,
                 Name = shelter.Name,
                 PhoneNumber = shelter.PhoneNumber,
                 BankNumber = shelter.BankNumber
@@ -139,10 +141,10 @@ namespace Lapka.Identity.Infrastructure.Mongo.Documents
                 Username = user.Username,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Email = user.Email,
+                Email = user.Email.Value,
                 Password = user.Password,
-                PhoneNumber = user.PhoneNumber,
-                PhotoId = user.PhotoId,
+                PhoneNumber = user.PhoneNumber?.Value,
+                PhotoPath = user.PhotoPath,
                 Role = user.Role,
                 CreatedAt = user.CreatedAt,
             };
@@ -150,8 +152,8 @@ namespace Lapka.Identity.Infrastructure.Mongo.Documents
 
         public static User AsBusiness(this UserDocument user)
         {
-            return new User(user.Id, user.Username, user.FirstName, user.LastName, user.Email, user.Password,
-                user.PhoneNumber, user.PhotoId, user.CreatedAt, user.Role);
+            return new User(user.Id, user.Username, user.FirstName, user.LastName, new EmailAddress(user.Email),
+                user.Password, user.CreatedAt, user.Role, new PhoneNumber(user.PhoneNumber), user.PhotoPath);
         }
 
         public static UserDto AsDto(this UserDocument user)
@@ -164,7 +166,23 @@ namespace Lapka.Identity.Infrastructure.Mongo.Documents
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 PhoneNumber = user.PhoneNumber,
-                PhotoId = user.PhotoId,
+                PhotoPath = user.PhotoPath,
+                Role = user.Role,
+                Username = user.Username,
+            };
+        }
+
+        public static UserDto AsDto(this User user)
+        {
+            return new UserDto
+            {
+                Id = user.Id.Value,
+                CreatedAt = user.CreatedAt,
+                Email = user.Email.Value,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber?.Value,
+                PhotoPath = user.PhotoPath,
                 Role = user.Role,
                 Username = user.Username,
             };
@@ -218,17 +236,6 @@ namespace Lapka.Identity.Infrastructure.Mongo.Documents
             };
         }
 
-        public static GetPhotoPathRequest.Types.Bucket AsGrpcUGet(this BucketName bucket)
-        {
-            return bucket switch
-            {
-                BucketName.PetPhotos => GetPhotoPathRequest.Types.Bucket.PetPhotos,
-                BucketName.ShelterPhotos => GetPhotoPathRequest.Types.Bucket.ShelterPhotos,
-                BucketName.UserPhotos => GetPhotoPathRequest.Types.Bucket.UserPhotos,
-                _ => throw new InvalidBucketNameException(bucket.ToString())
-            };
-        }
-
         public static UploadPhotoRequest.Types.Bucket AsGrpcUpload(this BucketName bucket)
         {
             return bucket switch
@@ -247,17 +254,6 @@ namespace Lapka.Identity.Infrastructure.Mongo.Documents
                 BucketName.PetPhotos => DeletePhotoRequest.Types.Bucket.PetPhotos,
                 BucketName.ShelterPhotos => DeletePhotoRequest.Types.Bucket.ShelterPhotos,
                 BucketName.UserPhotos => DeletePhotoRequest.Types.Bucket.UserPhotos,
-                _ => throw new InvalidBucketNameException(bucket.ToString())
-            };
-        }
-
-        public static SetExternalPhotoRequest.Types.Bucket AsGrpcUploadExternal(this BucketName bucket)
-        {
-            return bucket switch
-            {
-                BucketName.PetPhotos => SetExternalPhotoRequest.Types.Bucket.PetPhotos,
-                BucketName.ShelterPhotos => SetExternalPhotoRequest.Types.Bucket.ShelterPhotos,
-                BucketName.UserPhotos => SetExternalPhotoRequest.Types.Bucket.UserPhotos,
                 _ => throw new InvalidBucketNameException(bucket.ToString())
             };
         }

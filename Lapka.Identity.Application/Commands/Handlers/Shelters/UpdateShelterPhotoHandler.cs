@@ -37,8 +37,9 @@ namespace Lapka.Identity.Application.Commands.Handlers.Shelters
 
             ValidIfUserIsAccessibleToModifyPet(command, shelter);
 
-            await UpdatePhotoInMinioAsync(command, shelter);
-            shelter.UpdatePhoto(command.Photo.Id);
+            await DeletePhotoFromMinioAsync(shelter, command);
+            string path = await AddPhotoFromMinioAsync(command);
+            shelter.UpdatePhoto(path, shelter.PhotoPath);
 
             await _shelterRepository.UpdateAsync(shelter);
             await _eventProcessor.ProcessAsync(shelter.Events);
@@ -62,33 +63,31 @@ namespace Lapka.Identity.Application.Commands.Handlers.Shelters
 
             return shelter;
         }
-
-        private async Task UpdatePhotoInMinioAsync(UpdateShelterPhoto command, Shelter shelter)
+        
+        private async Task<string> AddPhotoFromMinioAsync(UpdateShelterPhoto command)
         {
-            await DeletePhotoFromMinioAsync(shelter);
-            await AddPhotoFromMinioAsync(command);
-        }
-
-        private async Task AddPhotoFromMinioAsync(UpdateShelterPhoto command)
-        {
+            string path;
             try
             {
-                await _grpcPhotoService.AddAsync(command.Photo.Id, command.Photo.Name, command.Photo.Content,
-                    BucketName.ShelterPhotos);
+                path = await _grpcPhotoService.AddAsync(command.Photo.Name, command.UserAuth.UserId, true,
+                    command.Photo.Content, BucketName.ShelterPhotos);
             }
             catch (Exception ex)
             {
                 throw new CannotRequestFilesMicroserviceException(ex);
             }
+
+            return path;
         }
 
-        private async Task DeletePhotoFromMinioAsync(Shelter shelter)
+        private async Task DeletePhotoFromMinioAsync(Shelter shelter, UpdateShelterPhoto command)
         {
             try
             {
-                if (shelter.PhotoId != Guid.Empty)
+                if (!string.IsNullOrEmpty(shelter.PhotoPath))
                 {
-                    await _grpcPhotoService.DeleteAsync(shelter.PhotoId, BucketName.ShelterPhotos);
+                    await _grpcPhotoService.DeleteAsync(shelter.PhotoPath, command.UserAuth.UserId,
+                        BucketName.ShelterPhotos);
                 }
             }
             catch (Exception ex)

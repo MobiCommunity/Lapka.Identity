@@ -28,11 +28,10 @@ namespace Lapka.Identity.Infrastructure.Auths
         private readonly IRefreshTokenService _refreshTokenService;
         private readonly IFacebookAuthenticator _facebookAuthenticator;
         private readonly IGoogleAuthenticator _googleAuthenticator;
-        private readonly IGrpcPhotoService _photoService;
 
         public IdentityService(IUserRepository userRepository, IPasswordService passwordService,
-            IJwtProvider jwtProvider, IRefreshTokenService refreshTokenService, IFacebookAuthenticator facebookAuthenticator,
-            IGoogleAuthenticator googleAuthenticator, IGrpcPhotoService photoService)
+            IJwtProvider jwtProvider, IRefreshTokenService refreshTokenService,
+            IFacebookAuthenticator facebookAuthenticator, IGoogleAuthenticator googleAuthenticator)
         {
             _userRepository = userRepository;
             _passwordService = passwordService;
@@ -40,7 +39,6 @@ namespace Lapka.Identity.Infrastructure.Auths
             _refreshTokenService = refreshTokenService;
             _facebookAuthenticator = facebookAuthenticator;
             _googleAuthenticator = googleAuthenticator;
-            _photoService = photoService;
         }
 
         public async Task<AuthDto> SignInAsync(SignIn command)
@@ -55,7 +53,7 @@ namespace Lapka.Identity.Infrastructure.Auths
             {
                 throw new InvalidCredentialsException(command.Email);
             }
-            
+
             AuthDto auth = await GetTokensAsync(user);
 
             return auth;
@@ -69,15 +67,17 @@ namespace Lapka.Identity.Infrastructure.Auths
             if (user is null)
             {
                 await SignUpAsync(new SignUp(Guid.NewGuid(), googleUser.Email, googleUser.GivenName,
-                    googleUser.FamilyName ?? "", googleUser.Email, Guid.NewGuid().ToString(), DateTime.UtcNow, BasicRole));
+                    googleUser.FamilyName ?? "", new EmailAddress(googleUser.Email), Guid.NewGuid().ToString(),
+                    DateTime.UtcNow, BasicRole, googleUser.Picture));
+
                 user = await _userRepository.GetAsync(googleUser.Email);
             }
             else
             {
-                user.Update(user.Email, googleUser.GivenName, googleUser.FamilyName, user.PhoneNumber);
+                user.Update(user.Email.Value, googleUser.GivenName, googleUser.FamilyName, user.PhoneNumber);
+                user.UpdatePhoto(googleUser.Picture, "");
             }
-            
-            await CheckIfPhotoUpdated(user, googleUser.Picture);
+
             await _userRepository.UpdateAsync(user);
 
             user = await _userRepository.GetAsync(googleUser.Email);
@@ -89,17 +89,17 @@ namespace Lapka.Identity.Infrastructure.Auths
 
         public async Task SignUpAsync(SignUp command)
         {
-            User user = await _userRepository.GetAsync(command.Email);
+            User user = await _userRepository.GetAsync(command.Email.Value);
             if (user is { })
             {
-                throw new EmailInUseException(command.Email);
+                throw new EmailInUseException(command.Email.Value);
             }
 
             if (command.Password.Length < MinimumPasswordLength)
             {
                 throw new TooShortPasswordException();
             }
-            
+
             string password = _passwordService.Hash(command.Password);
             user = User.Create(command.Id, command.Username, command.FirstName, command.LastName, command.Email,
                 password, command.CreatedAt, command.Role);
@@ -123,16 +123,18 @@ namespace Lapka.Identity.Infrastructure.Auths
 
             if (user is null)
             {
-                await SignUpAsync(new SignUp(Guid.NewGuid(), userInfo.Email, userInfo.FirstName,
-                    userInfo.LastName, userInfo.Email, Guid.NewGuid().ToString(), DateTime.UtcNow, BasicRole));
+                await SignUpAsync(new SignUp(Guid.NewGuid(), userInfo.Email, userInfo.FirstName, userInfo.LastName,
+                    new EmailAddress(userInfo.Email), Guid.NewGuid().ToString(), DateTime.UtcNow, BasicRole,
+                    userInfo.FacebookPicture.Data.Url.AbsoluteUri));
+
                 user = await _userRepository.GetAsync(userInfo.Email);
             }
             else
             {
-                user.Update(user.Email, userInfo.FirstName, userInfo.LastName, user.PhoneNumber);
+                user.Update(user.Email.Value, userInfo.FirstName, userInfo.LastName, user.PhoneNumber);
+                user.UpdatePhoto(userInfo.FacebookPicture.Data.Url.AbsoluteUri, "");
             }
-            
-            await CheckIfPhotoUpdated(user, userInfo.FacebookPicture.Data.Url.AbsoluteUri);
+
             await _userRepository.UpdateAsync(user);
 
             user = await _userRepository.GetAsync(userInfo.Email);
@@ -159,35 +161,12 @@ namespace Lapka.Identity.Infrastructure.Auths
 
         private async Task<AuthDto> GetTokensAsync(User user)
         {
-            AuthDto auth = _jwtProvider.Create(user.Id.Value, user.Role, claims: new Dictionary<string, IEnumerable<string>>());
+            AuthDto auth = _jwtProvider.Create(user.Id.Value, user.Role,
+                claims: new Dictionary<string, IEnumerable<string>>());
             auth.RefreshToken = await _refreshTokenService.CreateAsync(user.Id.Value);
             return auth;
         }
-        
-        private async Task CheckIfPhotoUpdated(User user, string newPath)
-        {
-            if (user.PhotoId == Guid.Empty)
-            {
-                await SetNewPhotoAsync(user, "", newPath);
-                return;
-            }
 
-            string photoPath = await _photoService.GetPhotoPathAsync(user.PhotoId, BucketName.UserPhotos);
-
-            if (photoPath != newPath)
-            {
-                await SetNewPhotoAsync(user, photoPath, newPath);
-            }
-        }
-
-        private async Task SetNewPhotoAsync(User user, string oldPath, string newPath)
-        {
-            Guid photoId = Guid.NewGuid();
-            await _photoService.SetExternalPhotoAsync(photoId, oldPath, newPath,
-                BucketName.UserPhotos);
-            user.UpdatePhoto(photoId);
-        }
-        
         private const int MinimumPasswordLength = 5;
     }
 }

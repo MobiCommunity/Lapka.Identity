@@ -6,6 +6,7 @@ using Lapka.Identity.Application.Commands.Users;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Repositories;
 using Lapka.Identity.Core.Entities;
+using Lapka.Identity.Core.ValueObjects;
 using NSubstitute;
 using Xunit;
 
@@ -37,7 +38,7 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.UserTests
             User user = User.Create(arrangeUser.Id.Value, arrangeUser.Username, arrangeUser.FirstName,
                 arrangeUser.LastName, arrangeUser.Email, arrangeUser.Password, arrangeUser.CreatedAt, arrangeUser.Role);
 
-            UpdateUserEmail command = new UpdateUserEmail(user.Id.Value, "thisismynewemail@mail.com");
+            UpdateUserEmail command = new UpdateUserEmail(user.Id.Value, new EmailAddress("thisismynewemail@mail.com"));
             _userRepository.GetAsync(command.Id).Returns(user);
 
             await Act(command);

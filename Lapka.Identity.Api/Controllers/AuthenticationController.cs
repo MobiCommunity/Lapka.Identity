@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Convey.CQRS.Commands;
+using Lapka.Identity.Api.Models;
 using Lapka.Identity.Api.Models.Request;
 using Lapka.Identity.Api.Models.Request.Auth;
 using Lapka.Identity.Application.Commands;
@@ -77,8 +78,8 @@ namespace Lapka.Identity.Api.Controllers
             DateTime createdAt = DateTime.UtcNow;
             const string basicUserRole = "user";
 
-            await _identityService.SignUpAsync(new SignUp(id, user.Username, user.FirstName, user.LastName, user.Email,
-                user.Password, createdAt, basicUserRole));
+            await _identityService.SignUpAsync(new SignUp(id, user.Username, user.FirstName, user.LastName,
+                user.Email.AsValueObject(), user.Password, createdAt, basicUserRole));
 
             return Created($"api/user/{id}", null);
         }

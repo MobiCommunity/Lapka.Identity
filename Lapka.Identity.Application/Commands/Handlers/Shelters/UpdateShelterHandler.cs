@@ -6,6 +6,8 @@ using Lapka.Identity.Application.Exceptions;
 using Lapka.Identity.Application.Exceptions.Shelters;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Repositories;
+using Lapka.Identity.Core.Entities;
+using Lapka.Identity.Core.ValueObjects;
 
 namespace Lapka.Identity.Application.Commands.Handlers.Shelters
 {
@@ -23,23 +25,33 @@ namespace Lapka.Identity.Application.Commands.Handlers.Shelters
 
         public async Task HandleAsync(UpdateShelter command)
         {
-            Core.Entities.Shelter shelter = await _shelterRepository.GetByIdAsync(command.Id);
+            Shelter shelter = await GetShelterAsync(command);
+            ValidIfUserCanManageShelter(command, shelter);
+
+            shelter.Update(command.Name, new PhoneNumber(command.PhoneNumber), new EmailAddress(command.Email), new BankNumber(command.BankNumber));
+
+            await _shelterRepository.UpdateAsync(shelter);
+
+            await _eventProcessor.ProcessAsync(shelter.Events);
+        }
+
+        private static void ValidIfUserCanManageShelter(UpdateShelter command, Shelter shelter)
+        {
+            if (shelter.Owners.Any(x => x != command.UserAuth.UserId) && command.UserAuth.Role != "admin")
+            {
+                throw new UnauthorizedAccessException();
+            }
+        }
+
+        private async Task<Shelter> GetShelterAsync(UpdateShelter command)
+        {
+            Shelter shelter = await _shelterRepository.GetByIdAsync(command.Id);
             if (shelter is null)
             {
                 throw new ShelterNotFoundException(command.Id.ToString());
             }
 
-            if (shelter.Owners.Any(x => x != command.UserAuth.UserId) && command.UserAuth.Role != "admin")
-            {
-                throw new UnauthorizedAccessException();
-            }
-
-            shelter.Update(command.Name, command.Address, command.GeoLocation, command.PhoneNumber, command.Email,
-                command.BankNumber);
-
-            await _shelterRepository.UpdateAsync(shelter);
-
-            await _eventProcessor.ProcessAsync(shelter.Events);
+            return shelter;
         }
     }
 }

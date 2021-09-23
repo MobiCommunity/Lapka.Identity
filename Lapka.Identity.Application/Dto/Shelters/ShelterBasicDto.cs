@@ -7,6 +7,6 @@ namespace Lapka.Identity.Application.Dto.Shelters
         public Guid Id { get; set; }
         public string Name { get; set; }
         public AddressDto Address { get; set; }
-        public Guid PhotoId { get; set; }
+        public string PhotoPath { get; set; }
     }
 }

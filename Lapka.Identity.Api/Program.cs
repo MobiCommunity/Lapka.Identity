@@ -111,6 +111,7 @@ namespace Lapka.Identity.Api
                         {
                             e.MapControllers();
                             e.MapGrpcService<GrpcShelterController>();
+                            e.MapGrpcService<GrpcIdentityPhotoController>();
                             e.Map("ping", async ctx => { await ctx.Response.WriteAsync("Alive"); });
                         });
                 })

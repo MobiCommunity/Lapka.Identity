@@ -17,48 +17,29 @@ namespace Lapka.Identity.Infrastructure.Grpc
         {
             _client = client;
         }
-        
-        public async Task<string> GetPhotoPathAsync(Guid photoId, BucketName bucket)
+
+        public async Task<string> AddAsync(string name, Guid userId, bool isPublic, Stream photo, BucketName bucket)
         {
-            GetPhotoPathReply response = await _client.GetPhotoPathAsync(new GetPhotoPathRequest
+            UploadPhotoReply response = await _client.UploadPhotoAsync(new UploadPhotoRequest
             {
-                Id = photoId.ToString(),
-                BucketName = bucket.AsGrpcUGet()
+                IsPublic = isPublic,
+                Name = name,
+                UserId = userId.ToString(),
+                Photo = await ByteString.FromStreamAsync(photo),
+                BucketName = bucket.AsGrpcUpload()
             });
 
             return response.Path;
         }
-        public async Task AddAsync(Guid photoId, string name, Stream photo, BucketName bucket)
-        {
-            await _client.UploadPhotoAsync(new UploadPhotoRequest
-            {
-                Id = photoId.ToString(),
-                Name = name,
-                Photo = await ByteString.FromStreamAsync(photo),
-                BucketName = bucket.AsGrpcUpload()
-            });
-        }
 
-        public async Task SetExternalPhotoAsync(Guid photoId, string oldPath, string newPath, BucketName bucket)
-        {
-            await _client.SetExternalPhotoAsync(new SetExternalPhotoRequest
-            {
-                Id = photoId.ToString(),
-                OldName = oldPath,
-                NewName = newPath,
-                BucketName = bucket.AsGrpcUploadExternal()
-            });
-        }
-
-        public async Task DeleteAsync(Guid photoId, BucketName bucket)
+        public async Task DeleteAsync(string photoPath, Guid userId, BucketName bucket)
         {
             await _client.DeletePhotoAsync(new DeletePhotoRequest
             {
-                Id = photoId.ToString(),
+                Id = photoPath,
+                UserId = userId.ToString(),
                 BucketName = bucket.AsGrpcDelete()
             });
         }
-        
-        
     }
 }

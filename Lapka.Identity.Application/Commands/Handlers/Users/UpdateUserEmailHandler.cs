@@ -21,8 +21,11 @@ namespace Lapka.Identity.Application.Commands.Handlers.Users
 
         public async Task HandleAsync(UpdateUserEmail command)
         {
-            User user = await _userRepository.GetAsync(command.Email);
-            if (user is { }) throw new EmailInUseException(command.Email);
+            User user = await _userRepository.GetAsync(command.Email.Value);
+            if (user is { })
+            {
+                throw new EmailInUseException(command.Email.Value);
+            }
 
             user = await _userRepository.GetAsync(command.Id);
 

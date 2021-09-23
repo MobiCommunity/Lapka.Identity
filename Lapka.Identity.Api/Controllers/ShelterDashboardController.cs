@@ -21,23 +21,7 @@ namespace Lapka.Identity.Api.Controllers
         {
             _queryDispatcher = queryDispatcher;
         }
-        
-        [HttpGet("cards/count")]
-        public async Task<IActionResult> GetById(Guid id)
-        {
-            UserAuth userAuth = await HttpContext.AuthenticateUsingJwtGetUserAuthAsync();
-            if (userAuth is null)
-            {
-                return Unauthorized();
-            }
-            
-            return Ok(await _queryDispatcher.QueryAsync(new GetShelterCardsCount
-            {
-                Auth = userAuth,
-                ShelterId = id
-            }));
-        }
-        
+
         // [HttpPatch("view/count")]
         // public async Task<IActionResult> IncrementShelterViews(Guid shelterId)
         // {

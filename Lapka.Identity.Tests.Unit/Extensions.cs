@@ -11,14 +11,14 @@ namespace Lapka.Identity.Tests.Unit
     public static class Extensions
     {
         public static User ArrangeUser(AggregateId id = null, string username = null, string firstName = null,
-            string lastName = null, string email = null, string password = null, DateTime createdAt = default,
-            string role = null, List<Guid> userPets = null)
+            string lastName = null, EmailAddress email = null, string password = null, DateTime createdAt = default,
+            string role = null)
         {
             AggregateId validId = id ?? new AggregateId();
             string validUsername = username ?? "Pomidorowy";
             string validFirstName = firstName ?? "Jasiek";
             string validLastName = lastName ?? "Skronowski";
-            string validEmail = email ?? "Skronowski@email.com";
+            EmailAddress validEmail = email ?? new EmailAddress("Skronowski@email.com");
             string validPassword = password ?? "Secretpassword";
             string validRole = role ?? "user";
             DateTime validCreatedAt = DateTime.UtcNow;
@@ -28,27 +28,27 @@ namespace Lapka.Identity.Tests.Unit
             }
 
             User user = new User(validId.Value, validUsername, validFirstName, validLastName, validEmail, validPassword,
-                null, Guid.Empty, validCreatedAt, validRole);
+                validCreatedAt, validRole);
 
             return user;
         }
 
         public static Shelter ArrangeShelter(AggregateId id = null, string name = null, Address address = null,
-            Location location = null, Guid? photoId = null, string phoneNumber = null, string email = null,
-            string bankNumber = null, List<Guid> owners = null)
+            Location location = null,  PhoneNumber phoneNumber = null, EmailAddress email = null,
+            BankNumber bankNumber = null, string photoPath = null, HashSet<Guid> owners = null)
         {
             AggregateId validId = id ?? new AggregateId();
             string validName = name ?? "Miniok";
             Address validAddress = address ?? ArrangeAddress();
             Location validLocation = location ?? ArrangeLocation();
-            Guid validPhotoId = photoId ?? Guid.NewGuid();
-            string validPhoneNumber = phoneNumber ?? "435731934";
-            string validEmail = email ?? "support@lappka.com";
-            string validBankNumber = bankNumber ?? "24204530505030050350535035";
-            List<Guid> validOwners = owners ?? new List<Guid>();
+            string validPhotoPath = photoPath ?? "myphoto.jpg";
+            PhoneNumber validPhoneNumber = phoneNumber ?? new PhoneNumber("435731934");
+            EmailAddress validEmail = email ?? new EmailAddress("support@lappka.com");
+            BankNumber validBankNumber = bankNumber ?? new BankNumber("24204530505030050350535035");
+            IEnumerable<Guid> validOwners = owners ?? new HashSet<Guid>();
 
-            Shelter shelter = new Shelter(validId.Value, validName, validAddress, validLocation, validPhotoId,
-                validPhoneNumber, validEmail, validBankNumber, validOwners);
+            Shelter shelter = new Shelter(validId.Value, validName, validAddress, validLocation,
+                validPhoneNumber, validEmail, validBankNumber, validPhotoPath, false, validOwners);
 
             return shelter;
         }
@@ -74,7 +74,7 @@ namespace Lapka.Identity.Tests.Unit
             return location;
         }
 
-        public static PhotoFile ArrangePhotoFile(Guid? id = null, string name = null, Stream stream = null,
+        public static File ArrangePhotoFile(Guid? id = null, string name = null, Stream stream = null,
             string contentType = null)
         {
             Guid validId = id ?? Guid.NewGuid();
@@ -82,7 +82,7 @@ namespace Lapka.Identity.Tests.Unit
             Stream validStream = stream ?? new MemoryStream();
             string validContentType = contentType ?? "image/jpg";
 
-            PhotoFile file = new PhotoFile(validId, validName, validStream, validContentType);
+            File file = new File(validName, validStream, validContentType);
 
             return file;
         }

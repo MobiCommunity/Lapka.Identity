@@ -8,7 +8,7 @@ namespace Lapka.Identity.Application.Dto.Shelters
         public string Name { get; set; }
         public AddressDto Address { get; set; }
         public LocationDto GeoLocation { get; set; }
-        public Guid PhotoId { get; set; }
+        public string PhotoPath { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public double? Distance { get; set; }
