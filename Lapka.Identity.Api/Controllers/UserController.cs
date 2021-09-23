@@ -31,7 +31,7 @@ namespace Lapka.Identity.Api.Controllers
 
         
         /// <summary>
-        /// Gets user by ID..
+        /// Gets user by ID.
         /// </summary>
         /// <returns>User</returns>
         /// <response code="200">If successfully got user</response>
