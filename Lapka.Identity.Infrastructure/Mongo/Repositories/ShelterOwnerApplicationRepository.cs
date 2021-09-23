@@ -39,6 +39,13 @@ namespace Lapka.Identity.Infrastructure.Mongo.Repositories
             return application.Select(x => x.AsBusiness());
         }
 
+        public async Task<IEnumerable<ShelterOwnerApplication>> GetApplicationsMadeForShelterAsync(Guid shelterId)
+        {
+            IReadOnlyList<ShelterOwnerApplicationDocument> application =
+                await _repository.FindAsync(x => x.ShelterId == shelterId);
+
+            return application.Select(x => x.AsBusiness());        }
+
         public async Task AddApplicationAsync(ShelterOwnerApplication application)
         {
             await _repository.AddAsync(application.AsDocument());
