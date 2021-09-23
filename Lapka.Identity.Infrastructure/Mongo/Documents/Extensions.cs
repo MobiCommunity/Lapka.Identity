@@ -1,3 +1,4 @@
+using System.Linq;
 using GeoCoordinatePortable;
 using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Dto.Shelters;
@@ -233,6 +234,57 @@ namespace Lapka.Identity.Infrastructure.Mongo.Documents
                 RefreshToken = token.Token,
                 CreatedAt = token.CreatedAt,
                 ExpiresAt = token.RevokedAt
+            };
+        }
+
+        public static ShelterViewsDocument AsDocument(this ShelterViews views)
+        {
+            return new ShelterViewsDocument
+            {
+                Id = views.Id,
+                ActualMonthViewsCount = views.ViewsCount,
+                PreviousMonthsViews = views.PreviousMonthsViews.Select(x => x.AsDocument())
+            };
+        }
+        
+        public static ShelterViewsDto AsDto(this ShelterViewsDocument views)
+        {
+            return new ShelterViewsDto
+            {
+                Id = views.Id,
+                ActualMonthViewsCount = views.ActualMonthViewsCount,
+                PreviousMonthsViews = views.PreviousMonthsViews.Select(x => x.AsDto())
+            };
+        }
+        
+        public static ShelterViews AsBusiness(this ShelterViewsDocument views)
+        {
+            return new ShelterViews(views.Id, views.ActualMonthViewsCount,
+                views.PreviousMonthsViews.Select(x => x.AsBusiness()));
+        }
+
+        public static ViewHistory AsBusiness(this ViewHistoryDocument history)
+        {
+            return new ViewHistory(history.MonthOfTheYear, history.Year, history.Views);
+        }
+        
+        public static ViewHistoryDocument AsDocument(this ViewHistory history)
+        {
+            return new ViewHistoryDocument
+            {
+                MonthOfTheYear = history.MonthOfTheYear,
+                Year = history.Year,
+                Views = history.Views
+            };
+        }
+        
+        public static ViewHistoryDto AsDto(this ViewHistoryDocument history)
+        {
+            return new ViewHistoryDto
+            {
+                MonthOfTheYear = history.MonthOfTheYear,
+                Year = history.Year,
+                Views = history.Views
             };
         }
 

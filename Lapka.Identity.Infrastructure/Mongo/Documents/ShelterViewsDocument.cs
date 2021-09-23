@@ -4,10 +4,10 @@ using Convey.Types;
 
 namespace Lapka.Identity.Infrastructure.Mongo.Documents
 {
-    public class ShelterDashboardDocument : IIdentifiable<Guid>
+    public class ShelterViewsDocument : IIdentifiable<Guid>
     {
         public Guid Id { get; set; }
         public int ActualMonthViewsCount { get; set; }
-        public List<ViewHistoryDocument> PreviousMonthsViews { get; set; }
+        public IEnumerable<ViewHistoryDocument> PreviousMonthsViews { get; set; }
     }
 }

@@ -16,25 +16,41 @@ namespace Lapka.Identity.Api.Controllers
     public class ShelterDashboardController : ControllerBase
     {
         private readonly IQueryDispatcher _queryDispatcher;
+        private readonly ICommandDispatcher _commandDispatcher;
 
-        public ShelterDashboardController(IQueryDispatcher queryDispatcher)
+        public ShelterDashboardController(IQueryDispatcher queryDispatcher, ICommandDispatcher commandDispatcher)
         {
             _queryDispatcher = queryDispatcher;
+            _commandDispatcher = commandDispatcher;
+        }
+        
+        [HttpGet("view/count")]
+        public async Task<IActionResult> GetShelterViews(Guid id)
+        {
+            UserAuth userAuth = await HttpContext.AuthenticateUsingJwtGetUserAuthAsync();
+            if (userAuth is null)
+            {
+                return Unauthorized();
+            }
+            
+            return Ok(await _queryDispatcher.QueryAsync(new GetShelterViewsCount
+            {
+                ShelterId = id
+            }));
         }
 
-        // [HttpPatch("view/count")]
-        // public async Task<IActionResult> IncrementShelterViews(Guid shelterId)
-        // {
-        //     UserAuth userAuth = await HttpContext.AuthenticateUsingJwtGetUserAuthAsync();
-        //     if (userAuth is null)
-        //     {
-        //         return Unauthorized();
-        //     }
-        //     
-        //     return Ok(await _queryDispatcher.QueryAsync(new IncrementShelterViews
-        //     {
-        //         
-        //     }));
-        // }
+        [HttpPatch("view/count")]
+        public async Task<IActionResult> IncrementShelterViews(Guid id)
+        {
+            UserAuth userAuth = await HttpContext.AuthenticateUsingJwtGetUserAuthAsync();
+            if (userAuth is null)
+            {
+                return Unauthorized();
+            }
+            
+            await _commandDispatcher.SendAsync(new IncrementShelterViews(id));
+
+            return NoContent();
+        }
     }
 }
