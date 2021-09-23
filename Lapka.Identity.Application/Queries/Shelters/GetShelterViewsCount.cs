@@ -1,12 +1,12 @@
 ﻿using System;
 using Convey.CQRS.Queries;
 using Lapka.Identity.Api.Models;
+using Lapka.Identity.Application.Dto;
 
 namespace Lapka.Identity.Application.Queries.Shelters
 {
-    public class GetShelterCardsCount : IQuery<int>
+    public class GetShelterViewsCount : IQuery<ShelterViewsDto>
     {
-        public UserAuth Auth { get; set; }
         public Guid ShelterId { get; set; }
     }
 }

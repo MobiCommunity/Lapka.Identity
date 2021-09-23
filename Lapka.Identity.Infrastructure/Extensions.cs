@@ -62,6 +62,7 @@ namespace Lapka.Identity.Infrastructure
                 .AddMongoRepository<UserDocument, Guid>("users")
                 .AddMongoRepository<JsonWebTokenDocument, Guid>("refreshTokens")
                 .AddMongoRepository<ShelterOwnerApplicationDocument, Guid>("shelterOwnerApplications")
+                .AddMongoRepository<ShelterViewsDocument, Guid>("shelterViews")
                 .AddMongo()
                 .AddJwt()
                 .AddRabbitMq()
@@ -96,10 +97,6 @@ namespace Lapka.Identity.Infrastructure
             configuration.GetSection("filesMicroservice").Bind(filesMicroserviceOptions);
             services.AddSingleton(filesMicroserviceOptions);
 
-            PetsMicroserviceOptions petsMicroserviceOptions = new PetsMicroserviceOptions();
-            configuration.GetSection("petsMicroservice").Bind(petsMicroserviceOptions);
-            services.AddSingleton(petsMicroserviceOptions);
-
             ElasticSearchOptions elasticSearchOptions = new ElasticSearchOptions();
             configuration.GetSection("elasticSearch").Bind(elasticSearchOptions);
             services.AddSingleton(elasticSearchOptions);
@@ -114,6 +111,7 @@ namespace Lapka.Identity.Infrastructure
             services.AddSingleton<IDomainToIntegrationEventMapper, DomainToIntegrationEventMapper>();
             services.AddSingleton<IElasticClient>(new ElasticClient(elasticConnectionSettings));
 
+            services.AddTransient<IShelterViewsRepository, ShelterViewsRepository>();
             services.AddTransient<IUserElasticsearchUpdater, UserElasticsearchUpdater>();
             services.AddTransient<IShelterElasticsearchUpdater, ShelterElasticsearchUpdater>();
             services.AddTransient<IShelterOwnerApplicationElasticSearchUpdater,
@@ -138,11 +136,6 @@ namespace Lapka.Identity.Infrastructure
             services.AddGrpcClient<PhotoProto.PhotoProtoClient>(o =>
             {
                 o.Address = new Uri(filesMicroserviceOptions.UrlHttp2);
-            });
-
-            services.AddGrpcClient<PetProto.PetProtoClient>(o =>
-            {
-                o.Address = new Uri(petsMicroserviceOptions.UrlHttp2);
             });
 
             builder.Services.Scan(s => s.FromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
