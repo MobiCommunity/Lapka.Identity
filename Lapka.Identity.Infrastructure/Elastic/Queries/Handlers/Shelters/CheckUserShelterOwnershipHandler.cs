@@ -24,7 +24,7 @@ namespace Lapka.Identity.Infrastructure.Elastic.Queries.Handlers.Shelters
         {
             ShelterDocument shelter = await GetShelterAsync(query);
 
-            return shelter.Owners.Any(x => x == query.UserId);
+            return shelter.Owners.Contains(query.UserId);
         }
 
         private async Task<ShelterDocument> GetShelterAsync(CheckUserShelterOwnership query)

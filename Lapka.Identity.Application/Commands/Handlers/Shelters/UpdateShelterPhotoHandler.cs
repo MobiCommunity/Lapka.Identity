@@ -47,7 +47,7 @@ namespace Lapka.Identity.Application.Commands.Handlers.Shelters
 
         private static void ValidIfUserIsAccessibleToModifyPet(UpdateShelterPhoto command, Shelter shelter)
         {
-            if (shelter.Owners.Any(x => x != command.UserAuth.UserId) && command.UserAuth.Role != "admin")
+            if (!shelter.Owners.Contains(command.UserAuth.UserId) && command.UserAuth.Role != "admin")
             {
                 throw new Exceptions.UnauthorizedAccessException();
             }

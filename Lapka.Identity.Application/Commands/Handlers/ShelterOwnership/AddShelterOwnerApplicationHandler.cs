@@ -48,7 +48,7 @@ namespace Lapka.Identity.Application.Commands.Handlers.ShelterOwnership
 
         private static void ValidIfUserIsNotOwnerOfShelter(Shelter shelter, User user)
         {
-            if (shelter.Owners.Any(x => x == user.Id.Value))
+            if (shelter.Owners.Contains(user.Id.Value))
             {
                 throw new UserAlreadyIsOwnerOfShelterException(shelter.Id.Value, user.Id.Value);
             }
