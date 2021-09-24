@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,24 +15,26 @@ using Nest;
 
 namespace Lapka.Identity.Infrastructure.Elastic.Queries.Handlers.Shelters
 {
-    public class GetShelterOwnerApplicationsHandler : IQueryHandler<GetShelterOwnerApplications,
+    public class GetSpecificShelterOwnerApplicationsHandler : IQueryHandler<GetSpecificShelterOwnerApplications,
         IEnumerable<ShelterOwnerApplicationDto>>
     {
         private readonly IElasticClient _elasticClient;
         private readonly ElasticSearchOptions _elasticSearchOptions;
 
-        public GetShelterOwnerApplicationsHandler(IElasticClient elasticClient,
+        public GetSpecificShelterOwnerApplicationsHandler(IElasticClient elasticClient,
             ElasticSearchOptions elasticSearchOptions)
         {
             _elasticClient = elasticClient;
             _elasticSearchOptions = elasticSearchOptions;
         }
 
-        public async Task<IEnumerable<ShelterOwnerApplicationDto>> HandleAsync(GetShelterOwnerApplications query)
+        public async Task<IEnumerable<ShelterOwnerApplicationDto>> HandleAsync(
+            GetSpecificShelterOwnerApplications query)
         {
             ICollection<ShelterOwnerApplicationDto> applicationDto = new Collection<ShelterOwnerApplicationDto>();
 
-            IEnumerable<ShelterOwnerApplicationDocument> applications = await GetAllApplications();
+            IEnumerable<ShelterOwnerApplicationDocument> applications =
+                await GetShelterSpecificApplications(query.ShelterId);
 
             await ConvertDocumentsToDto(applications, applicationDto);
 
@@ -79,14 +82,25 @@ namespace Lapka.Identity.Infrastructure.Elastic.Queries.Handlers.Shelters
             return shelter;
         }
 
-        private async Task<IEnumerable<ShelterOwnerApplicationDocument>> GetAllApplications()
+        private async Task<IEnumerable<ShelterOwnerApplicationDocument>> GetShelterSpecificApplications(Guid shelterId)
         {
             ISearchRequest searchRequest = new SearchRequest(_elasticSearchOptions.Aliases.ShelterOwnerApplications)
             {
-                Query = new TermQuery
+                Query = new BoolQuery
                 {
-                    Value = OwnerApplicationStatus.Pending,
-                    Field = Infer.Field<ShelterOwnerApplicationDocument>(p => p.Status)
+                    Must = new List<QueryContainer>
+                    {
+                        new QueryContainer(new MatchPhraseQuery
+                        {
+                            Query = shelterId.ToString(),
+                            Field = Infer.Field<ShelterOwnerApplicationDocument>(f => f.ShelterId)
+                        }),
+                        new QueryContainer(new TermQuery
+                        {
+                            Value = OwnerApplicationStatus.Pending,
+                            Field = Infer.Field<ShelterOwnerApplicationDocument>(p => p.Status)
+                        }),
+                    }
                 }
             };
 

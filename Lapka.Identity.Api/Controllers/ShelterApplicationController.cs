@@ -133,5 +133,32 @@ namespace Lapka.Identity.Api.Controllers
             
             return Ok(await _queryDispatcher.QueryAsync(new GetShelterOwnerApplications()));
         }
+        
+        /// <summary>
+        /// Gets applications for owner for specific shelter. User has to be logged and in admin role.
+        /// </summary>
+        /// <returns>Applications for shelter ownership</returns>
+        /// <response code="200">If applications are successfully returned</response>
+        /// <response code="401">If user is not logged</response>
+        /// <response code="403">If user is not in admin role</response>
+        [ProducesResponseType(typeof(IEnumerable<ShelterDto>), StatusCodes.Status200OK)]
+        [HttpGet("shelter/{id:guid}")]
+        public async Task<ActionResult<IEnumerable<ShelterDto>>> GetShelterApplications(Guid id)
+        {
+            UserAuth userRole = await HttpContext.AuthenticateUsingJwtGetUserAuthAsync();
+            if (userRole.UserId == Guid.Empty)
+            {
+                return Unauthorized();
+            }
+            if (userRole.Role != "admin")
+            {
+                return Forbid();
+            }
+            
+            return Ok(await _queryDispatcher.QueryAsync(new GetSpecificShelterOwnerApplications
+            {
+                ShelterId = id
+            }));
+        }
     }
 }

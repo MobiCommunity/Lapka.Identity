@@ -23,12 +23,12 @@ namespace Lapka.Identity.Infrastructure.Elastic.Queries.Handlers.Shelters
 
         public async Task<IEnumerable<ShelterBasicDto>> HandleAsync(GetUserShelters query)
         {
-            List<ShelterDocument> userShelters = await GetUserSheltersAsync(query);
+            IEnumerable<ShelterDocument> userShelters = await GetUserSheltersAsync(query);
             
             return userShelters.Select(x => x.AsDto());
         }
 
-        private async Task<List<ShelterDocument>> GetUserSheltersAsync(GetUserShelters query)
+        private async Task<IEnumerable<ShelterDocument>> GetUserSheltersAsync(GetUserShelters query)
         {
             ISearchRequest searchRequest = new SearchRequest(_elasticSearchOptions.Aliases.Shelters)
             {
@@ -40,7 +40,7 @@ namespace Lapka.Identity.Infrastructure.Elastic.Queries.Handlers.Shelters
             };
 
             ISearchResponse<ShelterDocument> userShelters = await _elasticClient.SearchAsync<ShelterDocument>(searchRequest);
-            return userShelters?.Documents.ToList();
+            return userShelters?.Documents.AsEnumerable();
         }
     }
 }
