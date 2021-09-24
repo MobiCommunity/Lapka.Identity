@@ -7,6 +7,7 @@ using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Exceptions.Shelters;
 using Lapka.Identity.Application.Exceptions.Users;
 using Lapka.Identity.Application.Queries.Shelters;
+using Lapka.Identity.Core.ValueObjects;
 using Lapka.Identity.Infrastructure.Elastic.Options;
 using Lapka.Identity.Infrastructure.Mongo.Documents;
 using Nest;
@@ -80,7 +81,14 @@ namespace Lapka.Identity.Infrastructure.Elastic.Queries.Handlers.Shelters
 
         private async Task<IEnumerable<ShelterOwnerApplicationDocument>> GetAllApplications()
         {
-            ISearchRequest searchRequest = new SearchRequest(_elasticSearchOptions.Aliases.ShelterOwnerApplications);
+            ISearchRequest searchRequest = new SearchRequest(_elasticSearchOptions.Aliases.ShelterOwnerApplications)
+            {
+                Query = new TermQuery
+                {
+                    Value = OwnerApplicationStatus.Pending,
+                    Field = Infer.Field<ShelterOwnerApplicationDocument>(p => p.Status)
+                }
+            };
 
             ISearchResponse<ShelterOwnerApplicationDocument>
                 shelters = await _elasticClient.SearchAsync<ShelterOwnerApplicationDocument>(searchRequest);
