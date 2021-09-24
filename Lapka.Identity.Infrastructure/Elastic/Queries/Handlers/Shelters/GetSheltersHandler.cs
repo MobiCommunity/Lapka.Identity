@@ -23,17 +23,17 @@ namespace Lapka.Identity.Infrastructure.Elastic.Queries.Handlers.Shelters
 
         public async Task<IEnumerable<ShelterDto>> HandleAsync(GetShelters query)
         {
-            List<ShelterDocument> shelters = await GetSheltersAsync();
+            IEnumerable<ShelterDocument> shelters = await GetSheltersAsync();
 
             return shelters.Select(s => s.AsDto(query.Latitude, query.Longitude));
         }
 
-        private async Task<List<ShelterDocument>> GetSheltersAsync()
+        private async Task<IEnumerable<ShelterDocument>> GetSheltersAsync()
         {
             ISearchRequest searchRequest = new SearchRequest(_elasticSearchOptions.Aliases.Shelters);
 
             ISearchResponse<ShelterDocument> shelters = await _elasticClient.SearchAsync<ShelterDocument>(searchRequest);
-            return shelters?.Documents.ToList();
+            return shelters?.Documents.AsEnumerable();
         }
     }
 }
