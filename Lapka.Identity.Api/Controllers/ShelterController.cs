@@ -212,5 +212,27 @@ namespace Lapka.Identity.Api.Controllers
                 Latitude = latitude
             }));
         }
+        
+        /// <summary>
+        /// Gets all shelters owners.
+        /// </summary>
+        /// <returns>Shelters owners</returns>
+        /// <response code="200">If shelters owners is successfully returned</response>
+        /// <response code="401">If user is not logged or admin</response>
+        [ProducesResponseType(typeof(IEnumerable<Guid>), StatusCodes.Status200OK)]
+        [HttpGet("{id:guid}/owners")]
+        public async Task<ActionResult<IEnumerable<ShelterDto>>> GetSheltersOwners(Guid id)
+        {
+            string userRole = await HttpContext.AuthenticateUsingJwtGetUserRoleAsync();
+            if (userRole != "admin")
+            {
+                return Unauthorized();
+            }
+            
+            return Ok(await _queryDispatcher.QueryAsync(new GetSheltersOwners
+            {
+                ShelterId = id
+            }));
+        }
     }
 }
