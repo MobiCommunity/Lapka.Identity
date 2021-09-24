@@ -36,8 +36,4 @@
         <Protobuf Include="Grpc\Protos\photo.proto" GrpcServices="Client" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Elastic\Queries\Handlers\Dashboards" />
-    </ItemGroup>
-
 </Project>

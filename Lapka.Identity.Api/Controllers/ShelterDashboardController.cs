@@ -68,5 +68,33 @@ namespace Lapka.Identity.Api.Controllers
 
             return NoContent();
         }
+        
+        /// <summary>
+        /// Gets total number of applications for this shelter. User has to be logged and in admin role.
+        /// </summary>
+        /// <returns>Application count</returns>
+        /// <response code="200">If successfully got application count</response>
+        /// <response code="401">If user is not logged</response>
+        /// <response code="403">If user is not in admin role</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpGet("application/count")]
+        public async Task<IActionResult> GetApplicationCount(Guid id)
+        {
+            UserAuth userAuth = await HttpContext.AuthenticateUsingJwtGetUserAuthAsync();
+            if (userAuth is null)
+            {
+                return Unauthorized();
+            }
+
+            if (userAuth.Role != "admin")
+            {
+                return Forbid();
+            }
+            
+            return Ok(await _queryDispatcher.QueryAsync(new GetShelterOwnerApplicationsCount
+            {
+                ShelterId = id
+            }));
+        }
     }
 }
