@@ -22,6 +22,7 @@ namespace Lapka.Identity.Infrastructure.Auths
     public class IdentityService : IIdentityService
     {
         private const string BasicRole = "user";
+        private readonly IEventProcessor _eventProcessor;
         private readonly IUserRepository _userRepository;
         private readonly IPasswordService _passwordService;
         private readonly IJwtProvider _jwtProvider;
@@ -29,10 +30,11 @@ namespace Lapka.Identity.Infrastructure.Auths
         private readonly IFacebookAuthenticator _facebookAuthenticator;
         private readonly IGoogleAuthenticator _googleAuthenticator;
 
-        public IdentityService(IUserRepository userRepository, IPasswordService passwordService,
+        public IdentityService(IEventProcessor eventProcessor, IUserRepository userRepository, IPasswordService passwordService,
             IJwtProvider jwtProvider, IRefreshTokenService refreshTokenService,
             IFacebookAuthenticator facebookAuthenticator, IGoogleAuthenticator googleAuthenticator)
         {
+            _eventProcessor = eventProcessor;
             _userRepository = userRepository;
             _passwordService = passwordService;
             _jwtProvider = jwtProvider;
@@ -81,7 +83,8 @@ namespace Lapka.Identity.Infrastructure.Auths
             await _userRepository.UpdateAsync(user);
 
             user = await _userRepository.GetAsync(googleUser.Email);
-
+            await _eventProcessor.ProcessAsync(user.Events);
+            
             AuthDto auth = await GetTokensAsync(user);
 
             return auth;
@@ -105,6 +108,7 @@ namespace Lapka.Identity.Infrastructure.Auths
                 new EmailAddress(command.Email), password, command.CreatedAt, command.Role);
 
             await _userRepository.AddAsync(user);
+            await _eventProcessor.ProcessAsync(user.Events);
         }
 
         public async Task<AuthDto> FacebookLoginAsync(SignInFacebook command)
@@ -138,6 +142,7 @@ namespace Lapka.Identity.Infrastructure.Auths
             await _userRepository.UpdateAsync(user);
 
             user = await _userRepository.GetAsync(userInfo.Email);
+            await _eventProcessor.ProcessAsync(user.Events);
 
             AuthDto auth = await GetTokensAsync(user);
 
