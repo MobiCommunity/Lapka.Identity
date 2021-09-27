@@ -42,12 +42,13 @@ namespace Lapka.Identity.Application.Commands.Handlers.Shelters
                 throw new Application.Exceptions.UnauthorizedAccessException();
             }
 
-            Shelter created = Shelter.Create(command.Id, command.Name, command.Address,
-                command.GeoLocation, command.PhoneNumber, command.Email, command.BankNumber);
+            Shelter created = Shelter.Create(command.Id, command.Name, command.Address, command.GeoLocation,
+                new PhoneNumber(command.PhoneNumber), new EmailAddress(command.Email),
+                new BankNumber(command.BankNumber));
 
             string path = await AddPhotoAsync(command);
             created.UpdatePhoto(path, "");
-            
+
             await _shelterRepository.AddAsync(created);
             await _eventProcessor.ProcessAsync(created.Events);
             IEnumerable<IEvent> events = _eventMapper.MapAll(created.Events);

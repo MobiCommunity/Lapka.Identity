@@ -38,7 +38,7 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.AuthTests
             UserAuth userAuth = Extensions.ArrangeUserAuth();
             
             SignUp command = new SignUp(id, arrangeUser.Username, arrangeUser.FirstName,
-                arrangeUser.LastName, arrangeUser.Email, arrangeUser.Password, createdAt, userAuth.Role);
+                arrangeUser.LastName, arrangeUser.Email.Value, arrangeUser.Password, createdAt, userAuth.Role);
 
             await Act(command);
 

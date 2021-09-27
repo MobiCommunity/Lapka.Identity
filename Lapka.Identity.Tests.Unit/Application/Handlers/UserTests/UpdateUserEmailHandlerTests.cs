@@ -38,7 +38,7 @@ namespace Lapka.Identity.Tests.Unit.Application.Handlers.UserTests
             User user = User.Create(arrangeUser.Id.Value, arrangeUser.Username, arrangeUser.FirstName,
                 arrangeUser.LastName, arrangeUser.Email, arrangeUser.Password, arrangeUser.CreatedAt, arrangeUser.Role);
 
-            UpdateUserEmail command = new UpdateUserEmail(user.Id.Value, new EmailAddress("thisismynewemail@mail.com"));
+            UpdateUserEmail command = new UpdateUserEmail(user.Id.Value, "thisismynewemail@mail.com");
             _userRepository.GetAsync(command.Id).Returns(user);
 
             await Act(command);

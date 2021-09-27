@@ -67,7 +67,7 @@ namespace Lapka.Identity.Infrastructure.Auths
             if (user is null)
             {
                 await SignUpAsync(new SignUp(Guid.NewGuid(), googleUser.Email, googleUser.GivenName,
-                    googleUser.FamilyName ?? "", new EmailAddress(googleUser.Email), Guid.NewGuid().ToString(),
+                    googleUser.FamilyName ?? "", googleUser.Email, Guid.NewGuid().ToString(),
                     DateTime.UtcNow, BasicRole, googleUser.Picture));
 
                 user = await _userRepository.GetAsync(googleUser.Email);
@@ -89,10 +89,10 @@ namespace Lapka.Identity.Infrastructure.Auths
 
         public async Task SignUpAsync(SignUp command)
         {
-            User user = await _userRepository.GetAsync(command.Email.Value);
+            User user = await _userRepository.GetAsync(command.Email);
             if (user is { })
             {
-                throw new EmailInUseException(command.Email.Value);
+                throw new EmailInUseException(command.Email);
             }
 
             if (command.Password.Length < MinimumPasswordLength)
@@ -101,8 +101,8 @@ namespace Lapka.Identity.Infrastructure.Auths
             }
 
             string password = _passwordService.Hash(command.Password);
-            user = User.Create(command.Id, command.Username, command.FirstName, command.LastName, command.Email,
-                password, command.CreatedAt, command.Role);
+            user = User.Create(command.Id, command.Username, command.FirstName, command.LastName,
+                new EmailAddress(command.Email), password, command.CreatedAt, command.Role);
 
             await _userRepository.AddAsync(user);
         }
@@ -124,7 +124,7 @@ namespace Lapka.Identity.Infrastructure.Auths
             if (user is null)
             {
                 await SignUpAsync(new SignUp(Guid.NewGuid(), userInfo.Email, userInfo.FirstName, userInfo.LastName,
-                    new EmailAddress(userInfo.Email), Guid.NewGuid().ToString(), DateTime.UtcNow, BasicRole,
+                    userInfo.Email, Guid.NewGuid().ToString(), DateTime.UtcNow, BasicRole,
                     userInfo.FacebookPicture.Data.Url.AbsoluteUri));
 
                 user = await _userRepository.GetAsync(userInfo.Email);

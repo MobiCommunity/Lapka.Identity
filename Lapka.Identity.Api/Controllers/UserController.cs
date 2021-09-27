@@ -111,7 +111,7 @@ namespace Lapka.Identity.Api.Controllers
                 return Unauthorized();
             }
 
-            await _commandDispatcher.SendAsync(new UpdateUserEmail(userId, photoRequest.Email.AsValueObject()));
+            await _commandDispatcher.SendAsync(new UpdateUserEmail(userId, photoRequest.Email));
 
             return NoContent();
         }
@@ -130,7 +130,7 @@ namespace Lapka.Identity.Api.Controllers
             if (userId == Guid.Empty) return Unauthorized();
 
             await _commandDispatcher.SendAsync(new UpdateUser(userId, user.Username, user.FirstName, user.LastName,
-                user.PhoneNumber.AsValueObject()));
+                user.PhoneNumber));
 
             return NoContent();
         }

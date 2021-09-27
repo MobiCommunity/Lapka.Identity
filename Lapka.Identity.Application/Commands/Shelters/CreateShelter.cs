@@ -12,13 +12,13 @@ namespace Lapka.Identity.Application.Commands.Shelters
         public string Name { get; }
         public Location GeoLocation { get; }
         public Address Address { get; }
-        public PhoneNumber PhoneNumber { get; }
-        public EmailAddress Email { get; }
+        public string PhoneNumber { get; }
+        public string Email { get; }
         public File Photo { get; }
-        public BankNumber BankNumber { get; }
+        public string BankNumber { get; }
 
-        public CreateShelter(Guid id, UserAuth userAuth, string name, PhoneNumber phoneNumber, EmailAddress email,
-            Address address, Location geoLocation, File photo, BankNumber bankNumber)
+        public CreateShelter(Guid id, UserAuth userAuth, string name, string phoneNumber, string email,
+            Address address, Location geoLocation, File photo, string bankNumber)
         {
             Id = id;
             UserAuth = userAuth;

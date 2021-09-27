@@ -9,18 +9,18 @@ namespace Lapka.Identity.Core.ValueObjects
 
         public BankNumber(string bankNumber)
         {
-            ValidateBankNumber(bankNumber);
-
             Value = bankNumber;
+            
+            Validate();
         }
 
-        private void ValidateBankNumber(string bankNumber)
+        private void Validate()
         {
-            if (string.IsNullOrEmpty(bankNumber)) return;
+            if (string.IsNullOrEmpty(Value)) return;
             
-            if (bankNumber.Length < BankNumberMinimumLetters)
+            if (Value.Length < BankNumberMinimumLetters)
             {
-                throw new InvalidBankNumberException(bankNumber);
+                throw new InvalidBankNumberException(Value);
             }
         }
         

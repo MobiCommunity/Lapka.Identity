@@ -46,6 +46,11 @@ namespace Lapka.Identity.Core.Entities
         public static Shelter Create(Guid id, string name, Address address, Location location, PhoneNumber phoneNumber,
             EmailAddress email, BankNumber bankNumber, string photoPath = null, IEnumerable<Guid> owners = null)
         {
+            if (phoneNumber.IsEmpty)
+            {
+                
+            }
+            
             Shelter shelter = new Shelter(id, name, address, location, phoneNumber, email, bankNumber, photoPath, false,
                 owners);
 

@@ -6,6 +6,7 @@ using Lapka.Identity.Application.Exceptions.Users;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Repositories;
 using Lapka.Identity.Core.Entities;
+using Lapka.Identity.Core.ValueObjects;
 
 namespace Lapka.Identity.Application.Commands.Handlers.Users
 {
@@ -24,7 +25,7 @@ namespace Lapka.Identity.Application.Commands.Handlers.Users
         {
             User user = await GetUserAsync(command);
 
-            user.Update(command.Username, command.FirstName, command.LastName, command.PhoneNumber);
+            user.Update(command.Username, command.FirstName, command.LastName, new PhoneNumber(command.PhoneNumber));
 
             await _userRepository.UpdateAsync(user);
             await _eventProcessor.ProcessAsync(user.Events);

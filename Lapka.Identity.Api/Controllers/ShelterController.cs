@@ -143,9 +143,9 @@ namespace Lapka.Identity.Api.Controllers
             Guid id = Guid.NewGuid();
 
             await _commandDispatcher.SendAsync(new CreateShelter(id, userAuth, createShelterRequest.Name,
-                createShelterRequest.PhoneNumber.AsValueObject(), createShelterRequest.Email.AsValueObject(),
+                createShelterRequest.PhoneNumber, createShelterRequest.Email,
                 createShelterRequest.Address.AsValueObject(), createShelterRequest.GeoLocation.AsValueObject(),
-                createShelterRequest.Photo.AsValueObject(), createShelterRequest.BankNumber.AsValueObject()));
+                createShelterRequest.Photo.AsValueObject(), createShelterRequest.BankNumber));
 
             return Created($"api/shelter/{id}", null);
         }

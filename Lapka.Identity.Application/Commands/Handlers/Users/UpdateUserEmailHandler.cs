@@ -5,6 +5,7 @@ using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Repositories;
 using Lapka.Identity.Core.Entities;
 using Lapka.Identity.Core.Exceptions.Identity;
+using Lapka.Identity.Core.ValueObjects;
 
 namespace Lapka.Identity.Application.Commands.Handlers.Users
 {
@@ -21,15 +22,15 @@ namespace Lapka.Identity.Application.Commands.Handlers.Users
 
         public async Task HandleAsync(UpdateUserEmail command)
         {
-            User user = await _userRepository.GetAsync(command.Email.Value);
+            User user = await _userRepository.GetAsync(command.Email);
             if (user is { })
             {
-                throw new EmailInUseException(command.Email.Value);
+                throw new EmailInUseException(command.Email);
             }
 
             user = await _userRepository.GetAsync(command.Id);
 
-            user.UpdateEmail(command.Email);
+            user.UpdateEmail(new EmailAddress(command.Email));
 
             await _userRepository.UpdateAsync(user);
             await _eventProcessor.ProcessAsync(user.Events);

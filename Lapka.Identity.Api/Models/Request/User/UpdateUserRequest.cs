@@ -10,6 +10,6 @@ namespace Lapka.Identity.Api.Models.Request.User
         public string FirstName { get; set; }
         [Required]
         public string LastName{ get; set; }
-        public UserPhoneNumberModel PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }

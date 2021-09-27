@@ -6,21 +6,22 @@ namespace Lapka.Identity.Core.ValueObjects
     public class PhoneNumber
     {
         public string Value { get; }
-
+        public bool IsEmpty => string.IsNullOrEmpty(Value);
+        
         public PhoneNumber(string phoneNumber)
         {
-            ValidatePhoneNumber(phoneNumber);
-            
             Value = phoneNumber;
+            
+            Validate();
         }
 
-        private void ValidatePhoneNumber(string phoneNumber)
+        private void Validate()
         {
-            if (string.IsNullOrWhiteSpace(phoneNumber)) return;
+            if (IsEmpty) return;
             
-            if (!PhoneNumberRegex.IsMatch(phoneNumber))
+            if (!PhoneNumberRegex.IsMatch(Value))
             {
-                throw new InvalidPhoneNumberException(phoneNumber);
+                throw new InvalidPhoneNumberException(Value);
             }
         }
         

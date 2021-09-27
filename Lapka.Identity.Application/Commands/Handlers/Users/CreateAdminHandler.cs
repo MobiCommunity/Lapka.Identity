@@ -21,7 +21,7 @@ namespace Lapka.Identity.Application.Commands.Handlers.Users
         public async Task HandleAsync(CreateAdmin command)
         {
             await _identityService.SignUpAsync(new SignUp(Guid.NewGuid(), "admin", "admin",
-                "admin",  new EmailAddress("admin@admin.com"), "admin", DateTime.UtcNow, "admin"));
+                "admin", "admin@admin.com", "admin", DateTime.UtcNow, "admin"));
         }
     }
 }

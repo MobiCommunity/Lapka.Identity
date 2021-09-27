@@ -14,6 +14,7 @@ using Lapka.Identity.Application.Services.Auth;
 using Lapka.Identity.Core.Exceptions.Token;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Lapka.Identity.Api.Controllers
 {
@@ -52,11 +53,8 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Revokes refresh token.
         /// </summary>
-        /// <returns>A newly created refresh token</returns>
-        /// <response code="200">If token is successfully refreshed</response>
-        /// <response code="400">If token is not found or invalid</response>
-        /// <response code="404">If user is not found</response>
         [ProducesResponseType(typeof(AuthDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
         [HttpPost("use")]
         public async Task<IActionResult> RefreshToken(RefreshTokenRequest refreshToken)
         {
@@ -118,7 +116,7 @@ namespace Lapka.Identity.Api.Controllers
         /// <returns>Created status with user ID</returns>
         /// <response code="201">If user is successfully logged, returns created response with user id</response>
         /// <response code="400">If user email is taken, or password is too short</response>
-        [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status201Created)]
         [HttpPost("signup")]
         public async Task<IActionResult> SingUp(SignUpRequest user)
         {
@@ -127,7 +125,7 @@ namespace Lapka.Identity.Api.Controllers
             const string basicUserRole = "user";
 
             await _identityService.SignUpAsync(new SignUp(id, user.Username, user.FirstName, user.LastName,
-                user.Email.AsValueObject(), user.Password, createdAt, basicUserRole));
+                user.Email, user.Password, createdAt, basicUserRole));
 
             return Created($"api/user/{id}", null);
         }
