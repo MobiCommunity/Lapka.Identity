@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Lapka.Identity.Api.Controllers
 {
     [ApiController]
-    [Route("api/user")]
+    [Route("api/identity/user")]
     public class UserController : ControllerBase
     {
         private readonly ICommandDispatcher _commandDispatcher;

@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Http;
 namespace Lapka.Identity.Api.Controllers
 {
     [ApiController]
-    [Route("api/application")]
+    [Route("api/identity/application")]
     public class ShelterApplicationController : ControllerBase
     {
         private readonly ICommandDispatcher _commandDispatcher;

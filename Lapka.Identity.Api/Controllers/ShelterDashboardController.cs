@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Lapka.Identity.Api.Controllers
 {
     [ApiController]
-    [Route("api/shelter/{id:guid}/dashboard")]
+    [Route("api/identity/shelter/{id:guid}/dashboard")]
     public class ShelterDashboardController : ControllerBase
     {
         private readonly IQueryDispatcher _queryDispatcher;
