@@ -34,10 +34,8 @@ namespace Lapka.Identity.Api.Controllers
         /// Gets shelter by ID. Longitude and latitude are not required, but if passed, distance value is returned
         /// which describes length to the shelter in meters
         /// </summary>
-        /// <returns>Shelter</returns>
-        /// <response code="200">If shelter is successfully returned</response>
-        /// <response code="404">If shelter is not found</response>
         [ProducesResponseType(typeof(ShelterDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetById(Guid id, string longitude, string latitude)
         {
@@ -52,10 +50,8 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Gets all users shelters where user is in ownership role.
         /// </summary>
-        /// <returns>Shelters</returns>
-        /// <response code="200">If shelters is successfully returned</response>
-        /// <response code="401">If user is not logged</response>
         [ProducesResponseType(typeof(IEnumerable<ShelterBasicDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         [HttpGet("user")]
         public async Task<IActionResult> GetUserShelters()
         {
@@ -74,13 +70,11 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Updates shelter. User has to be in admin role, or ownership of shelter.
         /// </summary>
-        /// <returns>No content</returns>
-        /// <response code="204">If shelter is successfully updated</response>
-        /// <response code="400">If invalid shelter properties are given</response>
-        /// <response code="401">If user is not logged</response>
-        /// <response code="403">If user is not in admin role, or shelter ownership</response>
-        /// <response code="404">If shelter is not found</response>
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
         [HttpPatch("{id:guid}")]
         public async Task<IActionResult> Update(Guid id, UpdateShelterRequest shelter)
         {
@@ -99,14 +93,12 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Updates shelter photo. User has to be in admin role, or ownership of shelter.
         /// </summary>
-        /// <returns>No content</returns>
-        /// <response code="204">If shelter is successfully updated</response>
-        /// <response code="400">If invalid shelter properties are given</response>
-        /// <response code="401">If user is not logged</response>
-        /// <response code="403">If user is not in admin role, or shelter ownership</response>
-        /// <response code="404">If shelter is not found</response>
-        /// <response code="500">If connection is interrupted to files microservice</response>
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status500InternalServerError)]
         [HttpPatch("{id:guid}/photo")]
         public async Task<IActionResult> UpdatePhoto(Guid id, [FromForm] UpdateShelterPhotoRequest shelter)
         {
@@ -125,12 +117,10 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Creates a shelter. User has to be in admin role.
         /// </summary>
-        /// <returns>URL to created shelter</returns>
-        /// <response code="201">If shelter is successfully updated</response>
-        /// <response code="400">If invalid shelter properties are given</response>
-        /// <response code="401">If user is not logged</response>
-        /// <response code="403">If user is not in admin role</response>
         [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
         [HttpPost]
         public async Task<IActionResult> Add([FromForm] CreateShelterRequest createShelterRequest)
         {
@@ -153,12 +143,10 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Deletes a shelter. User has to be in admin role.
         /// </summary>
-        /// <returns>URL to created shelter</returns>
-        /// <response code="204">If shelter is successfully deleted</response>
-        /// <response code="401">If user is not logged</response>
-        /// <response code="403">If user is not in admin role</response>
-        /// <response code="404">If shelter is not found</response>
-        [ProducesResponseType(typeof(string), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -176,12 +164,10 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Removes user from the shelter ownership. User has to be in admin role.
         /// </summary>
-        /// <returns>No content</returns>
-        /// <response code="204">If user is successfully deleted from ownership</response>
-        /// <response code="401">If user is not logged</response>
-        /// <response code="403">If user is not in admin role</response>
-        /// <response code="404">If shelter is not found or user is not owner of shelter</response>
-        [ProducesResponseType(typeof(string), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
         [HttpPatch("{shelterId:guid}/owners/{userId:guid}/Remove")]
         public async Task<IActionResult> Remove(Guid userId, Guid shelterId)
         {
@@ -200,8 +186,6 @@ namespace Lapka.Identity.Api.Controllers
         /// Gets all shelters. Longitude and latitude are not required, but if passed, distance value is returned
         /// which describes length to the shelter in meters.
         /// </summary>
-        /// <returns>Shelters</returns>
-        /// <response code="200">If shelters is successfully returned</response>
         [ProducesResponseType(typeof(IEnumerable<ShelterDto>), StatusCodes.Status200OK)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ShelterDto>>> GetShelters(string longitude, string latitude)
@@ -216,10 +200,8 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Gets all shelters owners.
         /// </summary>
-        /// <returns>Shelters owners</returns>
-        /// <response code="200">If shelters owners is successfully returned</response>
-        /// <response code="401">If user is not logged or admin</response>
         [ProducesResponseType(typeof(IEnumerable<Guid>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         [HttpGet("{id:guid}/owners")]
         public async Task<ActionResult<IEnumerable<ShelterDto>>> GetSheltersOwners(Guid id)
         {

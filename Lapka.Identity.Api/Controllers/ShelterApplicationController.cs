@@ -34,12 +34,10 @@ namespace Lapka.Identity.Api.Controllers
         /// Makes application for shelter ownership. User has to be logged, cannot be shelter owner and have
         /// made application for this shelter already.
         /// </summary>
-        /// <returns>Created status with application ID</returns>
-        /// <response code="201">If application is created, returns created status with application ID</response>
-        /// <response code="400">If user is owner of shelter or already have made application for this shelter</response>
-        /// <response code="401">If user was not logged</response>
-        /// <response code="404">If shelter was not found</response>
-        [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
         [HttpPost]
         public async Task<IActionResult> Add(AddApplicationRequest request)
         {
@@ -59,12 +57,10 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Accepts user application for shelter ownership. User has to be logged and in admin role.
         /// </summary>
-        /// <returns>No content</returns>
-        /// <response code="204">If user application is successfully accepted</response>
-        /// <response code="401">If user is not logged</response>
-        /// <response code="403">If user is not in admin role</response>
-        /// <response code="404">If application or shelter was not found</response>
         [ProducesResponseType(typeof(string), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
         [HttpPatch("{id:guid}/Accept")]
         public async Task<IActionResult> AcceptApplication(Guid id)
         {
@@ -86,12 +82,10 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Declines user application for shelter ownership. User has to be logged and in admin role.
         /// </summary>
-        /// <returns>No content</returns>
-        /// <response code="204">If user application is declined</response>
-        /// <response code="401">If user is not logged</response>
-        /// <response code="403">If user is not in admin role</response>
-        /// <response code="404">If application or shelter was not found</response>
-        [ProducesResponseType(typeof(string), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
         [HttpPatch("{id:Guid}/Decline")]
         public async Task<IActionResult> DeclineApplication(Guid id)
         {
@@ -113,11 +107,9 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Gets all users application for shelter ownership. User has to be logged and in admin role.
         /// </summary>
-        /// <returns>Applications for shelter ownership</returns>
-        /// <response code="200">If applications are successfully returned</response>
-        /// <response code="401">If user is not logged</response>
-        /// <response code="403">If user is not in admin role</response>
         [ProducesResponseType(typeof(IEnumerable<ShelterDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ShelterDto>>> GetApplications()
         {
@@ -137,11 +129,10 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Gets applications for owner for specific shelter. User has to be logged and in admin role.
         /// </summary>
-        /// <returns>Applications for shelter ownership</returns>
-        /// <response code="200">If applications are successfully returned</response>
-        /// <response code="401">If user is not logged</response>
-        /// <response code="403">If user is not in admin role</response>
         [ProducesResponseType(typeof(IEnumerable<ShelterDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
         [HttpGet("shelter/{id:guid}")]
         public async Task<ActionResult<IEnumerable<ShelterDto>>> GetShelterApplications(Guid id)
         {

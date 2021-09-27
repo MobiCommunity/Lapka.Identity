@@ -33,10 +33,8 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Gets user by ID.
         /// </summary>
-        /// <returns>User</returns>
-        /// <response code="200">If successfully got user</response>
-        /// <response code="404">If user is not found</response>
         [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetUser(Guid id)
         {
@@ -49,8 +47,6 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Gets all users. At the moment for testing purpose.
         /// </summary>
-        /// <returns>Users</returns>
-        /// <response code="200">If successfully got users</response>
         [ProducesResponseType(typeof(IEnumerable<UserDto>), StatusCodes.Status200OK)]
         [HttpGet]
         public async Task<IActionResult> GetUser()
@@ -61,11 +57,9 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Updates user photo.
         /// </summary>
-        /// <returns>No content</returns>
-        /// <response code="204">If successfully updated user photo</response>
-        /// <response code="401">If user is not logged</response>
-        /// <response code="500">If connection to files microservices was interrupted</response>
         [ProducesResponseType(typeof(UserDto), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status500InternalServerError)]
         [HttpPatch("photo")]
         public async Task<IActionResult> UpdatePhoto([FromForm] UpdateUserPhotoRequest photoRequest)
         {
@@ -80,10 +74,8 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Updates user password.
         /// </summary>
-        /// <returns>No content</returns>
-        /// <response code="204">If successfully updated user password</response>
-        /// <response code="401">If user is not logged</response>
         [ProducesResponseType(typeof(UserDto), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         [HttpPatch("password")]
         public async Task<IActionResult> UpdatePassword(UpdateUserPasswordRequest request)
         {
@@ -98,10 +90,8 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Updates user email.
         /// </summary>
-        /// <returns>No content</returns>
-        /// <response code="204">If successfully updated user email</response>
-        /// <response code="401">If user is not logged</response>
         [ProducesResponseType(typeof(UserDto), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         [HttpPatch("email")]
         public async Task<IActionResult> UpdateEmail(UpdateUserEmailRequest photoRequest)
         {
@@ -119,10 +109,8 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Updates user basic information.
         /// </summary>
-        /// <returns>No content</returns>
-        /// <response code="204">If successfully updated user information</response>
-        /// <response code="401">If user is not logged</response>
         [ProducesResponseType(typeof(UserDto), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         [HttpPatch]
         public async Task<IActionResult> Update(UpdateUserRequest user)
         {

@@ -41,7 +41,8 @@ namespace Lapka.Identity.Api.Controllers
         /// <param name="refreshToken"></param>
         /// <response code="204">If token is successfully revoked</response>
         /// <response code="400">If the token is not found</response>
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
         [HttpPost("revoke")]
         public async Task<IActionResult> RevokeRefreshToken(RevokeRefreshTokenRequest refreshToken)
         {
@@ -67,10 +68,8 @@ namespace Lapka.Identity.Api.Controllers
         /// Signs in to the app. For testing purpose login by admin is enabled, by providing
         /// credentials { "email": "admin@admin.com", "password": "admin" }
         /// </summary>
-        /// <returns>Refresh tokens</returns>
-        /// <response code="200">If user is successfully logged, returns tokens</response>
-        /// <response code="400">If user is not found, or password is incorrect</response>
         [ProducesResponseType(typeof(AuthDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
         [HttpPost("signin")]
         public async Task<IActionResult> SingIn(SignInRequest user)
         {
@@ -82,10 +81,8 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Signs in to the app using google account.
         /// </summary>
-        /// <returns>Refresh tokens</returns>
-        /// <response code="200">If user is successfully logged, returns tokens</response>
-        /// <response code="400">If token is invalid</response>
         [ProducesResponseType(typeof(AuthDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
         [HttpPost("signin-google")]
         public async Task<IActionResult> SingInByGoogle(SignInGoogleRequest token)
         {
@@ -97,10 +94,8 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Signs in to the app using facebook account.
         /// </summary>
-        /// <returns>Refresh tokens</returns>
-        /// <response code="200">If user is successfully logged, returns tokens</response>
-        /// <response code="400">If token is invalid</response>
         [ProducesResponseType(typeof(AuthDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
         [HttpPost("signin-facebook")]
         public async Task<IActionResult> SignInFacebook(SignInFacebookRequest signInFacebookRequest)
         {
@@ -113,10 +108,8 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Signs up to the app.
         /// </summary>
-        /// <returns>Created status with user ID</returns>
-        /// <response code="201">If user is successfully logged, returns created response with user id</response>
-        /// <response code="400">If user email is taken, or password is too short</response>
         [ProducesResponseType(typeof(object), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
         [HttpPost("signup")]
         public async Task<IActionResult> SingUp(SignUpRequest user)
         {

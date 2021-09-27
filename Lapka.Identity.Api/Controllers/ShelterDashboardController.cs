@@ -5,7 +5,6 @@ using Convey.CQRS.Queries;
 using Lapka.Identity.Api.Models;
 using Lapka.Identity.Application.Commands.Dashboards;
 using Lapka.Identity.Application.Dto;
-using Lapka.Identity.Application.Queries;
 using Lapka.Identity.Application.Queries.Shelters;
 using Lapka.Identity.Infrastructure;
 using Microsoft.AspNetCore.Http;
@@ -30,10 +29,8 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Gets shelter total views. User has to be logged.
         /// </summary>
-        /// <returns>Shelter views</returns>
-        /// <response code="200">If successfully got shelter views</response>
-        /// <response code="404">If shelter is not found</response>
         [ProducesResponseType(typeof(ShelterViewsDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
         [HttpGet("view/count")]
         public async Task<IActionResult> GetShelterViews(Guid id)
         {
@@ -52,8 +49,6 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Increases total views of shelter. User has to be logged.
         /// </summary>
-        /// <returns>No content</returns>
-        /// <response code="204">If successfully increased views</response>
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [HttpPatch("view/count")]
         public async Task<IActionResult> IncrementShelterViews(Guid id)
@@ -72,11 +67,9 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Gets total number of applications for this shelter. User has to be logged and in admin role.
         /// </summary>
-        /// <returns>Application count</returns>
-        /// <response code="200">If successfully got application count</response>
-        /// <response code="401">If user is not logged</response>
-        /// <response code="403">If user is not in admin role</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
         [HttpGet("application/count")]
         public async Task<IActionResult> GetApplicationCount(Guid id)
         {
