@@ -81,7 +81,7 @@ namespace Lapka.Identity.Application.Commands.Handlers.Shelters
 
         private static void ValidUserRole(DeleteShelter command)
         {
-            if (command.UserAuth.Role != "admin")
+            if (command.UserAuth.Role != UserRoles.Admin.ToString())
             {
                 throw new Exceptions.UnauthorizedAccessException();
             }

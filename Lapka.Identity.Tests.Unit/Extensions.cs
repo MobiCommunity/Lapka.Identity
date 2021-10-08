@@ -90,7 +90,7 @@ namespace Lapka.Identity.Tests.Unit
         public static UserAuth ArrangeUserAuth(Guid? id = null, string role = null)
         {
             Guid validId = id ?? Guid.NewGuid();
-            string validRole = role ?? $"admin";
+            string validRole = role ?? UserRoles.Admin.ToString();
 
             UserAuth userAuth = new UserAuth(validRole, validId);
 

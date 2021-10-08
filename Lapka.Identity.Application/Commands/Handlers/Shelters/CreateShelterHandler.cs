@@ -37,7 +37,7 @@ namespace Lapka.Identity.Application.Commands.Handlers.Shelters
 
         public async Task HandleAsync(CreateShelter command)
         {
-            if (command.UserAuth.Role != "admin")
+            if (command.UserAuth.Role != UserRoles.Admin.ToString())
             {
                 throw new Application.Exceptions.UnauthorizedAccessException();
             }

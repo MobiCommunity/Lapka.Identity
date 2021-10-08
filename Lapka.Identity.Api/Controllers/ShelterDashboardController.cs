@@ -6,6 +6,7 @@ using Lapka.Identity.Api.Models;
 using Lapka.Identity.Application.Commands.Dashboards;
 using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Queries.Shelters;
+using Lapka.Identity.Core.ValueObjects;
 using Lapka.Identity.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -79,7 +80,7 @@ namespace Lapka.Identity.Api.Controllers
                 return Unauthorized();
             }
 
-            if (userAuth.Role != "admin")
+            if (userAuth.Role != UserRoles.Admin.ToString())
             {
                 return Forbid();
             }

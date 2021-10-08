@@ -37,7 +37,7 @@ namespace Lapka.Identity.Application.Commands.Handlers.Shelters
 
         private static void ValidIfUserCanManageShelter(UpdateShelter command, Shelter shelter)
         {
-            if (!shelter.Owners.Contains(command.UserAuth.UserId) && command.UserAuth.Role != "admin")
+            if (!shelter.Owners.Contains(command.UserAuth.UserId) && command.UserAuth.Role != UserRoles.Admin.ToString())
             {
                 throw new UnauthorizedAccessException();
             }

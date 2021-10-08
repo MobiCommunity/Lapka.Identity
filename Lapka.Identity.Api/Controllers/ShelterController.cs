@@ -11,6 +11,7 @@ using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Dto.Shelters;
 using Lapka.Identity.Application.Queries;
 using Lapka.Identity.Application.Queries.Shelters;
+using Lapka.Identity.Core.ValueObjects;
 using Lapka.Identity.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -172,7 +173,7 @@ namespace Lapka.Identity.Api.Controllers
         public async Task<IActionResult> Remove(Guid userId, Guid shelterId)
         {
             string userRole = await HttpContext.AuthenticateUsingJwtGetUserRoleAsync();
-            if (userRole != "admin")
+            if (userRole != UserRoles.Admin.ToString())
             {
                 return Unauthorized();
             }
@@ -206,7 +207,7 @@ namespace Lapka.Identity.Api.Controllers
         public async Task<ActionResult<IEnumerable<ShelterDto>>> GetSheltersOwners(Guid id)
         {
             string userRole = await HttpContext.AuthenticateUsingJwtGetUserRoleAsync();
-            if (userRole != "admin")
+            if (userRole != UserRoles.Admin.ToString())
             {
                 return Unauthorized();
             }

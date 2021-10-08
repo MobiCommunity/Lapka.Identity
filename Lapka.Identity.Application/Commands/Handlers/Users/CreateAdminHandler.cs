@@ -20,8 +20,8 @@ namespace Lapka.Identity.Application.Commands.Handlers.Users
 
         public async Task HandleAsync(CreateAdmin command)
         {
-            await _identityService.SignUpAsync(new SignUp(Guid.NewGuid(), "admin", "admin",
-                "admin", "admin@admin.com", "admin", DateTime.UtcNow, "admin"));
+            await _identityService.SignUpAsync(new SignUp(Guid.NewGuid(), UserRoles.Admin.ToString(), UserRoles.Admin.ToString(),
+                UserRoles.Admin.ToString(), "admin@admin.com", "admin", DateTime.UtcNow, UserRoles.Admin.ToString()));
         }
     }
 }

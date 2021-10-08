@@ -11,6 +11,7 @@ using Lapka.Identity.Application.Dto;
 using Lapka.Identity.Application.Dto.Shelters;
 using Lapka.Identity.Application.Queries;
 using Lapka.Identity.Application.Queries.Shelters;
+using Lapka.Identity.Core.ValueObjects;
 using Lapka.Identity.Infrastructure;
 using Microsoft.AspNetCore.Http;
 
@@ -69,7 +70,7 @@ namespace Lapka.Identity.Api.Controllers
             {
                 return Unauthorized();
             }
-            if (userRole.Role != "admin")
+            if (userRole.Role != UserRoles.Admin.ToString())
             {
                 return Forbid();
             }
@@ -94,7 +95,7 @@ namespace Lapka.Identity.Api.Controllers
             {
                 return Unauthorized();
             }
-            if (userRole.Role != "admin")
+            if (userRole.Role != UserRoles.Admin.ToString())
             {
                 return Forbid();
             }
@@ -107,18 +108,18 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Gets all users application for shelter ownership. User has to be logged and in admin role.
         /// </summary>
-        [ProducesResponseType(typeof(IEnumerable<ShelterDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<ShelterOwnerApplicationDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ShelterDto>>> GetApplications()
+        public async Task<ActionResult<IEnumerable<ShelterOwnerApplicationDto>>> GetApplications()
         {
             UserAuth userRole = await HttpContext.AuthenticateUsingJwtGetUserAuthAsync();
             if (userRole.UserId == Guid.Empty)
             {
                 return Unauthorized();
             }
-            if (userRole.Role != "admin")
+            if (userRole.Role != UserRoles.Admin.ToString())
             {
                 return Forbid();
             }
@@ -129,19 +130,19 @@ namespace Lapka.Identity.Api.Controllers
         /// <summary>
         /// Gets applications for owner for specific shelter. User has to be logged and in admin role.
         /// </summary>
-        [ProducesResponseType(typeof(IEnumerable<ShelterDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<ShelterOwnerApplicationDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(object), StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
         [HttpGet("shelter/{id:guid}")]
-        public async Task<ActionResult<IEnumerable<ShelterDto>>> GetShelterApplications(Guid id)
+        public async Task<ActionResult<IEnumerable<ShelterOwnerApplicationDto>>> GetShelterApplications(Guid id)
         {
             UserAuth userRole = await HttpContext.AuthenticateUsingJwtGetUserAuthAsync();
             if (userRole.UserId == Guid.Empty)
             {
                 return Unauthorized();
             }
-            if (userRole.Role != "admin")
+            if (userRole.Role != UserRoles.Admin.ToString())
             {
                 return Forbid();
             }
