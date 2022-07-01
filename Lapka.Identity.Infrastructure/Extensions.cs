@@ -65,8 +65,8 @@ namespace Lapka.Identity.Infrastructure
                 .AddMongoRepository<ShelterViewsDocument, Guid>("shelterViews")
                 .AddMongo()
                 .AddJwt()
-                .AddRabbitMq()
-                .AddMessageOutbox()
+                // .AddRabbitMq()
+                // .AddMessageOutbox()
                 // .AddConsul()
                 // .AddFabio()
                 // .AddMessageOutbox()
@@ -131,7 +131,7 @@ namespace Lapka.Identity.Infrastructure
             services.AddTransient<IGrpcPetService, GrpcPetService>();
             services.AddTransient<IShelterOwnerApplicationRepository, ShelterOwnerApplicationRepository>();
 
-            services.AddHostedService<ElasticSearchSeeder>();
+            // services.AddHostedService<ElasticSearchSeeder>();
 
             services.AddGrpcClient<PhotoProto.PhotoProtoClient>(o =>
             {
@@ -153,14 +153,14 @@ namespace Lapka.Identity.Infrastructure
                 .UseErrorHandler()
                 .UseConvey()
                 .UseAuthentication()
-                .UseRabbitMq()
-                .SubscribeCommand<CreateShelter>()
-                .SubscribeCommand<DeleteShelter>()
-                .SubscribeCommand<UpdateShelter>()
-                .SubscribeCommand<UpdateUserPhoto>()
-                .SubscribeCommand<UpdateShelterPhoto>()
-                .SubscribeCommand<AcceptShelterOwnerApplication>()
-                .SubscribeCommand<RemoveUserFromShelterOwners>()
+                // .UseRabbitMq()
+                // .SubscribeCommand<CreateShelter>()
+                // .SubscribeCommand<DeleteShelter>()
+                // .SubscribeCommand<UpdateShelter>()
+                // .SubscribeCommand<UpdateUserPhoto>()
+                // .SubscribeCommand<UpdateShelterPhoto>()
+                // .SubscribeCommand<AcceptShelterOwnerApplication>()
+                // .SubscribeCommand<RemoveUserFromShelterOwners>()
                 //.UseMetrics()
                 ;
 
