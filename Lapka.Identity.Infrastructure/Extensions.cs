@@ -22,14 +22,12 @@ using Lapka.Identity.Application.Commands.Users;
 using Lapka.Identity.Application.Events.Abstract;
 using Lapka.Identity.Application.Services;
 using Lapka.Identity.Application.Services.Auth;
-using Lapka.Identity.Application.Services.Elastic;
 using Lapka.Identity.Application.Services.Grpc;
 using Lapka.Identity.Application.Services.Repositories;
 using Lapka.Identity.Core.Events.Concrete.Shelters;
 using Lapka.Identity.Infrastructure.Auths;
 using Lapka.Identity.Infrastructure.Elastic;
 using Lapka.Identity.Infrastructure.Elastic.Options;
-using Lapka.Identity.Infrastructure.Elastic.Services;
 using Lapka.Identity.Infrastructure.Exceptions;
 using Lapka.Identity.Infrastructure.Grpc;
 using Lapka.Identity.Infrastructure.Grpc.Options;
@@ -112,13 +110,13 @@ namespace Lapka.Identity.Infrastructure
             services.AddSingleton<IElasticClient>(new ElasticClient(elasticConnectionSettings));
 
             services.AddTransient<IShelterViewsRepository, ShelterViewsRepository>();
-            services.AddTransient<IUserElasticsearchUpdater, UserElasticsearchUpdater>();
-            services.AddTransient<IShelterElasticsearchUpdater, ShelterElasticsearchUpdater>();
-            services.AddTransient<IShelterOwnerApplicationElasticSearchUpdater,
-                ShelterOwnerApplicationElasticSearchUpdater>();
+            // services.AddTransient<IUserElasticsearchUpdater, UserElasticsearchUpdater>();
+            // services.AddTransient<IShelterElasticsearchUpdater, ShelterElasticsearchUpdater>();
+            // services.AddTransient<IShelterOwnerApplicationElasticSearchUpdater,
+            //     ShelterOwnerApplicationElasticSearchUpdater>();
             services.AddTransient<IMongoDbSeeder, MongoDbSeeder>();
             services.AddTransient<IEventProcessor, EventProcessor>();
-            services.AddTransient<IMessageBroker, MessageBroker>();
+            services.AddTransient<IMessageBroker, FakeMessageBroker>();
             services.AddTransient<IShelterRepository, ShelterRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IIdentityService, IdentityService>();

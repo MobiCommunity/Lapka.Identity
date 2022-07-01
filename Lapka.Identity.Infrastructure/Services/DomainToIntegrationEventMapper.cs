@@ -15,21 +15,21 @@ namespace Lapka.Identity.Infrastructure.Services
 
         public IEvent Map(IDomainEvent @event) => @event switch
         {
-            ShelterCreated shelterCreated => new ShelterAdded(shelterCreated.Shelter.Id.Value),
-            
-            ShelterOwnerRemoved shelterOwnerRemoved =>
-                new ShelterOwnerUnassigned(shelterOwnerRemoved.Shelter.Id.Value, shelterOwnerRemoved.OwnerId),
-            
-            ShelterOwnerAdded shelterOwnerAdded =>
-                new ShelterOwnerAssigned(shelterOwnerAdded.Shelter.Id.Value, shelterOwnerAdded.OwnerId),
-            
-            ShelterDeleted shelterOwnerAdded => new ShelterRemoved(shelterOwnerAdded.Shelter.Id.Value),
-            
-            ShelterUpdated shelterUpdated => new ShelterChanged(shelterUpdated.Shelter.Id.Value),
-            
-            UserPhotoUpdated photoDeleted => new UserPhotoRemoved(photoDeleted.PhotoPath),
-            
-            ShelterPhotoUpdated photoDeleted => new ShelterPhotoRemoved(photoDeleted.OldPhotoPath),
+            // ShelterCreated shelterCreated => new ShelterAdded(shelterCreated.Shelter.Id.Value),
+            //
+            // ShelterOwnerRemoved shelterOwnerRemoved =>
+            //     new ShelterOwnerUnassigned(shelterOwnerRemoved.Shelter.Id.Value, shelterOwnerRemoved.OwnerId),
+            //
+            // ShelterOwnerAdded shelterOwnerAdded =>
+            //     new ShelterOwnerAssigned(shelterOwnerAdded.Shelter.Id.Value, shelterOwnerAdded.OwnerId),
+            //
+            // ShelterDeleted shelterOwnerAdded => new ShelterRemoved(shelterOwnerAdded.Shelter.Id.Value),
+            //
+            // ShelterUpdated shelterUpdated => new ShelterChanged(shelterUpdated.Shelter.Id.Value),
+            //
+            // UserPhotoUpdated photoDeleted => new UserPhotoRemoved(photoDeleted.PhotoPath),
+            //
+            // ShelterPhotoUpdated photoDeleted => new ShelterPhotoRemoved(photoDeleted.OldPhotoPath),
 
             _ => null
         };
